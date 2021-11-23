@@ -134,8 +134,8 @@ const unsigned char eroShip2[] = {
 
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    54,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,54,               // center point (PIXELS) from 0,0 top left
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
 
 
 
@@ -175,12 +175,15 @@ const unsigned char eroShip2[] = {
     ____XXXX //___X____   // 003 
     XXXX____ //________   // 004 
     XXXX____ //________   // 005 
+    ____XXXX //___X____   // 003 
+    XXXX____ //________   // 004 
+    XXXX____ //________   // 005 
+    ____XXXX //___X____   // 003 
+    XXXX____ //________   // 004 
+    XXXX____ //________   // 005 
     ____XXXX //___X____   // 009 
     XXXX____ //___X____   // 010 
     XXXX____ //___X____   // 011 
-    ____XXXX //__XXX___   // 012 
-    XXXX____ //__XXX___   // 013 
-    XXXX____ //__XXX___   // 014 
     ____XXXX //__XXX___   // 015 
     XXXX____ //__XXX___   // 016 
     XXXX____ //__XXX___   // 017 
@@ -193,18 +196,21 @@ const unsigned char eroShip2[] = {
     ____X___ //__XXX___   // 018
     ___X____ //__XXX___   // 019 
     ___X____ //__XXX___   // 020 
-
-
+    ________
+    ________
+    ________
 
 
 };
+
+
 const unsigned char eroShip[] = {
 
 
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    108,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,108,               // center point (PIXELS) from 0,0 top left
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
 
 
 
@@ -244,14 +250,17 @@ const unsigned char eroShip[] = {
     ____XXXX //___X____   // 003 
     XXXX____ //________   // 004 
     XXXXXXXX //________   // 005 
+    ____XXXX //___X____   // 003 
+    XXXX____ //________   // 004 
+    XXXXXXXX //________   // 005 
+    ____XXXX //___X____   // 003 
+    XXXX____ //________   // 004 
+    XXXXXXXX //________   // 005 
     ____XXXX //___X____   // 009 
     XXXX____ //___X____   // 010 
     XXXXXXXX //___X____   // 011 
     ____XXXX //__XXX___   // 012 
     XXXX____ //__XXX___   // 013 
-    XXXXXXXX //__XXX___   // 014 
-    ____XXXX //__XXX___   // 015 
-    XXXX____ //__XXX___   // 016 
     XXXXXXXX //__XXX___   // 017 
     ____XXX_ //__XXX___   // 018
     _XXX____ //__XXX___   // 019 
@@ -262,6 +271,23 @@ const unsigned char eroShip[] = {
     ____X___ //__XXX___   // 018
     ___X____ //__XXX___   // 019 
     ___XX___ //__XXX___   // 020 
+    ________
+    ________
+    ________
+
+
+};
+
+const unsigned char topFace[] = {
+
+
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+
     ________ //________   // 000    // colour 0
     ________ //________   // 001    // colour 1
     ________ //________   // 002    // colour 2 etc...
@@ -277,49 +303,570 @@ const unsigned char eroShip[] = {
     XXXXXXXX //________   // 000    // colour 0
     XXXXXXXX //________   // 001    // colour 1
     XXXXXXXX //________   // 002    // colour 2 etc...
-    XXXXXXXX //________   // 000    // colour 0
-    XXXXXXX_ //________   // 001    // colour 1
-    XXXXXXXX //________   // 002    // colour 2 etc...
     _XXXXXXX //________   // 000    // colour 0
-    XXXXXX__ //________   // 001    // colour 1
-    XXXXXXXX //________   // 002    // colour 2 etc...
-    __XXXXXX //________   // 000    // colour 0
-    XXXXX___ //________   // 001    // colour 1
-    XXXXXXXX //________   // 002    // colour 2 etc...
-    ___XXXXX //___X____   // 003 
-    XXXX____ //________   // 004 
-    XXXXXXXX //________   // 005 
-    ____XXXX //___X____   // 003 
-    XXXX____ //________   // 004 
-    XXXXXXXX //________   // 005 
-    ____XXXX //___X____   // 003 
-    XXXX____ //________   // 004 
-    XXXXXXXX //________   // 005 
-    ____XXXX //___X____   // 003 
-    XXXX____ //________   // 004 
-    XXXXXXXX //________   // 005 
-    ____XXXX //___X____   // 009 
-    XXXX____ //___X____   // 010 
-    XXXXXXXX //___X____   // 011 
-    ____XXXX //__XXX___   // 012 
-    XXXX____ //__XXX___   // 013 
-    XXXXXXXX //__XXX___   // 014 
-    ____XXXX //__XXX___   // 015 
-    XXXX____ //__XXX___   // 016 
-    XXXXXXXX //__XXX___   // 017 
-    ____XXX_ //__XXX___   // 018
-    _XXX____ //__XXX___   // 019 
-    _XXXXXX_ //__XXX___   // 020 
-    ____XX__ //__XXX___   // 018
-    __XX____ //__XXX___   // 019 
-    __XXXX__ //__XXX___   // 020 
-    ____X___ //__XXX___   // 018
-    ___X____ //__XXX___   // 019 
-    ___XX___ //__XXX___   // 020 
+    _XXXXXXX //________   // 001    // colour 1
+    _XXXXXXX //________   // 002    // colour 2 etc...
+    __XXXXX_ //________   // 000    // colour 0
+    __XXXXX_ //________   // 001    // colour 1
+    __XXXXX_ //________   // 002    // colour 2 etc...
+    ___XXX__ //________   // 000    // colour 0
+    ___XXX__ //________   // 001    // colour 1
+    ___XXX__ //________   // 002    // colour 2 etc...
+    ____X___ //___X____   // 003 
+    ____X___ //________   // 004 
+    ____X___ //________   // 005 
+    ________ //___X____   // 003 
+    ________ //________   // 004 
+    ________ //________   // 005 
+    ________ //___X____   // 003 
+    ________ //________   // 004 
+    ________ //________   // 005 
+    ________ //___X____   // 003 
+    ________ //________   // 004 
+    ________ //________   // 005 
+    ________ //___X____   // 003 
+    ________ //________   // 004 
+    ________ //________   // 005 
+    ________ //___X____   // 003 
+    ________ //________   // 004 
+    ________ //________   // 005 
+    ________ //___X____   // 009 
+    ________ //___X____   // 010 
+    ________ //___X____   // 011 
+    ________ //__XXX___   // 012 
+    ________ //__XXX___   // 013 
+    ________ //__XXX___   // 014 
+    ________ //__XXX___   // 015 
+    ________ //__XXX___   // 016 
+    ________ //__XXX___   // 017 
+    ________ //__XXX___   // 018
+    ________ //__XXX___   // 019 
+    ________ //__XXX___   // 020 
+    ________ //__XXX___   // 018
+    ________ //__XXX___   // 019 
+    ________ //__XXX___   // 020 
+    ________ //__XXX___   // 018
+    ________ //__XXX___   // 019 
+    ________ //__XXX___   // 020 
 
 
 
 };
+
+const unsigned char innerFacets[] = {
+
+
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+
+    ________ //________   // 000    // colour 0
+    ________ //________   // 001    // colour 1
+    ________ //________   // 002    // colour 2 etc...
+    ________ //________   // 000    // colour 0
+    ________ //________   // 001    // colour 1
+    ________ //________   // 002    // colour 2 etc...
+    ________ //________   // 000    // colour 0
+    ________ //________   // 001    // colour 1
+    ________ //________   // 002    // colour 2 etc...
+    ________ //________   // 000    // colour 0
+    ________ //________   // 001    // colour 1
+    ________ //________   // 002    // colour 2 etc...
+    ________ //________   // 000    // colour 0
+    ________ //________   // 001    // colour 1
+    ________ //________   // 002    // colour 2 etc...
+    _______X //________   // 000    // colour 0
+    ________ //________   // 001    // colour 1
+    ________ //________   // 002    // colour 2 etc...
+    ______XX //________   // 000    // colour 0
+    ________ //________   // 001    // colour 1
+    ________ //________   // 002    // colour 2 etc...
+    _____XXX //________   // 000    // colour 0
+    ________ //________   // 001    // colour 1
+    ________ //________   // 002    // colour 2 etc...
+    ____XXX_ //___X____   // 003 
+    ________ //________   // 004 
+    ________ //________   // 005 
+    ____XX__ //___X____   // 003 
+    ________ //________   // 004 
+    ________ //________   // 005 
+    ____X___ //___X____   // 003 
+    ________ //________   // 004 
+    ________ //________   // 005 
+    ____X___ //___X____   // 003 
+    ________ //________   // 004 
+    ________ //________   // 005 
+    ____X___ //___X____   // 003 
+    ________ //________   // 004 
+    ________ //________   // 005 
+    ____X___ //___X____   // 003 
+    ________ //________   // 004 
+    ________ //________   // 005 
+    ____X___ //___X____   // 009 
+    ________ //___X____   // 010 
+    ________ //___X____   // 011 
+    ____X___ //__XXX___   // 015 
+    ________ //__XXX___   // 016 
+    ________ //__XXX___   // 017 
+    ____X___ //__XXX___   // 018
+    ________ //__XXX___   // 019 
+    ________ //__XXX___   // 020 
+    ____X___ //__XXX___   // 018
+    ________ //__XXX___   // 019 
+    ________ //__XXX___   // 020 
+    ____X___ //__XXX___   // 018
+    ________ //__XXX___   // 019 
+    ________ //__XXX___   // 020 
+    ________ //__XXX___   // 020 
+    ________ //__XXX___   // 020 
+    ________ //__XXX___   // 020 
+
+
+
+};
+
+
+
+#define RIGHTFACET(a,b,c) \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & _______X \
+b & _______X \
+c & _______X \
+a & ______XX \
+b & ______XX \
+c & ______XX \
+a & _____XXX \
+b & _____XXX \
+c & _____XXX \
+a & ____XXXX \
+b & ____XXXX \
+c & ____XXXX \
+a & ____XXXX \
+b & ____XXXX \
+c & ____XXXX \
+a & ____XXXX \
+b & ____XXXX \
+c & ____XXXX \
+a & ____XXXX \
+b & ____XXXX \
+c & ____XXXX \
+a & ____XXXX \
+b & ____XXXX \
+c & ____XXXX \
+a & ____XXXX \
+b & ____XXXX \
+c & ____XXXX \
+a & ____XXXX \
+b & ____XXXX \
+c & ____XXXX \
+a & ____XXXX \
+b & ____XXXX \
+c & ____XXXX \
+a & ____XXX_ \
+b & ____XXX_ \
+c & ____XXX_ \
+a & ____XX__ \
+b & ____XX__ \
+c & ____XX__ \
+a & ____X___ \
+b & ____X___ \
+c & ____X___ \
+a & ________ \
+b & ________ \
+c & ________ \
+
+
+const unsigned char rightFacets000[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    RIGHTFACET(0,0,0)
+};
+
+const unsigned char rightFacets001[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    RIGHTFACET(0xFF,0,0)
+};
+
+const unsigned char rightFacets010[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    RIGHTFACET(0,0xFF,0)
+};
+
+const unsigned char rightFacets011[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    RIGHTFACET(0xFF,0xFF,0)
+};
+
+const unsigned char rightFacets100[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    RIGHTFACET(0,0,0xFF)
+};
+
+
+const unsigned char rightFacets101[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    RIGHTFACET(0xFF,0,0xFF)
+};
+
+const unsigned char rightFacets110[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    RIGHTFACET(0,0xFF,0xFF)
+};
+
+const unsigned char rightFacets111[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    RIGHTFACET(0xFF,0xFF,0xFF)
+};
+
+
+
+#define LEFTFACET(a,b,c) \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & X_______ \
+c & X_______ \
+a & X_______ \
+b & XX______ \
+c & XX______ \
+a & XX______ \
+b & XXX_____ \
+c & XXX_____ \
+a & XXX_____ \
+b & XXXX____ \
+c & XXXX____ \
+a & XXXX____ \
+b & XXXX____ \
+c & XXXX____ \
+a & XXXX____ \
+b & XXXX____ \
+c & XXXX____ \
+a & XXXX____ \
+b & XXXX____ \
+c & XXXX____ \
+a & XXXX____ \
+b & XXXX____ \
+c & XXXX____ \
+a & XXXX____ \
+b & XXXX____ \
+c & XXXX____ \
+a & XXXX____ \
+b & XXXX____ \
+c & XXXX____ \
+a & XXXX____ \
+b & XXXX____ \
+c & XXXX____ \
+a & _XXX____ \
+b & _XXX____ \
+c & _XXX____ \
+a & __XX____ \
+b & __XX____ \
+c & __XX____ \
+a & ___X____ \
+b & ___X____ \
+c & ___X____ \
+a & ________ \
+b & ________ \
+c & ________ \
+
+
+const unsigned char leftFacets000[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    LEFTFACET(0,0,0)
+};
+
+const unsigned char leftFacets001[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    LEFTFACET(0xFF,0,0)
+};
+
+const unsigned char leftFacets010[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    LEFTFACET(0,0xFF,0)
+};
+
+const unsigned char leftFacets011[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    LEFTFACET(0xFF,0xFF,0)
+};
+
+const unsigned char leftFacets100[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    LEFTFACET(0,0,0xFF)
+};
+
+
+const unsigned char leftFacets101[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    LEFTFACET(0xFF,0,0xFF)
+};
+
+const unsigned char leftFacets110[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    LEFTFACET(0,0xFF,0xFF)
+};
+
+const unsigned char leftFacets111[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    LEFTFACET(0xFF,0xFF,0xFF)
+};
+
+
+#define TOPFACET(a,b,c) \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ___XX___ \
+b & ___XX___ \
+c & ___XX___ \
+a & __XXXX__ \
+b & __XXXX__ \
+c & __XXXX__ \
+a & _XXXXXX_ \
+b & _XXXXXX_ \
+c & _XXXXXX_ \
+a & XXXXXXXX \
+b & XXXXXXXX \
+c & XXXXXXXX \
+a & _XXXXXXX \
+b & _XXXXXXX \
+c & _XXXXXXX \
+a & __XXXXX_ \
+b & __XXXXX_ \
+c & __XXXXX_ \
+a & ___XXX__ \
+b & ___XXX__ \
+c & ___XXX__ \
+a & ____X___ \
+b & ____X___ \
+c & ____X___ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+a & ________ \
+b & ________ \
+c & ________ \
+
+
+const unsigned char topFacets000[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    TOPFACET(0,0,0)
+};
+
+const unsigned char topFacets001[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    TOPFACET(0xFF,0,0)
+};
+
+const unsigned char topFacets010[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    TOPFACET(0,0xFF,0)
+};
+
+const unsigned char topFacets011[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    TOPFACET(0xFF,0xFF,0)
+};
+
+const unsigned char topFacets100[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    TOPFACET(0,0,0xFF)
+};
+
+
+const unsigned char topFacets101[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    TOPFACET(0xFF,0,0xFF)
+};
+
+const unsigned char topFacets110[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    TOPFACET(0,0xFF,0xFF)
+};
+
+const unsigned char topFacets111[] = {
+
+    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
+    60,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    8,60,               // center point (PIXELS) from 0,0 top left
+
+
+    TOPFACET(0xFF,0xFF,0xFF)
+};
+
+
+
 
 const unsigned char rocketShipLeg[] = {
 
@@ -494,7 +1041,7 @@ void drawBitmap(const unsigned char *bmp, int x, int y, bool relativeToScreen) {
     unsigned char pf[3][6];
     unsigned char masker[6];
 
-    int screenStart = SCORE_SCANLINES; //relativeToScreen ? 0 : SCORE_SCANLINES;
+    int screenStart = 0; //SCORE_SCANLINES; //relativeToScreen ? 0 : SCORE_SCANLINES;
 
     for (int i = 0; i < 40; i++)
         pix[i] = 0;

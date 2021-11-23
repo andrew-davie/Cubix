@@ -86,7 +86,7 @@ int water, lava;
 unsigned char *lastWater;
 unsigned char bgPalette[24];
 
-#define SPACESHIPS 9
+#define SPACESHIPS 19
 int spaceshipY[SPACESHIPS];
 //int spaceshipAccel[SPACESHIPS];
 int spaceshipWait[SPACESHIPS];
@@ -94,6 +94,10 @@ int spaceshipMode[SPACESHIPS];
 int spaceshipX[SPACESHIPS];
 int spaceshipVar[SPACESHIPS];
 int spaceshipSquare[SPACESHIPS];
+int spaceshipRightShape[SPACESHIPS];
+int spaceshipLeftShape[SPACESHIPS];
+int spaceshipTopShape[SPACESHIPS];
+
 //int spaceshipTargetX[SPACESHIPS];
 //int spaceshipVar[SPACESHIPS];
 unsigned const char *spaceShipShape[SPACESHIPS];
@@ -560,14 +564,14 @@ void setColours() {
     unsigned char bgCol = flashTime ? ARENA_COLOR : 0;
 
     i = 0;
-    if (displayMode == DISPLAY_NORMAL)
-        while (i < SCORE_SCANLINES) {
-            RAM[_BUF_COLUPF + i] = ColourConvert(scorecol);
-            RAM[_BUF_COLUBK + i] = bgCol;
+    // if (displayMode == DISPLAY_NORMAL)
+    //     while (i < SCORE_SCANLINES) {
+    //         RAM[_BUF_COLUPF + i] = ColourConvert(scorecol);
+    //         RAM[_BUF_COLUBK + i] = bgCol;
             
-            scorecol -= (i + (i>>1))>>4;
-            i++;
-        }
+    //         scorecol -= (i + (i>>1))>>4;
+    //         i++;
+    //     }
 
     unsigned char cno = 0;
     while (i < _ARENA_SCANLINES) {
@@ -580,26 +584,116 @@ void setColours() {
 
 }
 
+bool hasTopFace[] = {
+
+    false, false, false, false,
+    false, false, false, false,
+    false, false, true, true,
+    true, true, true, true,
+    true, true, true,
+
+};
+
+bool hasRightFace[] = {
+
+    false, true, false, true,
+    true, false, true, false,
+    true, true, false, false,
+    false, false, false, true,
+    false, true, true,
+};
+
+bool hasLeftFace[] = {
+
+    true, false, true, false,
+    true, true, false, true,
+    false, true, false, false,
+    false, true, false, false,
+    true, false, true,
+};
+
+
+
 
 void InitGameX() {
 
     for (int i = 0; i < 2; i++)
         thisFrame[0][i] = thisFrame[1][i] = false;
 
+#define SPCX 4
+#define SPCY 1
+
+
+
+
     const int ssx[] = {
 
-        15, 20, 25, 30,
-        10, 15, 20, 25,
-        5, 10, 15, 20,
-        0, 5, 10, 15,
+        4, 24,
+        9, 19,
+        14,
+
+        4, 24,
+        9, 19,
+        14,
+
+        14,
+        9,19,
+        4, 14, 24,
+        9,19,
+        14,
+
+
+
+
+
+
+
+        6,
+        10,22,18,14,
+        6, 10, 22, 18, 14,
+        6, 10, 22, 18, 14,
+
+
+
+
+        5,5,5,
+        10,10,10,10,
+        15,15,15,15,15,
+        20,20,20,20,
+        25,25,25,
     };
 
     const int ssy[] = {
+
+        0x190000+0x150000, 0x190000+0x150000,
+        0x1E0000+0x150000, 0x1E0000+0x150000,
+        0x230000+0x150000,
+
+        0x190000+0x80000, 0x190000+0x80000,
+        0x1E0000+0x80000, 0x1E0000+0x80000,
+        0x230000+0x80000,
+
+        0xA0000,
+        0xF0000, 0xF0000,
+        0x140000, 0x140000, 0x140000,
+        0x190000, 0x190000,
+        0x1E0000,
+
         
-        16, 14, 12, 10,
-        14, 12, 10, 8,
-        12, 10, 8, 6,
-        10, 8, 6, 4,
+        
+
+
+        12,13,12,13,14,
+        10,11,10,11,12,
+        7,8,7,8,9,
+
+
+        8,12,16,
+        6,10,14,18,
+        4,8,12,16,20,
+        6,10,14,18,
+        8,12,16,
+
      };
 
 
@@ -613,10 +707,19 @@ void InitGameX() {
         
 //        spaceshipX[sno] = 5 << 14; //(((getRandom32() & 0xFF) >> 8) * 160) << 14;
 
-        spaceshipY[sno] = (ssy[sno] << 16) * 3;
+        spaceshipY[sno] = ((ssy[sno])); // << 16) * 3;
         spaceshipX[sno] = ssx[sno] << 14;
 
-
+        do
+            spaceshipRightShape[sno] = getRandom32() & 7;
+        while (spaceshipRightShape[sno] < 2);
+        do
+            spaceshipLeftShape[sno] = getRandom32() & 7;
+        while (spaceshipLeftShape[sno] < 2);
+        do
+            spaceshipTopShape[sno] = getRandom32() & 7;
+        while (spaceshipTopShape[sno] < 2);
+//        spaceshipTopShape[sno] = sno & 7;
 
         // spaceshipTargetX[sno] = 5 << 16;
 
@@ -1609,68 +1712,68 @@ void setPalette(int start, int size, int step, int tweak) {
         }
     }
 
-    int lavaLine = lava - tweak - PIECE_DEPTH;
-    int waterLine = water - tweak - PIECE_DEPTH;
-#if ENABLE_SHAKE
-    lavaLine += (shakeY >> 16);
-    waterLine += (shakeY >> 16);
-#endif    
+//     int lavaLine = lava - tweak - PIECE_DEPTH;
+//     int waterLine = water - tweak - PIECE_DEPTH;
+// #if ENABLE_SHAKE
+//     lavaLine += (shakeY >> 16);
+//     waterLine += (shakeY >> 16);
+// #endif    
 
 
     int i = start;
     while (i < _ARENA_SCANLINES) {
 
-        if (lava && absLine >= lavaLine) {
+        // if (lava && absLine >= lavaLine) {
 
-            unsigned char lavaCol = 0x44;
-            int delta = (absLine - lavaLine);
+        //     unsigned char lavaCol = 0x44;
+        //     int delta = (absLine - lavaLine);
 
-            if (delta < 14) {
-                lavaCol = 0x2E - (delta >> 2);
-            } else {
+        //     if (delta < 14) {
+        //         lavaCol = 0x2E - (delta >> 2);
+        //     } else {
 
-                lavaCol = 0x4A - (delta >> 3);
-                if (lavaCol < 0x44)
-                    lavaCol = 0x44;
-            }
+        //         lavaCol = 0x4A - (delta >> 3);
+        //         if (lavaCol < 0x44)
+        //             lavaCol = 0x44;
+        //     }
 
-            //if (!flashTime) {
-                RAM[_BUF_COLUBK + i ] = 
-                RAM[_BUF_COLUBK + i + 1 ] =
-                RAM[_BUF_COLUBK + i + 2] = ColourConvert(lavaCol);
-            //}
+        //     //if (!flashTime) {
+        //         RAM[_BUF_COLUBK + i ] = 
+        //         RAM[_BUF_COLUBK + i + 1 ] =
+        //         RAM[_BUF_COLUBK + i + 2] = ColourConvert(lavaCol);
+        //     //}
 
-            RAM[_BUF_COLUPF + i] = ColourConvert(0x48);
-            RAM[_BUF_COLUPF + i + 1 ] = ColourConvert(0x28);
-            RAM[_BUF_COLUPF + i + 2 ] = ColourConvert(0x3c);
+        //     RAM[_BUF_COLUPF + i] = ColourConvert(0x48);
+        //     RAM[_BUF_COLUPF + i + 1 ] = ColourConvert(0x28);
+        //     RAM[_BUF_COLUPF + i + 2 ] = ColourConvert(0x3c);
 
-        }
+        // }
         
-        else if (water && absLine >= waterLine) {
+        // else if (water && absLine >= waterLine) {
 
-            unsigned char waterCol = 0x90;
-            int delta = absLine - waterLine;
-            if (delta < 32) {
-                waterCol += (32 - delta) >> 2;
-            }
+        //     unsigned char waterCol = 0x90;
+        //     int delta = absLine - waterLine;
+        //     if (delta < 32) {
+        //         waterCol += (32 - delta) >> 2;
+        //     }
 
 
-            //if (!flashTime) {
+        //     //if (!flashTime) {
 
-                RAM[_BUF_COLUBK + i ] = ColourConvert(waterCol);
-                RAM[_BUF_COLUBK + i + 1 ] = ColourConvert(waterCol);
-                RAM[_BUF_COLUBK + i + 2 ] = ColourConvert(waterCol);
+        //         RAM[_BUF_COLUBK + i ] = ColourConvert(waterCol);
+        //         RAM[_BUF_COLUBK + i + 1 ] = ColourConvert(waterCol);
+        //         RAM[_BUF_COLUBK + i + 2 ] = ColourConvert(waterCol);
 
-            //}
+        //     //}
 
-            RAM[_BUF_COLUPF + i ] = ColourConvert(0xA4);
-            RAM[_BUF_COLUPF + i + 1] = ColourConvert(0x84);     // boulder body
-            RAM[_BUF_COLUPF + i + 2] = ColourConvert(0x94);     // flow + inside stream colour
+        //     RAM[_BUF_COLUPF + i ] = ColourConvert(0xA4);
+        //     RAM[_BUF_COLUPF + i + 1] = ColourConvert(0x84);     // boulder body
+        //     RAM[_BUF_COLUPF + i + 2] = ColourConvert(0x94);     // flow + inside stream colour
 
-        }
-        else {
+        // }
+        // else {
             RAM[_BUF_COLUPF + i] = ColourConvert(bgPalette[pfCharLine]);
-        }
+        // }
         
             
         bgCharLine += 3;            
@@ -1755,7 +1858,7 @@ void setOverviewPalette() {
 }
 
 void setDisplayPalette() {
-    setPalette(18, PIECE_DEPTH, 3, 3);
+    setPalette(0, PIECE_DEPTH, 3, 3);
 }
 
 
@@ -1766,70 +1869,70 @@ int sortOrder[SPACESHIPS];
 
 void sortCubes() {
 
-    for (int sno = 0; sno < SPACESHIPS; sno++)
-        spaceshipVar[sno] = 0;
+    // for (int sno = 0; sno < SPACESHIPS; sno++)
+    //     spaceshipVar[sno] = 0;
 
     for (int cube = 0; cube < SPACESHIPS; cube++) {
 
-        int bestno;
-        int best = 0x7FFFFFFF;
-        for (int sno = 0; sno < SPACESHIPS; sno++) {
-            if (spaceshipVar[sno] == 0 && spaceshipY[sno] <= best) {
-                best = spaceshipY[sno];
-                bestno = sno;
-            }
-        }
+        // int bestno;
+        // int best = 0;
+        // for (int sno = 0; sno < SPACESHIPS; sno++) {
+        //     if (spaceshipVar[sno] == 0 && spaceshipY[sno] >= best) {
+        //         best = spaceshipY[sno];
+        //         bestno = sno;
+        //     }
+        // }
 
-            spaceshipVar[bestno] = 1;
-            sortOrder[cube] = bestno;
+            // spaceshipVar[bestno] = 1;
+            sortOrder[cube] = cube;
     }  
 
 
-    for (int cube = 0; cube < SPACESHIPS; cube++) {
+    // for (int cube = 0; cube < SPACESHIPS; cube++) {
 
-        int sno = sortOrder[cube];
+    //     int sno = sortOrder[cube];
 
-        int dx[] = { 0, 1, 0, -1 };
-        int dy[] = { 1, 0, -1, 0 };
-
-
-        if (spaceshipWait[sno] == 0 /*&& (getRandom32() & 0xFF) < 155*/) {
+    //     int dx[] = { 0, 1, 0, -1 };
+    //     int dy[] = { 1, 0, -1, 0 };
 
 
-            int dir = getRandom32() & 3;
-
-            int x = (spaceshipSquare[sno] & 3)+ dx[dir];
-            if ( x >= 0 && x <= 3) {
-                int y = ((spaceshipSquare[sno] >> 2) & 3) + dy[dir];
-                if (y >= 0 && y <= 3) {
-
-                    bool occupied = false;
-                    for (int sn = 0; sn < SPACESHIPS; sn++) {
-                        if (spaceshipSquare[sn] == y * 4 + x)
-                            occupied = true;
-                    }
-
-                    if (!occupied) {
-                        spaceshipSquare[sno] = y * 4 + x;
-                        spaceshipMode[sno]= dir;
-                        spaceshipWait[sno] = 5;
-                    }
-                }
-            }
-        }
+    //     if (spaceshipWait[sno] == 0 /*&& (getRandom32() & 0xFF) < 155*/) {
 
 
-        if (spaceshipWait[sno]) {
-            spaceshipWait[sno]--;
+    //         int dir = getRandom32() & 3;
 
-            spaceshipX[sno] += 0x4000 * dx[spaceshipMode[sno]];
-            spaceshipX[sno] -= 0x4000  * dy[spaceshipMode[sno]];
+    //         int x = (spaceshipSquare[sno] & 3)+ dx[dir];
+    //         if ( x >= 0 && x <= 3) {
+    //             int y = ((spaceshipSquare[sno] >> 2) & 3) + dy[dir];
+    //             if (y >= 0 && y <= 3) {
 
-            spaceshipY[sno] -= 0x4000 * dx[spaceshipMode[sno]] * 5;
-            spaceshipY[sno] -= 0x4000  * dy[spaceshipMode[sno]] * 5;
-        }
+    //                 bool occupied = false;
+    //                 for (int sn = 0; sn < SPACESHIPS; sn++) {
+    //                     if (spaceshipSquare[sn] == y * 4 + x)
+    //                         occupied = true;
+    //                 }
 
-    }
+    //                 if (!occupied) {
+    //                     spaceshipSquare[sno] = y * 4 + x;
+    //                     spaceshipMode[sno]= dir;
+    //                     spaceshipWait[sno] = 5;
+    //                 }
+    //             }
+    //         }
+    //     }
+
+
+    //     if (spaceshipWait[sno]) {
+    //         spaceshipWait[sno]--;
+
+    //         spaceshipX[sno] += 0x4000 * dx[spaceshipMode[sno]];
+    //         spaceshipX[sno] -= 0x4000  * dy[spaceshipMode[sno]];
+
+    //         spaceshipY[sno] -= 0x4000 * dx[spaceshipMode[sno]] * 5;
+    //         spaceshipY[sno] -= 0x4000  * dy[spaceshipMode[sno]] * 5;
+    //     }
+
+    // }
 
     cubePtr = 0;
     // pfBuffer ^= 1;
@@ -1843,11 +1946,94 @@ void drawSoftwareSprites() {
 
     int cube = sortOrder[cubePtr];
 
-    drawBitmap(spaceShipShape[cube],
-        (spaceshipX[cube] & 0xFFFFC000) + 0x00024000,
-        (((104 << 16) + spaceshipY[cube]) & 0xFFFF0000)  * 3,
-        true);
-    
+    // if ((getRandom32() & 0xFF) < 10)
+    //     if (getRandom32() & 1)
+    //         spaceShipShape[cube] = &eroShip[0];
+    //     else
+    //         spaceShipShape[cube] = &eroShip2[0];
+
+    // spaceShipShape[cube] = &topFace[0];
+
+
+    if (hasTopFace[cube]) {
+
+        const unsigned char *facetTopColour[] = {
+            &topFacets000[0],
+            &topFacets001[0],
+            &topFacets010[0],
+            &topFacets011[0],
+            &topFacets100[0],
+            &topFacets101[0],
+            &topFacets110[0],
+            &topFacets111[0],
+        };
+
+        if ((getRandom32() & 0xff) < 28) {
+            int fcol = getRandom32() & 7;
+            if (fcol > 0 && fcol < 7 && fcol != spaceshipRightShape[cube] && fcol != spaceshipLeftShape[cube])
+                spaceshipTopShape[cube] = fcol;
+        }
+
+        drawBitmap(facetTopColour[spaceshipTopShape[cube]],
+            (spaceshipX[cube] & 0xFFFFC000) + 0x00024000,
+            (((104 << 16) + spaceshipY[cube]) & 0xFFFF0000)  * 3,
+            true);
+    }
+
+    // drawBitmap(&innerFacets[0],
+    //     (spaceshipX[cube] & 0xFFFFC000) + 0x00024000,
+    //     (((104 << 16) + spaceshipY[cube]) & 0xFFFF0000)  * 3,
+    //     true);
+
+    if (hasRightFace[cube]) {
+
+        const unsigned char *facetRightColour[] = {
+            &rightFacets000[0],
+            &rightFacets001[0],
+            &rightFacets010[0],
+            &rightFacets011[0],
+            &rightFacets100[0],
+            &rightFacets101[0],
+            &rightFacets110[0],
+            &rightFacets111[0],
+        };
+
+        if ((getRandom32() & 0xff) < 28) {
+            int fcol = getRandom32() & 7;
+            if (fcol > 0 && fcol < 7 && fcol != spaceshipLeftShape[cube] && fcol != spaceshipTopShape[cube])
+                spaceshipRightShape[cube] = fcol;
+        }
+
+        drawBitmap(facetRightColour[spaceshipRightShape[cube]],
+            (spaceshipX[cube] & 0xFFFFC000) + 0x00024000,
+            (((104 << 16) + spaceshipY[cube]) & 0xFFFF0000)  * 3,
+            true);
+    }
+
+    if (hasLeftFace[cube]) {
+
+        const unsigned char *facetLeftColour[] = {
+            &leftFacets000[0],
+            &leftFacets001[0],
+            &leftFacets010[0],
+            &leftFacets011[0],
+            &leftFacets100[0],
+            &leftFacets101[0],
+            &leftFacets110[0],
+            &leftFacets111[0],
+        };
+
+        if ((getRandom32() & 0xff) < 28) {
+            int fcol = getRandom32() & 7;
+            if (fcol > 0 && fcol < 7 && fcol != spaceshipRightShape[cube] && fcol != spaceshipTopShape[cube])
+                spaceshipLeftShape[cube] = fcol;
+        }
+
+        drawBitmap(facetLeftColour[spaceshipLeftShape[cube]],
+            (spaceshipX[cube] & 0xFFFFC000) + 0x00024000,
+            (((104 << 16) + spaceshipY[cube]) & 0xFFFF0000)  * 3,
+            true);
+    }
 
     if (++cubePtr >= SPACESHIPS) {
         cubePtr = 0;
@@ -1861,7 +2047,7 @@ void GameScheduleDrawSprites() {
 
 
     setDisplayPalette();
-    drawScore();
+//    drawScore();
 
 
     for (int sp = 0; sp < 2; sp++) {
