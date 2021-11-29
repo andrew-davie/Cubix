@@ -1730,6 +1730,12 @@ void drawBitmap(const unsigned char *bmp, int x, int y, bool relativeToScreen) {
         return;
 
     }
+
+
+
+
+
+
     int pixT = (y - (scrollY * 3)) - (bmp[BMP_CENTER_Y] << 16);
     int pixB = pixT + (bmp[BMP_HEIGHT] << 16);
     if (pixB < 0 || pixT >= (_ARENA_SCANLINES << 16)) {

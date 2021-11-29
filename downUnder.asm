@@ -17,7 +17,7 @@
     MAC ldx
     ENDM
 
-CDC = 13
+CDC = 14
 
 ; Symbols prefixed with _ are exported to 'main/defines_from_dasm_for_c.h'
 ; This is done via 'awk' in the makefile.
@@ -70,8 +70,8 @@ _DS_GRP1a = DS12DATA
 ;_DS_GRP1c = DS16DATA
     
 ; timer values
-VB_TIM64T = 49;46; //7; //7
-OS_TIM64T = 21; 41; //33 ;-3
+VB_TIM64T = 42;46; //7; //7
+OS_TIM64T = 28; 41; //33 ;-3
 
 ; color values
 _BLACK           = $00
@@ -631,7 +631,11 @@ GameVB:
 
                     ldy #_FN_GAME_VB
 
+    ;SLEEP 20
+
 Again1              jsr CallArmCode                 ; draws the chessboard!
+
+    ;SLEEP 2
 
                     ldy #_FN_GAME_IDLE
 

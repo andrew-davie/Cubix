@@ -46,10 +46,13 @@ VPATH += $(BASE):$(SRC)
 # Default ∫target
 default: armcode
 	#sleep 20
-	open -a /Applications/Stella.app ./downUnder.bin
+	#open -a /Applications/Stella.app ./downUnder.bin
+	../Gopher2600/gopher2600_darwin_amd64 ./downUnder.bin &
+	#@killall gopher2600_darwin_amd64 || true
 
 armcode_defines:
-	osascript -e 'quit app "Stella"'
+	killall gopher2600_darwin_amd64 || true
+	#osascript -e 'quit app "Stella"'
 	@echo -e $(INFO_COLOR)
 	@echo "Step 1/3 - Create $(DASM_TO_C)"  
 	@echo -e $(OPTION_COLOR)

@@ -1347,8 +1347,8 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // false            always drawn
 
 
-            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
-            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
+            {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
+            {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
 
             // top facets
 
