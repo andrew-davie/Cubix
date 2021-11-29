@@ -17,6 +17,8 @@
     MAC ldx
     ENDM
 
+CDC = 13
+
 ; Symbols prefixed with _ are exported to 'main/defines_from_dasm_for_c.h'
 ; This is done via 'awk' in the makefile.
 
@@ -519,7 +521,7 @@ Again2              jsr CallArmCode                 ; draws the chessboard!
                     bmi .ag2
                     ldy #_FN_GAME_IDLE
                     ldx INTIM
-                    cpx #10
+                    cpx #CDC
                     bcs Again2
 
 
@@ -636,7 +638,7 @@ Again1              jsr CallArmCode                 ; draws the chessboard!
                     ldx TIMINT
                     bmi skipss
                     ldx INTIM
-                    cpx #10
+                    cpx #CDC
                     bcs Again1
 
                     jsr safeTimerWait

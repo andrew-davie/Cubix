@@ -3,7 +3,8 @@
 
 #include <stdbool.h>
 
-extern const unsigned char rocketShip[];
+extern const unsigned char cubeBoundary[];
+extern const unsigned char cube1Boundary[];
 extern const unsigned char topFace[];
 extern const unsigned char innerFacets[];
 
@@ -16,6 +17,15 @@ extern const unsigned char rightFacets101[];
 extern const unsigned char rightFacets110[];
 extern const unsigned char rightFacets111[];
 
+extern const unsigned char right2Facets000[];
+extern const unsigned char right2Facets001[];
+extern const unsigned char right2Facets010[];
+extern const unsigned char right2Facets011[];
+extern const unsigned char right2Facets100[];
+extern const unsigned char right2Facets101[];
+extern const unsigned char right2Facets110[];
+extern const unsigned char right2Facets111[];
+
 extern const unsigned char leftFacets000[];
 extern const unsigned char leftFacets001[];
 extern const unsigned char leftFacets010[];
@@ -24,6 +34,15 @@ extern const unsigned char leftFacets100[];
 extern const unsigned char leftFacets101[];
 extern const unsigned char leftFacets110[];
 extern const unsigned char leftFacets111[];
+
+extern const unsigned char left2Facets000[];
+extern const unsigned char left2Facets001[];
+extern const unsigned char left2Facets010[];
+extern const unsigned char left2Facets011[];
+extern const unsigned char left2Facets100[];
+extern const unsigned char left2Facets101[];
+extern const unsigned char left2Facets110[];
+extern const unsigned char left2Facets111[];
 
 extern const unsigned char topFacets000[];
 extern const unsigned char topFacets001[];
@@ -34,6 +53,33 @@ extern const unsigned char topFacets101[];
 extern const unsigned char topFacets110[];
 extern const unsigned char topFacets111[];
 
+extern const unsigned char top2Facets000[];
+extern const unsigned char top2Facets001[];
+extern const unsigned char top2Facets010[];
+extern const unsigned char top2Facets011[];
+extern const unsigned char top2Facets100[];
+extern const unsigned char top2Facets101[];
+extern const unsigned char top2Facets110[];
+extern const unsigned char top2Facets111[];
+
+extern const unsigned char topFacet45_000[];
+extern const unsigned char topFacet45_001[];
+extern const unsigned char topFacet45_010[];
+extern const unsigned char topFacet45_011[];
+extern const unsigned char topFacet45_100[];
+extern const unsigned char topFacet45_101[];
+extern const unsigned char topFacet45_110[];
+extern const unsigned char topFacet45_111[];
+
+
+extern const unsigned char frontFacet45_000[];
+extern const unsigned char frontFacet45_001[];
+extern const unsigned char frontFacet45_010[];
+extern const unsigned char frontFacet45_011[];
+extern const unsigned char frontFacet45_100[];
+extern const unsigned char frontFacet45_101[];
+extern const unsigned char frontFacet45_110[];
+extern const unsigned char frontFacet45_111[];
 
 
 extern const unsigned char eroShip[];

@@ -420,8 +420,8 @@ const unsigned char predraw[] = {
     ________  ________  ________  ________  ________  ________ 
     ________  ________  ________  ________  ________  ________ 
 
-    XXX_____  X_______  ________  ________  ________  ________ 
-    XXXX____  ________  ________  ________  ________  ________ 
+    ________  ________  ________  ________  ________  ________ 
+    ________  ________  ________  ________  ________  ________ 
     ________  ________  ________  ________  ________  ________ 
 
     ________  ________  ________  ________  ________  ________ 
@@ -565,18 +565,18 @@ const unsigned char predraw[] = {
 
 void drawScreen(){
 
-    unsigned char mask = JOY0_FIRE ? 0xFF : 0;
+    unsigned char mask = 0; //JOY0_FIRE ? 0xFF : 0;
     
 
-    unsigned char *p0 = RAM + bufPtr[0][pfBuffer] + SCORE_SCANLINES;
+    unsigned char *p0 = RAM + bufPtr[0][pfBuffer];
     unsigned char *screen = predraw;
-    for (int sl = 0; sl < _ARENA_SCANLINES - SCORE_SCANLINES; sl++) {
-        *(p0 + 0 * _ARENA_SCANLINES) = getRandom32() & mask; //*screen++;
-        *(p0 + 1 * _ARENA_SCANLINES) = getRandom32() & mask; //*screen++;
-        *(p0 + 2 * _ARENA_SCANLINES) = getRandom32() & mask; //*screen++;
-        *(p0 + 3 * _ARENA_SCANLINES) = getRandom32() & mask; //*screen++;
-        *(p0 + 4 * _ARENA_SCANLINES) = getRandom32() & mask; //*screen++;
-        *(p0 + 5 * _ARENA_SCANLINES) = getRandom32() & mask; //*screen++;
+    for (int sl = 0; sl < _ARENA_SCANLINES; sl++) {
+        *(p0 + 0 * _ARENA_SCANLINES) = 0; //getRandom32() & mask; //*screen++;
+        *(p0 + 1 * _ARENA_SCANLINES) = 0; //getRandom32() & mask; //*screen++;
+        *(p0 + 2 * _ARENA_SCANLINES) = 0; //getRandom32() & mask; //*screen++;
+        *(p0 + 3 * _ARENA_SCANLINES) = 0; //getRandom32() & mask; //*screen++;
+        *(p0 + 4 * _ARENA_SCANLINES) = 0; //getRandom32() & mask; //*screen++;
+        *(p0 + 5 * _ARENA_SCANLINES) = 0; //getRandom32() & mask; //*screen++;
         p0++;
     }
 

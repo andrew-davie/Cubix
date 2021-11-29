@@ -77,6 +77,7 @@ int pfBuffer;
 int cubePtr;
 
 int parallax;
+bool finished = true;
 
 int drillHeight;
 
@@ -641,26 +642,6 @@ void InitGameX() {
         4, 14, 24,
         9,19,
         14,
-
-
-
-
-
-
-
-        6,
-        10,22,18,14,
-        6, 10, 22, 18, 14,
-        6, 10, 22, 18, 14,
-
-
-
-
-        5,5,5,
-        10,10,10,10,
-        15,15,15,15,15,
-        20,20,20,20,
-        25,25,25,
     };
 
     const int ssy[] = {
@@ -678,22 +659,6 @@ void InitGameX() {
         0x140000, 0x140000, 0x140000,
         0x190000, 0x190000,
         0x1E0000,
-
-        
-        
-
-
-        12,13,12,13,14,
-        10,11,10,11,12,
-        7,8,7,8,9,
-
-
-        8,12,16,
-        6,10,14,18,
-        4,8,12,16,20,
-        6,10,14,18,
-        8,12,16,
-
      };
 
 
@@ -930,12 +895,13 @@ void Initialize() {
 
     pfBuffer = 0;
 
-    sortCubes();
 
     InitAudio();
     InitGameX();
 
     InitGameBuffers();
+
+    setPalette(0, PIECE_DEPTH, 3, 3);
 }
 
 
@@ -952,59 +918,11 @@ void GameScheduleProcessBoardRow();
 
 
 
-
-void formLandscape(){
-
-
-    int horizon = (((getRandom32() & 0xFF) * 4) >> 8) + 8;
-    for (int i = 1; i < 39; i++) {
-
-        int offset = (((getRandom32() & 0xFF) * 3) >> 8) - 1;
-        horizon += offset;
-
-        if (horizon < 1) 
-            horizon = 1;
-
-        if (horizon > 22)
-            horizon = 22;
-
-
-        for (int j = 1; j < horizon; j++)
-            setChar(i,j, CH_BLANK); //_PARALLAX);
-
-
-    }
-
-}
-
-
 void Scheduler() {
 
     switch (gameSchedule) {
     case SCHEDULE_UNPACK_CAVE:
-        // if (DecodeExplicitData()) {
-        //     // add pebbles
-
-        //     for (int pebble = 0; pebble < MAX_PEBBLES; pebble++) {
-        //         int rnd = getRandom32();
-        //         int idx = _BOARD + (((rnd & 0xFFFF) * 880) >> 16);
-        //         if (RAM[idx] == CH_DIRT)
-        //             RAM[idx] = CH_RUBBLE + (rnd & 1);
-        //     }
-
-        //     if (lava) {
-        //         AddAudio(SFX_LAVA);
-        //     }
-
-
-        //     formLandscape();
-
-
-
-
-
-            gameSchedule = SCHEDULE_START;
-        // }
+        gameSchedule = SCHEDULE_START;
         break;
     case SCHEDULE_START:
         SetupBoard();
@@ -1070,626 +988,101 @@ void InitGameDatastreams() {
 
 void GameOverscan() {
 
-    Scroll();
 
-    InitGameDatastreams();
-    playAudio();
+    // for (int sp=0; sp< 1; sp++) {
+    //     drawSoftwareSprites();
+    //     if (finished) {
+    //         pfBuffer ^= 1;
+    //         drawScreen();
+    //         finished = false;
+    //         break;
+    //     }
+    // }
+
+    // InitGameDatastreams();
+
+    // Scroll();
+    // GameScheduleDrawSprites();
+
+    // InitGameDatastreams();
+//    playAudio();
 //    GameScheduleAnimate();
-    GameScheduleDrawSprites();
 }
 
-
-void clear(unsigned char *p, unsigned char v, int len) {
-    for (int i=0; i < len; i++)
-        *p++ = v;        
-}
-
-#define DIGIT_GAP \
-        ________   \
-        ________   \
-        ________   \
-        ________   \
-        ________   \
-        ________  
-
-
-
-static unsigned char digitShape[] = {
-
-        _X___X__  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        _X___X__  
-
-        DIGIT_GAP
-
-        __X___X_
-        __X___X_
-        __X___X_
-        _XX__XX_  
-        _XX__XX_  
-        _XX__XX_  
-        _XX__XX_  
-        __X___X_
-        __X___X_
-        __X___X_
-        __X___X_
-        __X___X_
-        __X___X_
-        __X___X_
-        __X___X_
-        __X___X_
-        __X___X_
-        __X___X_
-
-        DIGIT_GAP
-
-        _X___X__  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        X_X_X_X_  
-        __X___X_
-        __X___X_
-        __X___X_
-        _XX__XX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        XX__XX__  
-        X___X___  
-        X_X_X_X_  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-
-        DIGIT_GAP
-
-        _X___X__  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        X_X_X_X_  
-        __X___X_
-        __X___X_
-        _XX__XX_  
-        _X___X__  
-        _XX__XX_  
-        _XX__XX_  
-        __X___X_
-        __X___X_
-        X_X_X_X_  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        _X___X__  
-
-        DIGIT_GAP
-
-        X___X___  
-        X___X___  
-        X___X___  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        __X___X_
-        __X___X_
-        __X___X_
-        __X___X_
-        __X___X_
-
-        DIGIT_GAP
-
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        X_X_X_X_  
-        X___X___  
-        XX__XX__  
-        XXX_XXX_  
-        XXX_XXX_  
-        _XX__XX_  
-        __X___X_
-        __X___X_
-        __X___X_
-        X_X_X_X_  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        _X___X__  
-
-        DIGIT_GAP
-
-        _X___X__  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        X_X_X_X_  
-        X___X___  
-        XX__XX__  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        _X___X__  
-
-        DIGIT_GAP
-
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        X_X_X_X_  
-        __X___X_
-        __X___X_
-        __X___X_
-        __X___X_
-        _XX__XX_  
-        _X___X__  
-        _X___X__  
-        _X___X__  
-        _X___X__  
-        _X___X__  
-        _X___X__  
-        _X___X__  
-        _X___X__  
-
-        DIGIT_GAP
-
-        _X___X__  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        XXX_XXX_  
-        XXX_XXX_  
-        _X___X__  
-        XXX_XXX_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        _X___X__  
-
-        DIGIT_GAP
-
-        _X___X__  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        _XX__XX_  
-        __X___X_
-        X_X_X_X_  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        _X___X__  
-
-        DIGIT_GAP
-
-    // repeat 0
-
-        _X___X__  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        X_X_X_X_  
-        XXX_XXX_  
-        XXX_XXX_  
-        XXX_XXX_  
-        _X___X__  
-
-        DIGIT_GAP
-
-    // repeat 0
-
-        XX__XX__  
-        XX__XX__  
-        ________  
-        XXX_XXX_  
-        XXX_XXX_  
-        ________  
-        X_X_X_X_  
-        X_X_X_X_  
-        ________  
-        X_X_X_X_  
-        X_X_X_X_  
-        ________  
-        XXX_XXX_  
-        XXX_XXX_  
-        ________  
-        XX__XX__  
-        XX__XX__  
-        ________  
-
-        DIGIT_GAP
-
-        XXX_XXX_  
-        XXX_XXX_  
-        ________  
-        XXX_XXX_  
-        XXX_XXX_  
-        ________  
-        _X___X__  
-        _X___X__  
-        ________  
-        _X___X__  
-        _X___X__  
-        ________  
-        _X___X__  
-        _X___X__  
-        ________  
-        _X___X__  
-        _X___X__  
-        ________  
-
-        DIGIT_GAP
-
-        ________  
-        ________  
-        ________  
-        ________  
-        ________  
-        ________  
-        ________  
-        ________  
-        ________  
-        ________  
-        ________  
-        ________  
-        ________  
-        ________  
-        ________  
-        ________  
-        ________  
-        ________  
-
-        DIGIT_GAP
-
-        _X___X__  
-        _X___X__  
-        _X___X__  
-        ________  
-        XXX_XXX_  
-        XXX_XXX_  
-        ________  
-        _X___X__  
-        _X___X__  
-        ________  
-        _X___X__  
-        _X___X__  
-        X_X_X_X_  
-        X_X_X_X_  
-        ________  
-        X_X_X_X_  
-        X_X_X_X_  
-        ________  
-  
-        DIGIT_GAP
-
-        XX__XX__  
-        XX__XX__  
-        ________  
-        XXX_XXX_  
-        XXX_XXX_  
-        ________  
-        X_X_X_X_  
-        X_X_X_X_  
-        ________  
-        XX__XX__  
-        XX__XX__  
-        ________  
-        X___X___  
-        X___X___  
-        ________  
-        X___X___  
-        X___X___  
-        ________  
-
-        DIGIT_GAP
-
-        X___X___  
-        X___X___  
-        ________  
-        X___X___  
-        X___X___  
-        ________  
-        X___X___  
-        X___X___  
-        ________  
-        X___X___  
-        X___X___  
-        ________  
-        XXX_XXX_  
-        XXX_XXX_  
-        ________  
-        XXX_XXX_  
-        XXX_XXX_  
-        ________  
-
-        DIGIT_GAP
-
-        ___X___X
-        ___X___X
-        ________  
-        ___X___X
-        ___X___X
-        ________  
-        ________  
-        ________  
-        ________  
-        ________  
-        ________  
-        ________  
-        ___X___X
-        ___X___X
-        ________  
-        ___X___X
-        ___X___X
-        ________  
-
-        DIGIT_GAP
-
-};
-
-
-const int pwr[] = {
-    1,10,100,1000,10000,100000,
-};
-
-
-// right-to-left, least-significant first digit position
-const unsigned char digitMaskLR[] = {
-    0xF0, 0x0F, 0x0F, 0xF0, 0xF0,
-    0xF0, 0x0F, 0x0F, 0xF0, 0xF0,
-};
-
-const bool mirror[] = {
-    1,1,0,0,1,
-    1,1,0,0,1,
-};
-
-const int base[][2] = {
-    { _BUF_A_PF2_RIGHT,    _BUF_B_PF2_RIGHT, },
-    { _BUF_A_PF2_RIGHT,    _BUF_B_PF2_RIGHT, },
-    { _BUF_A_PF1_RIGHT,    _BUF_B_PF1_RIGHT, },
-    { _BUF_A_PF1_RIGHT,    _BUF_B_PF1_RIGHT, },
-    { _BUF_A_PF0_RIGHT,    _BUF_B_PF0_RIGHT, },
-    { _BUF_A_PF2_LEFT,     _BUF_B_PF2_LEFT,  },
-    { _BUF_A_PF2_LEFT,     _BUF_B_PF2_LEFT,  },
-    { _BUF_A_PF1_LEFT,     _BUF_B_PF1_LEFT,  },
-    { _BUF_A_PF1_LEFT,     _BUF_B_PF1_LEFT,  },
-    { _BUF_A_PF0_LEFT,     _BUF_B_PF0_LEFT,  },
-};
-
-
-void drawBigDigit(int offset, int pos) {
-
-    for (int line = 0; line < DIGIT_SIZE; line++, offset++) {
-        RAM[base[pos][pfBuffer] + line] = (RAM[base[pos][pfBuffer] + line] & ~digitMaskLR[pos])
-            | ((mirror[pos]? BitRev[digitShape[offset]] : digitShape[offset]) & digitMaskLR[pos]);
-    }
-}
-
-
-void drawDecimal(int cvt, int pos) {
-
-    int forced = 0;
-    int digitPos = 0;
-    for (int digit = 2; digit >= 0; digit--) {
-
-        int displayDigit = 0;
-        while (cvt >= pwr[digit]) {
-            displayDigit += DIGIT_SIZE_ROLLER;
-            cvt -= pwr[digit];
-        }
-
-        forced |= displayDigit;
-
-        if (forced || !digit)
-            scoreLineNew[pos-digitPos++] = displayDigit;
-    }
-}
-
-
-
-static inline void drawDogeCoinAndTime(){
-
-    scoreLineNew[9] = DIGIT_DOGE_L;
-    scoreLineNew[8] = DIGIT_DOGE;
-
-    drawDecimal(doge, 7);
-
-
-    static int pulseCount = 0;
-    if (!exitMode && time < 0xA00 && (pulseCount++ & 8)) {
-        return;
-    }
-
-    scoreLineNew[4] = DIGIT_TIME;    
-    drawDecimal(time>>8, 3);
-}
-
-
-
-static inline void drawLives() {
-
-    scoreLineNew[8] = DIGIT_LIVES;
-    drawDecimal(lives, 7);
-    scoreLineNew[5] = DIGIT_LEVEL;
-    drawDecimal(level + 1, 4);
-    scoreLineNew[2] = DIGIT_CAVE;
-    drawDecimal(cave + 1, 1);
-
-}
-
-
-
-static inline void drawTheScore() {
-
-    // Decimal convert...
-
-    int cvtScore = actualScore;
-    for (int digit = 5; digit >= 0; digit--) {
-
-        int displayDigit = 0;
-        while (cvtScore >= pwr[digit]) {
-            displayDigit += DIGIT_SIZE_ROLLER;
-            cvtScore -= pwr[digit];
-        }
-
-        if (ScorePtr[digit] != displayDigit) {
-            ScorePtr[digit] += ROLL_SPEED;
-            if (ScorePtr[digit] >= DIGIT_SIZE_ROLLER*10)
-                ScorePtr[digit] = 0;
-        }
-
-        scoreLineNew[digit+2] = ScorePtr[digit];
-    }
-
-}
-
-
-void drawScore() {
-
-    static int lockScore = 0;
-    static int displayedScoreCycle = -1;
-
-    if (lockScore > 0)
-        lockScore--;
-    else {
-        if (displayedScoreCycle != scoreCycle) {
-            displayedScoreCycle = scoreCycle;
-            lockScore = 40;
-        }
-    }
-
-
-//    if (rockfordDead)
-//        setColours();
-
-    for (int i = 0; i < 10; i++)
-        scoreLineNew[i] = DIGIT_SPACE;
-
-    switch (displayedScoreCycle) {
-    case 0:
-        drawDogeCoinAndTime();
-        break;
-    case 1:
-        drawTheScore();
-        break;
-    case 2:
-        drawLives();
-        break;
-    }
-
-    // draw all changed digits
-    for (int i = 0; i < 10; i++) {
-        //if (scoreLineNew[i] != scoreLineCurrent[i]) {
-            scoreLineCurrent[i] = scoreLineNew[i];
-            drawBigDigit(scoreLineCurrent[i], i);
-        //}
-    }
-
-    if (forceScoreDraw) {
-        forceScoreDraw--;
-        if (!forceScoreDraw) {
-            forceScoreDraw = SCOREVISIBLETIME;
-            if (rockfordDead)
-                scoreCycle = cnoNext[scoreCycle];
-            else
-                scoreCycle = 0;
-        }
-    }
-
-}
 
 
 
 void GameVerticalBlank() {
  
+
+    Scroll();
+
+
+    if (finished) {
+        pfBuffer ^= 1;
+        drawScreen();
+        finished = false;
+    }
+
+    // else
+    //     drawSoftwareSprites();
+
+
+    GameScheduleDrawSprites();
+
+
+
     frameCounter++;
     frameToggler++;
 
-    if (time && /*!uncoverCount &&*/ !rockfordDead) {
 
-        time--;
-        if ((time & 0xFF) == 0xFF) {
-
-            time -= 0xC4;           // magic!  - (-256+60)
-            if (time < 0xA00) {
-                scoreCycle = 0;
-                forceScoreDraw = SCOREVISIBLETIME;
-                AddAudio(SFX_COUNTDOWN2);
-            }
-        }
-    }
+    // for (int sp=0; sp< 3; sp++) {
+    //     if (finished) {
+    //         pfBuffer ^= 1;
+    //         drawScreen();
+    //         finished = false;
+    //         break;
+    //     }
 
 
+    //     drawSoftwareSprites();
 
-    if (gameSchedule != SCHEDULE_UNPACK_CAVE) {
+    // }
 
-//        drawBitmap(&rocketShip[0], 30, lava-(scrollY>>16), false);
+    InitGameDatastreams();
 
 
-//        GameScheduleAnimate();
-// #if ENABLE_OVERLAY
-//         GameScheduleDrawOverlay();
-// #endif
-        // Uncover();
+    // if (time && /*!uncoverCount &&*/ !rockfordDead) {
 
-extern void     looneyTuneFade();
+    //     time--;
+    //     if ((time & 0xFF) == 0xFF) {
 
-        looneyTuneFade();
-    }
+    //         time -= 0xC4;           // magic!  - (-256+60)
+    //         if (time < 0xA00) {
+    //             scoreCycle = 0;
+    //             forceScoreDraw = SCOREVISIBLETIME;
+    //             AddAudio(SFX_COUNTDOWN2);
+    //         }
+    //     }
+    // }
+
+
+
+//     if (gameSchedule != SCHEDULE_UNPACK_CAVE) {
+
+// //        drawBitmap(&rocketShip[0], 30, lava-(scrollY>>16), false);
+
+
+// //        GameScheduleAnimate();
+// // #if ENABLE_OVERLAY
+// //         GameScheduleDrawOverlay();
+// // #endif
+//         // Uncover();
+
+// extern void     looneyTuneFade();
+
+//         looneyTuneFade();
+//     }
 }
 
 
@@ -1712,12 +1105,6 @@ void setPalette(int start, int size, int step, int tweak) {
         }
     }
 
-//     int lavaLine = lava - tweak - PIECE_DEPTH;
-//     int waterLine = water - tweak - PIECE_DEPTH;
-// #if ENABLE_SHAKE
-//     lavaLine += (shakeY >> 16);
-//     waterLine += (shakeY >> 16);
-// #endif    
 
 
     int i = start;
@@ -1795,70 +1182,11 @@ void setPalette(int start, int size, int step, int tweak) {
 void setOverviewPalette() {
 
     setPalette(0, 9, 7, 6);
-/*
-    setColours();
-
-    int bgCharLine = (scrollY >> 16) * 3;
-    int absLine = 0; //(scrollY >> 16) * 7;
-    int pfCharLine = 0;
-
-    int i = 0;
-    while (i < _ARENA_SCANLINES) {
-
-        if (lava && absLine >= lava) {
-
-            unsigned char lavaCol = (absLine - lava) < 8 ? 0x2F - (absLine-lava) : 0x44;
-
-
-            if (!flashTime) {
-                RAM[_BUF_COLUBK + i ] = 
-                RAM[_BUF_COLUBK + i + 1 ] =
-                RAM[_BUF_COLUBK + i + 2 ] = lavaCol;
-            }
-
-            RAM[_BUF_COLUPF + i ] = 0x6A;
-            RAM[_BUF_COLUPF + i + 1 ] = 0x3C;
-            RAM[_BUF_COLUPF + i + 2 ] = 0x4;
-
-        }
-        
-        else if (water && absLine >= water - 6) {
-
-            unsigned char waterCol = (absLine - water) < 8 ? 0x96 - ((absLine-water)>>2) : 0x82;
-
-            if (!flashTime) {
-//            RAM[_BUF_COLUBK + i ] = 
-                RAM[_BUF_COLUBK + i + 1 ] =
-                RAM[_BUF_COLUBK + i + 2 ] = waterCol;
-
-                RAM[_BUF_COLUPF + i ] = 0xA2;
-                RAM[_BUF_COLUPF + i + 1] = 0x92;
-                RAM[_BUF_COLUPF + i + 2] = 0x86;
-            }
-
-        }
-        else {
-
-            RAM[_BUF_COLUPF + i ] = bgPalette[pfCharLine];
-        }
-        
-            
-        bgCharLine += 3;            
-        if (bgCharLine >= 9) {
-            bgCharLine = 0;
-            pfCharLine++;
-        }
-
-        absLine += 7;
-        i += 3;
-    }
-*/
-
 
 }
 
 void setDisplayPalette() {
-    setPalette(0, PIECE_DEPTH, 3, 3);
+//    setPalette(0, PIECE_DEPTH, 3, 3);
 }
 
 
@@ -1867,84 +1195,661 @@ int sortOrder[SPACESHIPS];
 
 
 
-void sortCubes() {
-
-    // for (int sno = 0; sno < SPACESHIPS; sno++)
-    //     spaceshipVar[sno] = 0;
-
-    for (int cube = 0; cube < SPACESHIPS; cube++) {
-
-        // int bestno;
-        // int best = 0;
-        // for (int sno = 0; sno < SPACESHIPS; sno++) {
-        //     if (spaceshipVar[sno] == 0 && spaceshipY[sno] >= best) {
-        //         best = spaceshipY[sno];
-        //         bestno = sno;
-        //     }
-        // }
-
-            // spaceshipVar[bestno] = 1;
-            sortOrder[cube] = cube;
-    }  
 
 
-    // for (int cube = 0; cube < SPACESHIPS; cube++) {
-
-    //     int sno = sortOrder[cube];
-
-    //     int dx[] = { 0, 1, 0, -1 };
-    //     int dy[] = { 1, 0, -1, 0 };
-
-
-    //     if (spaceshipWait[sno] == 0 /*&& (getRandom32() & 0xFF) < 155*/) {
-
-
-    //         int dir = getRandom32() & 3;
-
-    //         int x = (spaceshipSquare[sno] & 3)+ dx[dir];
-    //         if ( x >= 0 && x <= 3) {
-    //             int y = ((spaceshipSquare[sno] >> 2) & 3) + dy[dir];
-    //             if (y >= 0 && y <= 3) {
-
-    //                 bool occupied = false;
-    //                 for (int sn = 0; sn < SPACESHIPS; sn++) {
-    //                     if (spaceshipSquare[sn] == y * 4 + x)
-    //                         occupied = true;
-    //                 }
-
-    //                 if (!occupied) {
-    //                     spaceshipSquare[sno] = y * 4 + x;
-    //                     spaceshipMode[sno]= dir;
-    //                     spaceshipWait[sno] = 5;
-    //                 }
-    //             }
-    //         }
-    //     }
+// three axes
+// A/B/C layers for each
+// each layer has a rotation (0-3)
+// for all facets {
+    // facet shape
+    // x,y posn
+    // face=cube=ref-> lookup colour
+    //      --> lookup shape[colour] --> pattern to draw
+    //}
 
 
-    //     if (spaceshipWait[sno]) {
-    //         spaceshipWait[sno]--;
 
-    //         spaceshipX[sno] += 0x4000 * dx[spaceshipMode[sno]];
-    //         spaceshipX[sno] -= 0x4000  * dy[spaceshipMode[sno]];
-
-    //         spaceshipY[sno] -= 0x4000 * dx[spaceshipMode[sno]] * 5;
-    //         spaceshipY[sno] -= 0x4000  * dy[spaceshipMode[sno]] * 5;
-    //     }
-
-    // }
-
-    cubePtr = 0;
-    // pfBuffer ^= 1;
-
-}
+#define AXES 1
+#define ROTATE 9
 
 
+
+
+
+
+
+struct facet {
+    int face;
+    int colour;
+    int x;
+    int y;
+    int square;
+    bool topOnly;
+};
+
+
+
+struct facet shapeDef[AXES][ROTATE][25] = {
+
+    {
+
+         
+        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
+
+            // multiple facets, each...
+            // visibleShape, colour, x, y, face# (to get colour), topOnly
+
+            // visibleShape:
+            // 0                TOP
+            // 1                LEFT
+            // 2                RIGHT
+            // 3    ... more rotations to be added
+
+
+            // topOnly:
+            // true             a part of the 3x3 "top" of the layer
+            // false            always drawn
+
+
+
+            // top facets
+
+            {   0, 2,  14, 0x0A0000,   0,    true,    },
+            {   0, 1,   9, 0x0F0000,   1,    true,    },
+            {   0, 2,  19, 0x0F0000,   2,    true,    },
+            {   0, 3,   4, 0x140000,   3,    true,    },
+            {   0, 4,  14, 0x140000,   4,    true,    },
+            {   0, 5,  24, 0x140000,   5,    true,    },
+            {   0, 6,   9, 0x190000,   6,    true,    },
+            {   0, 7,  19, 0x190000,   7,    true,    },
+            {   0, 1,  14, 0x1E0000,   8,    true,    },
+
+            // left facets
+
+            {   1, 6,   4, 0x140000,   6,    false,   },       // L0
+            {   1, 1,   9, 0x190000,   7,    false,   },       // L1
+            {   1, 2,  14, 0x1E0000,   8,    false,   },       // L2 (@CENTER)
+
+            // right facets
+
+            {   2, 3,  24, 0x140000,   6,    false,   },
+            {   2, 1,  19, 0x190000,   7,    false,   },
+            {   2, 5,  14, 0x1E0000,   8,    false,   },
+
+            {   -1,  0,0,0,    false,   },
+        },
+ 
+
+
+        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
+
+            // multiple facets, each...
+            // visibleShape, x, y, face# (to get colour), topOnly
+
+            // visibleShape:
+            // 0                TOP
+            // 1                LEFT
+            // 2                RIGHT
+            // 3    ... more rotations to be added
+
+
+            // topOnly:
+            // true             a part of the 3x3 "top" of the layer
+            // false            always drawn
+
+
+            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
+            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
+
+
+            // top facets
+
+            {   7, 2,  17-1, 0x0D0000-0x10000,   0,    true,    },
+            {   7, 1,  11-1, 0x100000-0x10000,   1,    true,    },
+            {   7, 2,  20-1, 0x140000-0x10000,   2,    true,    },
+            {   7, 3,   5-1, 0x130000-0x10000,   3,    true,    },
+            {   7, 4,  14-1, 0x170000-0x20000,   4,    true,    },
+            {   7, 5,  23-1, 0x1C0000-0x20000,   5,    true,    },
+            {   7, 6,   8-1, 0x1A0000-0x10000,   6,    true,    },
+            {   7, 7,  17-1, 0x1F0000-0x20000,   7,    true,    },
+            {   7, 1,  11-1, 0x220000-0x20000,   8,    true,    },
+
+            // left facets
+
+            {   6, 6,   5-1, 0x110000-0x20000,   6,    false,   },       // L0
+            {   6, 1,   8-1, 0x190000-0x30000,   7,    false,   },       // L1
+            {   6, 2,  11-1, 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
+
+            // right facets
+
+            {   5, 3,  23-1, 0x1C0000-0x20000,   6,    false,   },
+            {   5, 1,  17-1, 0x1F0000-0x20000,   7,    false,   },
+            {   5, 5,  11-1, 0x220000-0x20000,   8,    false,   },
+
+            {   -1,  0,0,0,    false,   },
+        },
+
+
+        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
+
+            // multiple facets, each...
+            // visibleShape, x, y, face# (to get colour), topOnly
+
+            // visibleShape:
+            // 0                TOP
+            // 1                LEFT
+            // 2                RIGHT
+            // 3    ... more rotations to be added
+
+
+            // topOnly:
+            // true             a part of the 3x3 "top" of the layer
+            // false            always drawn
+
+
+            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
+            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
+
+            // top facets
+
+            {   3, 3,  8, 0x0F0000,   0,    true,    },
+            {   3, 1, 15, 0x0F0000,   1,    true,    },
+            {   3, 2, 22, 0x0F0000,   2,    true,    },
+            {   3, 6,  8, 0x160000,   3,    true,    },
+            {   3, 4, 15, 0x160000,   4,    true,    },
+            {   3, 2, 22, 0x160000,   5,    true,    },
+            {   3, 1,  8, 0x1E0000,   6,    true,    },
+            {   3, 7, 15, 0x1E0000,   7,    true,    },
+            {   3, 5, 22, 0x1E0000,   8,    true,    },
+
+            // right facets (now face-on)
+
+            {   4, 5,   8, 0x240000,   6,    false,   },       // L0
+            {   4, 1,  15, 0x240000,   7,    false,   },       // L1
+            {   4, 3,  22, 0x240000,   8,    false,   },       // L2 (@CENTER)
+
+
+            {   -1,  0,0,0,    false,   },
+        },
+ 
+ 
+
+        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
+
+            // multiple facets, each...
+            // visibleShape, x, y, face# (to get colour), topOnly
+
+            // visibleShape:
+            // 0                TOP
+            // 1                LEFT
+            // 2                RIGHT
+            // 3    ... more rotations to be added
+
+
+            // topOnly:
+            // true             a part of the 3x3 "top" of the layer
+            // false            always drawn
+
+            // top facets
+
+            {   0, 3,  14, 0x0A0000,   0,    true,    },
+            {   0, 6,   9, 0x0F0000,   1,    true,    },
+            {   0, 1,  19, 0x0F0000,   2,    true,    },
+            {   0, 1,   4, 0x140000,   3,    true,    },
+            {   0, 4,  14, 0x140000,   4,    true,    },
+            {   0, 2,  24, 0x140000,   5,    true,    },
+            {   0, 7,   9, 0x190000,   6,    true,    },
+            {   0, 2,  19, 0x190000,   7,    true,    },
+            {   0, 5,  14, 0x1E0000,   8,    true,    },
+
+            // left facets
+
+            {   1, 5,   4, 0x140000,   6,    false,   },       // L0
+            {   1, 1,   9, 0x190000,   7,    false,   },       // L1
+            {   1, 3,  14, 0x1E0000,   8,    false,   },       // L2 (@CENTER)
+
+            // right facets
+
+            {   2, 6,  24, 0x140000,   6,    false,   },
+            {   2, 5,  19, 0x190000,   7,    false,   },
+            {   2, 4,  14, 0x1E0000,   8,    false,   },
+
+            {   -1,  0,0,0,    false,   },
+        },
+ 
+        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
+
+            // multiple facets, each...
+            // visibleShape, x, y, face# (to get colour), topOnly
+
+            // visibleShape:
+            // 0                TOP
+            // 1                LEFT
+            // 2                RIGHT
+            // 3    ... more rotations to be added
+
+
+            // topOnly:
+            // true             a part of the 3x3 "top" of the layer
+            // false            always drawn
+
+            // top facets
+
+            {   3, 1,  8, 0x0F0000,   0,    true,    },
+            {   3, 6, 15, 0x0F0000,   1,    true,    },
+            {   3, 3, 22, 0x0F0000,   2,    true,    },
+            {   3, 7,  8, 0x160000,   3,    true,    },
+            {   3, 4, 15, 0x160000,   4,    true,    },
+            {   3, 1, 22, 0x160000,   5,    true,    },
+            {   3, 5,  8, 0x1E0000,   6,    true,    },
+            {   3, 2, 15, 0x1E0000,   7,    true,    },
+            {   3, 2, 22, 0x1E0000,   8,    true,    },
+
+            // right facets (now face-on)
+
+            {   4, 4,   8, 0x240000,   6,    false,   },       // L0
+            {   4, 5,  15, 0x240000,   7,    false,   },       // L1
+            {   4, 6,  22, 0x240000,   8,    false,   },       // L2 (@CENTER)
+
+            {   -1,  0,0,0,    false,   },
+        },
+ 
+ 
+         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
+
+            // multiple facets, each...
+            // visibleShape, x, y, face# (to get colour), topOnly
+
+            // visibleShape:
+            // 0                TOP
+            // 1                LEFT
+            // 2                RIGHT
+            // 3    ... more rotations to be added
+
+
+            // topOnly:
+            // true             a part of the 3x3 "top" of the layer
+            // false            always drawn
+
+            // top facets
+
+            {   0, 1,  14, 0x0A0000,   0,    true,    },
+            {   0, 7,   9, 0x0F0000,   1,    true,    },
+            {   0, 6,  19, 0x0F0000,   2,    true,    },
+            {   0, 5,   4, 0x140000,   3,    true,    },
+            {   0, 4,  14, 0x140000,   4,    true,    },
+            {   0, 3,  24, 0x140000,   5,    true,    },
+            {   0, 2,   9, 0x190000,   6,    true,    },
+            {   0, 1,  19, 0x190000,   7,    true,    },
+            {   0, 2,  14, 0x1E0000,   8,    true,    },
+
+            // left facets
+
+            {   1, 4,   4, 0x140000,   6,    false,   },       // L0
+            {   1, 5,   9, 0x190000,   7,    false,   },       // L1
+            {   1, 6,  14, 0x1E0000,   8,    false,   },       // L2 (@CENTER)
+
+            // right facets
+
+            {   2, 4,  24, 0x140000,   6,    false,   },
+            {   2, 7,  19, 0x190000,   7,    false,   },
+            {   2, 3,  14, 0x1E0000,   8,    false,   },
+
+            {   -1,  0,0,0,    false,   },
+        },
+ 
+        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
+
+            // multiple facets, each...
+            // visibleShape, x, y, face# (to get colour), topOnly
+
+            // visibleShape:
+            // 0                TOP
+            // 1                LEFT
+            // 2                RIGHT
+            // 3    ... more rotations to be added
+
+
+            // topOnly:
+            // true             a part of the 3x3 "top" of the layer
+            // false            always drawn
+
+            // top facets
+
+            {   3, 5,  8, 0x0F0000,   0,    true,    },
+            {   3, 7, 15, 0x0F0000,   1,    true,    },
+            {   3, 1, 22, 0x0F0000,   2,    true,    },
+            {   3, 2,  8, 0x160000,   3,    true,    },
+            {   3, 4, 15, 0x160000,   4,    true,    },
+            {   3, 6, 22, 0x160000,   5,    true,    },
+            {   3, 2,  8, 0x1E0000,   6,    true,    },
+            {   3, 1, 15, 0x1E0000,   7,    true,    },
+            {   3, 3, 22, 0x1E0000,   8,    true,    },
+
+            // right facets (now face-on)
+
+            {   4, 3,   8, 0x240000,   6,    false,   },       // L0
+            {   4, 7,  15, 0x240000,   7,    false,   },       // L1
+            {   4, 4,  22, 0x240000,   8,    false,   },       // L2 (@CENTER)
+
+            {   -1,  0,0,0,    false,   },
+        },
+ 
+ 
+         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
+
+            // multiple facets, each...
+            // visibleShape, x, y, face# (to get colour), topOnly
+
+            // visibleShape:
+            // 0                TOP
+            // 1                LEFT
+            // 2                RIGHT
+            // 3    ... more rotations to be added
+
+
+            // topOnly:
+            // true             a part of the 3x3 "top" of the layer
+            // false            always drawn
+
+            // top facets
+
+            {   0, 5,  14, 0x0A0000,   0,    true,    },
+            {   0, 2,   9, 0x0F0000,   1,    true,    },
+            {   0, 7,  19, 0x0F0000,   2,    true,    },
+            {   0, 2,   4, 0x140000,   3,    true,    },
+            {   0, 4,  14, 0x140000,   4,    true,    },
+            {   0, 1,  24, 0x140000,   5,    true,    },
+            {   0, 1,   9, 0x190000,   6,    true,    },
+            {   0, 6,  19, 0x190000,   7,    true,    },
+            {   0, 3,  14, 0x1E0000,   8,    true,    },
+
+            // left facets
+
+            {   1, 3,   4, 0x140000,   6,    false,   },       // L0
+            {   1, 7,   9, 0x190000,   7,    false,   },       // L1
+            {   1, 4,  14, 0x1E0000,   8,    false,   },       // L2 (@CENTER)
+
+            // right facets
+
+            {   2, 3,  24, 0x140000,   6,    false,   },
+            {   2, 1,  19, 0x190000,   7,    false,   },
+            {   2, 2,  14, 0x1E0000,   8,    false,   },
+
+            {   -1,  0,0,0,    false,   },
+        },
+ 
+        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
+
+            // multiple facets, each...
+            // visibleShape, x, y, face# (to get colour), topOnly
+
+            // visibleShape:
+            // 0                TOP
+            // 1                LEFT
+            // 2                RIGHT
+            // 3    ... more rotations to be added
+
+
+            // topOnly:
+            // true             a part of the 3x3 "top" of the layer
+            // false            always drawn
+
+            // top facets
+
+            {   3, 2,  8, 0x0F0000,   0,    true,    },
+            {   3, 2, 15, 0x0F0000,   1,    true,    },
+            {   3, 5, 22, 0x0F0000,   2,    true,    },
+            {   3, 1,  8, 0x160000,   3,    true,    },
+            {   3, 4, 15, 0x160000,   4,    true,    },
+            {   3, 7, 22, 0x160000,   5,    true,    },
+            {   3, 3,  8, 0x1E0000,   6,    true,    },
+            {   3, 6, 15, 0x1E0000,   7,    true,    },
+            {   3, 1, 22, 0x1E0000,   8,    true,    },
+
+            // right facets (now face-on)
+
+            {   4, 2,   8, 0x240000,   6,    false,   },       // L0
+            {   4, 1,  15, 0x240000,   7,    false,   },       // L1
+            {   4, 3,  22, 0x240000,   8,    false,   },       // L2 (@CENTER)
+
+
+            {   -1,  0,0,0,    false,   },
+        },
+ 
+ 
+
+
+
+    },
+};
+
+
+int visibleFace[] = {
+    0, 3, 1,
+};
+
+
+
+/*
+            B/2
+           +--+--+--+
+           |15|16|17|
+           +--+--+--+
+           |12|13|14|
+           +--+--+--+
+           | 9|10|11|
+           +--+--+--+
+ A/0        C/3        E/5        F/6
++--+--+--+ +--+--+--+ +--+--+--+ +--+--+--+
+| 6| 7| 8| |24|25|26| |42|43|44| |51|52|53|
++--+--+--+ +--+--+--+ +--+--+--+ +--+--+--+
+| 3| 4| 5| |21|22|23| |39|40|41| |48|49|50|
++--+--+--+ +--+--+--+ +--+--+--+ +--+--+--+
+| 0| 1| 2| |18|19|20| |36|37|38| |45|46|47|
++--+--+--+ +--+--+--+ +--+--+--+ +--+--+--+
+            D/4
+           +--+--+--+
+ 27 30 33  |33|34|35|
+           +--+--+--+
+ 28 31 34  |30|31|32|
+           +--+--+--+
+ 29 32 35  |27|28|29|
+           +--+--+--+
+*/
+
+
+
+int stickerColour[][9] = {
+
+    { 1,1,1,1,7,1,1,1,1 },
+    { 2,2,2,2,2,2,6,6,6 },
+    { 3,3,3,3,3,3,3,3,3 },
+    { 1,1,1,1,7,1,1,1,1 },
+    { 2,2,2,2,2,2,6,6,6 },
+    { 3,3,3,3,3,3,3,3,3 },
+};
+
+
+
+
+int fno = 0;
+int rotateTop = 0;
+
+
+const unsigned char *shapeSetTop[] = {
+    // rotation 0
+    &topFacets000[0],
+    &topFacets001[0],
+    &topFacets010[0],
+    &topFacets011[0],
+    &topFacets100[0],
+    &topFacets101[0],
+    &topFacets110[0],
+    &topFacets111[0],
+};
+
+const unsigned char *shapeSetTop2[] = {
+    // rotation 0
+    &top2Facets000[0],
+    &top2Facets001[0],
+    &top2Facets010[0],
+    &top2Facets011[0],
+    &top2Facets100[0],
+    &top2Facets101[0],
+    &top2Facets110[0],
+    &top2Facets111[0],
+};
+
+const unsigned char *shapeSetTop45[] = {
+    // rotation 0
+    &topFacet45_000[0],
+    &topFacet45_001[0],
+    &topFacet45_010[0],
+    &topFacet45_011[0],
+    &topFacet45_100[0],
+    &topFacet45_101[0],
+    &topFacet45_110[0],
+    &topFacet45_111[0],
+};
+
+const unsigned char *shapeSetFront45[] = {
+    // rotation 0
+    &frontFacet45_000[0],
+    &frontFacet45_001[0],
+    &frontFacet45_010[0],
+    &frontFacet45_011[0],
+    &frontFacet45_100[0],
+    &frontFacet45_101[0],
+    &frontFacet45_110[0],
+    &frontFacet45_111[0],
+};
+
+
+const unsigned char *shapeSetRight[] = {
+    &rightFacets000[0],
+    &rightFacets001[0],
+    &rightFacets010[0],
+    &rightFacets011[0],
+    &rightFacets100[0],
+    &rightFacets101[0],
+    &rightFacets110[0],
+    &rightFacets111[0],
+};
+
+const unsigned char *shapeSetRight2[] = {
+    &right2Facets000[0],
+    &right2Facets001[0],
+    &right2Facets010[0],
+    &right2Facets011[0],
+    &right2Facets100[0],
+    &right2Facets101[0],
+    &right2Facets110[0],
+    &right2Facets111[0],
+};
+
+const unsigned char *shapeSetLeft[] = {
+    &leftFacets000[0],
+    &leftFacets001[0],
+    &leftFacets010[0],
+    &leftFacets011[0],
+    &leftFacets100[0],
+    &leftFacets101[0],
+    &leftFacets110[0],
+    &leftFacets111[0],
+};
+
+const unsigned char *shapeSetLeft2[] = {
+    &left2Facets000[0],
+    &left2Facets001[0],
+    &left2Facets010[0],
+    &left2Facets011[0],
+    &left2Facets100[0],
+    &left2Facets101[0],
+    &left2Facets110[0],
+    &left2Facets111[0],
+};
+
+const unsigned char *shapeBoundary[] = {
+    &cubeBoundary[0],
+    &cube1Boundary[0],
+    &cubeBoundary[0],
+    &cubeBoundary[0],
+    &cubeBoundary[0],
+    &cubeBoundary[0],
+    &cubeBoundary[0],
+    &cubeBoundary[0],
+};
+
+int fLayer = 0;
 
 
 void drawSoftwareSprites() {
 
+    int rr = 0;
+    if (JOY0_FIRE || fLayer == 2)
+        rr = rotateTop;
+
+    struct facet *f = &shapeDef[0][rr][fno++];
+
+    // no more facets --> finished drawing
+    if (f->face < 0) {
+
+        fno = 0;
+
+
+        if (++fLayer > 2) {
+            fLayer = 0;
+
+            rotateTop++;
+            if (rotateTop > 2)
+                rotateTop = 0;
+
+            finished = true;
+        }
+
+
+        return;
+
+    }
+
+
+    const unsigned char **shape;
+    switch (f->face) {
+    case 0: shape = shapeSetTop;
+        break;
+    case 1: shape = shapeSetLeft;
+        break;
+    case 2: shape = shapeSetRight;
+        break;
+    case 3: shape = shapeSetTop45;
+        break;
+    case 4: shape = shapeSetFront45;
+        break;
+    case 5: shape = shapeSetRight2;
+        break;
+    case 6: shape = shapeSetLeft2;
+        break;
+    case 7: shape = shapeSetTop2;
+        break;
+    case 8: shape = shapeBoundary;
+    }
+
+
+    if (!f->topOnly || (fLayer == 2 && f->topOnly))
+        drawBitmap(shape[f->colour], //f->colourstickerColour[f->face][fLayer * 3 + f->square]],
+            ((f->x << 14) & 0xFFFFC000) + 0x00024000,
+            (((130 - (fLayer * 13) << 16) + (f->y)) & 0xFFFF0000)  * 3,
+            true);
+
+
+
+    // return;
+
+
+
     int cube = sortOrder[cubePtr];
+
 
     // if ((getRandom32() & 0xFF) < 10)
     //     if (getRandom32() & 1)
@@ -1954,6 +1859,11 @@ void drawSoftwareSprites() {
 
     // spaceShipShape[cube] = &topFace[0];
 
+
+
+    #if 0
+
+    // functional normal cube...
 
     if (hasTopFace[cube]) {
 
@@ -1976,7 +1886,7 @@ void drawSoftwareSprites() {
 
         drawBitmap(facetTopColour[spaceshipTopShape[cube]],
             (spaceshipX[cube] & 0xFFFFC000) + 0x00024000,
-            (((104 << 16) + spaceshipY[cube]) & 0xFFFF0000)  * 3,
+            (((103 << 16) + spaceshipY[cube]) & 0xFFFF0000)  * 3,
             true);
     }
 
@@ -2035,9 +1945,74 @@ void drawSoftwareSprites() {
             true);
     }
 
+
+
+    #endif
+
+    #if 0
+
+    if (hasTopFace[cube]) {
+
+        const unsigned char *facetTopColour[] = {
+            &topFacet45_000[0],
+            &topFacet45_001[0],
+            &topFacet45_010[0],
+            &topFacet45_011[0],
+            &topFacet45_100[0],
+            &topFacet45_101[0],
+            &topFacet45_110[0],
+            &topFacet45_111[0],
+        };
+
+        const int ssx[] = {
+
+            0,0,0,0,
+            0,0,0,0,
+            0,0,
+
+            2+6, 9+6, 16+6,
+            2+6, 9+6, 16+6,
+            2+6, 9+6, 16+6,
+
+        };
+
+        const int ssy[] = {
+
+            0,0,0,0,
+            0,0,0,0,
+            0,0,
+
+            0x190000+0x0e0000, 0x190000+0x0e0000, 0x190000+0x0e0000,
+            0x220000+0x0e0000, 0x220000+0x0e0000, 0x220000+0x0e0000,
+            0x2b0000+0x0e0000, 0x2b0000+0x0e0000, 0x2b0000+0x0e0000,
+        
+        };
+
+
+
+
+
+        if ((getRandom32() & 0xff) < 28) {
+            int fcol = getRandom32() & 7;
+            if (fcol > 0 && fcol < 7 && fcol != spaceshipRightShape[cube] && fcol != spaceshipLeftShape[cube])
+                spaceshipTopShape[cube] = fcol;
+        }
+
+        drawBitmap(facetTopColour[spaceshipTopShape[cube]],
+            ((ssx[cube] << 14) & 0xFFFFC000) + 0x00024000,
+            (((90 << 16) + ssy[cube]) & 0xFFFF0000)  * 3,
+            true);
+    }
+
+    #endif
+
     if (++cubePtr >= SPACESHIPS) {
         cubePtr = 0;
     }
+
+
+
+
 }
 
 
@@ -2050,100 +2025,26 @@ void GameScheduleDrawSprites() {
 //    drawScore();
 
 
-    for (int sp = 0; sp < 2; sp++) {
+  //  for (int sp = 0; sp < 1; sp++) {
 
-        if (cubePtr == 0)
-            drawScreen();
+        // if (finished) {
+        //     pfBuffer ^= 1;
+        //     drawScreen();
+        //     finished = false;
+        //     break;
+        // }
 
-        drawSoftwareSprites();
+        // drawSoftwareSprites();
+    //}
 
-        if (cubePtr == 0) {
-            sortCubes();
-
-            pfBuffer ^= 1;
-            break;
-        }
-    }
-
-    doPlayer();
+ //   doPlayer();
 
 
-    lastDisplayMode = displayMode;
+//    lastDisplayMode = displayMode;
 
 }
 
 
-
-// #if ENABLE_OVERLAY
-// void GameScheduleDrawOverlay() {
-
-
-//     // Handle "GAME OVER" display 
-//     // ... if the square doesn't contain rockford
-
-// //    int what = RAM[_BOARD + rockfordY * 40 + rockfordX] & (0x7F|0x80);
-// //    char type = CharToType[what];
-
-//     if (rockfordDead && !flashTime) {
-
-//         if (!lives) {
-
-//             if (overlayWord != overlayGameOver) {
-
-//                 overlayWord = overlayGameOver;
-//                 fIndex = 0;
-//                 rotateOffset = 0;
-//                 fSpeed = 0x120;
-//             }
-
-//             if (JOY0_FIRE) { 
-
-//                 if (fSpeed < 0)
-//                     rotateOffset = 0;
-
-//                 if (fSpeed < 0x400)
-//                     fSpeed += 28;
-
-//                 idleTimer = 0;
-
-//             }
-
-//             else {
-
-//                 if (idleTimer++ > IDLE_TIME) {
-
-//                     displayMode ^= 1;
-//                     idleTimer = 0;
-//                     if (fSpeed < 0)
-//                         rotateOffset = 0;
-
-//                     if (fSpeed < 0x400)
-//                         fSpeed += 250;
-//                 }
-//             }
-//         }
-
-// #if ENABLE_TOGGLE_DISPLAY_ON_DEATH
-
-//         else {
-
-//             // loss of a life -- switch display occasionally
-
-//             if (idleTimer++ > IDLE_TIME) {
-//                 displayMode ^= 1;
-//                 idleTimer = 0;
-//             }
-
-//         }
-// #endif
-
-//     }
-
-
-
-//    Overlay(overlayWord);
-// }
-// #endif
 
 #define ROW_MAXIMUM 23
 
@@ -2177,53 +2078,6 @@ void SetupBoard() {
 }
 
 
-void GameScheduleAnimate() {
-
-    // animate!
-    // count == -1 -> inactive
-    
-
-    for (int type = 0; type < TYPE_MAX; type++) {
-        if (Animate[type]) {
-
-            if (!AnimIdx[type].count || AnimIdx[type].index < 0) {
-
-                int idx = AnimIdx[type].index + 2;
-                
-                bool redo;
-                do {
-
-                    redo = false;
-
-                    switch ((*Animate[type])[idx]) {
-                    case 255:     
-                        idx = 0;
-                        redo = true;
-                        break;
-                    case 254:                   // play sound
-                        AddAudio((*Animate[type])[++idx]);
-                        ++idx;
-                        redo = true;
-                        break;
-                    }
-                } while (redo);
-
-
-                AnimIdx[type].index = idx;
-
-                if (!AnimIdx[type].count)
-                    AnimIdx[type].count = (*Animate[type])[idx + 1];        //TODO
-    
-            }
-
-            if (AnimIdx[type].count > 0 && AnimIdx[type].count < 255)
-                AnimIdx[type].count--;
-        }
-    }
-
-}
-
-
 
 void InitGameBuffers() {
     
@@ -2234,67 +2088,6 @@ void InitGameBuffers() {
     RAM_SINT[ _BUF_JUMP1_EXIT / 2 ] = _EXIT_KERNEL;
 }
 
-
-
-
-
-
-
-
-void Explode(unsigned char *where, unsigned char explosionShape) {
-
-    typedef struct {
-        signed char x;
-        signed char y;
-    } OFFSET;
-
-    static const OFFSET offset[] = {
-        { 0,-80, },
-        { -1,-40, },
-        { 0,-40, },
-        { 1,-40, },
-        { -2,0, },
-        { -1,0, },
-        { 1,0, },
-        { 2,0, },
-        { -1,40, },
-        { -0,40, },
-        { 1,40, },
-        { 0,80, },
-    };
-
-
-#if ENABLE_SHAKE
-    shakeTime += 130;
-#endif
-
-//    KillAudio(SFX_SHAKE);
-    AddAudio(SFX_EXPLODE);
-
-    // explosionShape |= FLAG_THISFRAME;
-
-    for (int i = 0; i < 12; i++) {
-        unsigned char *cell = where + offset[i].y + offset[i].x;
-        int attribute = Attribute[CharToType[*cell]];
-        if (attribute & ATT_EXPLODABLE)
-            *cell = explosionShape;
-    }
-
-    *where = explosionShape;
-}
-
-
-//00 = facing left
-//01 = facing up
-//10 = facing right
-//11 = facing down
-
-// turn right = -1
-// turn left = +1
-
-int move[] = {
-    -1, -40, +1, +40,
-};
 
 
 
@@ -2632,10 +2425,14 @@ void doRoll(unsigned char *this, unsigned int creature) {
 }
 
 
-const int dir[] = { -1, 1, -40, 40, -41, 41, -39, 39 };
+const int dir[] = { -1, 
+1, -40, 40, -41, 41, -39, 39 };
 
 
 void GameScheduleProcessBoardRow() {
+
+    if (!finished)
+        drawSoftwareSprites();
 
 }
 
