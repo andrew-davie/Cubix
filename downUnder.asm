@@ -516,7 +516,6 @@ SplashMenuOS_Code:    ; entry point from bank 5 & InitSystem with Y already set
                     ldy #_FN_GAME_OS
 
 Again2              jsr CallArmCode                 ; draws the chessboard!
-
                     ldx TIMINT
                     bmi .ag2
                     ldy #_FN_GAME_IDLE
@@ -634,16 +633,18 @@ GameVB:
     ;SLEEP 20
 
 Again1              jsr CallArmCode                 ; draws the chessboard!
-
+    
     ;SLEEP 2
 
                     ldy #_FN_GAME_IDLE
 
-                    ldx TIMINT
-                    bmi skipss
+skipss2                    ldx TIMINT
+                    bmi skipss2
                     ldx INTIM
                     cpx #CDC
                     bcs Again1
+
+
 
                     jsr safeTimerWait
 

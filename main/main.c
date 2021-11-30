@@ -136,6 +136,15 @@ unsigned char charDust3[CHAR_SIZE];
 bool thisFrame[2][40];
 
 
+int fLayer = 0;
+int layer = 0;
+int initSpeed[3] = { 1,3,5};
+int direct[3] = {1,-1,1};
+int fno = 0;
+int rotateTop[] = {1,1,1};
+int rotateSpeed[] = {1,1,1};
+
+
 
 
 void setAnimation(int animID);
@@ -688,10 +697,10 @@ void InitGameX() {
 
         // spaceshipTargetX[sno] = 5 << 16;
 
-        if (getRandom32() & 1)
-            spaceShipShape[sno] = &eroShip[0];
-        else
-            spaceShipShape[sno] = &eroShip2[0];
+        // if (getRandom32() & 1)
+        //     spaceShipShape[sno] = &eroShip[0];
+        // else
+        //     spaceShipShape[sno] = &eroShip2[0];
 
 
     }
@@ -1011,6 +1020,59 @@ void GameOverscan() {
 
 
 
+int controlledLayer = 0;
+int highlightLayer = 0;
+bool showHighlight = false;
+int jDelay = 0;
+
+void HandleJoystick() {
+
+    if (!jDelay && !highlightLayer) {
+
+        if (JOY0_UP) {
+            highlightLayer = 3;
+            jDelay = 20;
+            controlledLayer++;
+            if (controlledLayer > 2)
+                controlledLayer = 0;
+        }
+
+        if (JOY0_DOWN) {
+            highlightLayer = 3;
+            jDelay = 20;
+            controlledLayer--;
+            if (controlledLayer < 0)
+                controlledLayer = 2;
+        }
+
+        if (JOY0_LEFT && !(rotateTop[controlledLayer] & 3)) {
+
+            if (JOY0_FIRE)
+                for (int layer = 0; layer < 3; layer++)
+                    direct[layer] = 1;
+
+
+            direct[controlledLayer] = 1;
+        }
+
+
+        if (JOY0_RIGHT && !(rotateTop[controlledLayer] & 3)) {
+
+            if (JOY0_FIRE)
+                for (int layer = 0; layer < 3; layer++)
+                    direct[layer] = -1;
+
+
+            direct[controlledLayer] = -1;
+        }
+
+    }
+
+    if (jDelay)
+        jDelay--;
+}
+
+
 
 void GameVerticalBlank() {
  
@@ -1027,6 +1089,8 @@ void GameVerticalBlank() {
     // else
     //     drawSoftwareSprites();
 
+
+    HandleJoystick();
 
     GameScheduleDrawSprites();
 
@@ -1210,7 +1274,7 @@ int sortOrder[SPACESHIPS];
 
 
 #define AXES 1
-#define ROTATE 9
+#define ROTATE 16
 
 
 
@@ -1233,6 +1297,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
 
     {
 
+        // 0  ISO
          
         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
 
@@ -1268,18 +1333,19 @@ struct facet shapeDef[AXES][ROTATE][25] = {
 
             {   1, 6,   4, 0x140000,   6,    false,   },       // L0
             {   1, 1,   9, 0x190000,   7,    false,   },       // L1
-            {   1, 2,  14, 0x1E0000,   8,    false,   },       // L2 (@CENTER)
+            {   1, 3,  14, 0x1E0000,   8,    false,   },       // L2 (@CENTER)
 
             // right facets
 
             {   2, 3,  24, 0x140000,   6,    false,   },
             {   2, 1,  19, 0x190000,   7,    false,   },
-            {   2, 5,  14, 0x1E0000,   8,    false,   },
+            {   2, 6,  14, 0x1E0000,   8,    false,   },
 
             {   -1,  0,0,0,    false,   },
         },
  
 
+        // 1 tilt
 
         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
 
@@ -1318,17 +1384,18 @@ struct facet shapeDef[AXES][ROTATE][25] = {
 
             {   6, 6,   5-1, 0x110000-0x20000,   6,    false,   },       // L0
             {   6, 1,   8-1, 0x190000-0x30000,   7,    false,   },       // L1
-            {   6, 2,  11-1, 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
+            {   6, 3,  11-1, 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
 
             // right facets
 
             {   5, 3,  23-1, 0x1C0000-0x20000,   6,    false,   },
             {   5, 1,  17-1, 0x1F0000-0x20000,   7,    false,   },
-            {   5, 5,  11-1, 0x220000-0x20000,   8,    false,   },
+            {   5, 6,  11-1, 0x220000-0x20000,   8,    false,   },
 
             {   -1,  0,0,0,    false,   },
         },
 
+        // 2 flat
 
         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
 
@@ -1347,8 +1414,8 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // false            always drawn
 
 
-            {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
-            {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
+            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
+            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
 
             // top facets
 
@@ -1364,7 +1431,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
 
             // right facets (now face-on)
 
-            {   4, 5,   8, 0x240000,   6,    false,   },       // L0
+            {   4, 6,   8, 0x240000,   6,    false,   },       // L0
             {   4, 1,  15, 0x240000,   7,    false,   },       // L1
             {   4, 3,  22, 0x240000,   8,    false,   },       // L2 (@CENTER)
 
@@ -1373,6 +1440,56 @@ struct facet shapeDef[AXES][ROTATE][25] = {
         },
  
  
+        // 3 tilt2
+        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
+
+            // multiple facets, each...
+            // visibleShape, x, y, face# (to get colour), topOnly
+
+            // visibleShape:
+            // 0                TOP
+            // 1                LEFT
+            // 2                RIGHT
+            // 3    ... more rotations to be added
+
+
+            // topOnly:
+            // true             a part of the 3x3 "top" of the layer
+            // false            always drawn
+
+
+            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
+            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
+
+
+            // top facets
+
+            {   9, 3,  5+(23-(17-1)), 0x0D0000-0x10000,   0,    true,    },
+            {   9, 1,  5+(23-(11-1)), 0x100000-0x10000,   1,    true,    },
+            {   9, 6,  5+(23-(20-1)), 0x140000-0x10000,   2,    true,    },
+            {   9, 2,  5+(23-( 5-1)), 0x130000-0x10000,   3,    true,    },
+            {   9, 4,  5+(23-(14-1)), 0x170000-0x20000,   4,    true,    },
+            {   9, 2,  5+(23-( 8-1)), 0x1A0000-0x10000,   6,    true,    },
+            {   9, 1,  5+(23-(23-1)), 0x1C0000-0x20000,   5,    true,    },
+            {   9, 7,  5+(23-(17-1)), 0x1F0000-0x20000,   7,    true,    },
+            {   9, 5,  5+(23-(11-1)), 0x220000-0x20000,   8,    true,    },
+
+            // right facets
+
+            {   10, 6,   5+(23-(5-1)), 0x110000-0x20000,   6,    false,   },       // L0
+            {   10, 4,   5+(23-(8-1)), 0x190000-0x30000,   7,    false,   },       // L1
+            {   10, 4,  5+(23-(11-1)), 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
+
+            // left facets
+
+            {   11, 6,  5+(23-(23-1)), 0x1C0000-0x20000,   6,    false,   },
+            {   11, 1,  5+(23-(17-1)), 0x1F0000-0x20000,   7,    false,   },
+            {   11, 3,  5+(23-(11-1)), 0x220000-0x20000,   8,    false,   },
+
+            {   -1,  0,0,0,    false,   },
+        },
+
+        // 4 ISO
 
         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
 
@@ -1404,19 +1521,72 @@ struct facet shapeDef[AXES][ROTATE][25] = {
 
             // left facets
 
-            {   1, 5,   4, 0x140000,   6,    false,   },       // L0
+            {   1, 6,   4, 0x140000,   6,    false,   },       // L0
             {   1, 1,   9, 0x190000,   7,    false,   },       // L1
             {   1, 3,  14, 0x1E0000,   8,    false,   },       // L2 (@CENTER)
 
             // right facets
 
             {   2, 6,  24, 0x140000,   6,    false,   },
-            {   2, 5,  19, 0x190000,   7,    false,   },
+            {   2, 4,  19, 0x190000,   7,    false,   },
             {   2, 4,  14, 0x1E0000,   8,    false,   },
 
             {   -1,  0,0,0,    false,   },
         },
- 
+
+
+        // 5 TILT
+
+        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
+
+            // multiple facets, each...
+            // visibleShape, x, y, face# (to get colour), topOnly
+
+            // visibleShape:
+            // 0                TOP
+            // 1                LEFT
+            // 2                RIGHT
+            // 3    ... more rotations to be added
+
+
+            // topOnly:
+            // true             a part of the 3x3 "top" of the layer
+            // false            always drawn
+
+
+            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
+            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
+
+
+            // top facets
+
+            {   7, 3,  17-1, 0x0D0000-0x10000,   0,    true,    },
+            {   7, 6,  11-1, 0x100000-0x10000,   1,    true,    },
+            {   7, 1,  20-1, 0x140000-0x10000,   2,    true,    },
+            {   7, 1,   5-1, 0x130000-0x10000,   3,    true,    },
+            {   7, 4,  14-1, 0x170000-0x20000,   4,    true,    },
+            {   7, 2,  23-1, 0x1C0000-0x20000,   5,    true,    },
+            {   7, 7,   8-1, 0x1A0000-0x10000,   6,    true,    },
+            {   7, 2,  17-1, 0x1F0000-0x20000,   7,    true,    },
+            {   7, 5,  11-1, 0x220000-0x20000,   8,    true,    },
+
+            // left facets
+
+            {   6, 6,   5-1, 0x110000-0x20000,   6,    false,   },       // L0
+            {   6, 1,   8-1, 0x190000-0x30000,   7,    false,   },       // L1
+            {   6, 3,  11-1, 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
+
+            // right facets
+
+            {   5, 6,  23-1, 0x1C0000-0x20000,   6,    false,   },
+            {   5, 4,  17-1, 0x1F0000-0x20000,   7,    false,   },
+            {   5, 4,  11-1, 0x220000-0x20000,   8,    false,   },
+
+            {   -1,  0,0,0,    false,   },
+        },
+
+
+        // 6 FLAT
         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
 
             // multiple facets, each...
@@ -1448,13 +1618,64 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // right facets (now face-on)
 
             {   4, 4,   8, 0x240000,   6,    false,   },       // L0
-            {   4, 5,  15, 0x240000,   7,    false,   },       // L1
+            {   4, 4,  15, 0x240000,   7,    false,   },       // L1
             {   4, 6,  22, 0x240000,   8,    false,   },       // L2 (@CENTER)
 
             {   -1,  0,0,0,    false,   },
         },
  
- 
+
+        // 7 TILT2
+         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
+
+            // multiple facets, each...
+            // visibleShape, x, y, face# (to get colour), topOnly
+
+            // visibleShape:
+            // 0                TOP
+            // 1                LEFT
+            // 2                RIGHT
+            // 3    ... more rotations to be added
+
+
+            // topOnly:
+            // true             a part of the 3x3 "top" of the layer
+            // false            always drawn
+
+
+            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
+            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
+
+
+            // top facets
+
+            {   9, 1,  4+(23-(17-1)), 0x0D0000-0x10000,   0,    true,    },
+            {   9, 6,  4+(23-(11-1)), 0x100000-0x10000,   1,    true,    },
+            {   9, 7,  4+(23-(20-1)), 0x140000-0x10000,   2,    true,    },
+            {   9, 3,  4+(23-( 5-1)), 0x130000-0x10000,   3,    true,    },
+            {   9, 4,  4+(23-(14-1)), 0x170000-0x20000,   4,    true,    },
+            {   9, 1,  4+(23-( 8-1)), 0x1A0000-0x10000,   6,    true,    },
+            {   9, 5,  4+(23-(23-1)), 0x1C0000-0x20000,   5,    true,    },
+            {   9, 2,  4+(23-(17-1)), 0x1F0000-0x20000,   7,    true,    },
+            {   9, 2,  4+(23-(11-1)), 0x220000-0x20000,   8,    true,    },
+
+            // right facets
+
+            {   10, 5,   4+(23-(5-1)), 0x110000-0x20000,   6,    false,   },       // L0
+            {   10, 5,   4+(23-(8-1)), 0x190000-0x30000,   7,    false,   },       // L1
+            {   10, 3,  4+(23-(11-1)), 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
+
+            // left facets
+
+            {   11, 4,  4+(23-(23-1)), 0x1C0000-0x20000,   6,    false,   },
+            {   11, 4,  4+(23-(17-1)), 0x1F0000-0x20000,   7,    false,   },
+            {   11, 6,  4+(23-(11-1)), 0x220000-0x20000,   8,    false,   },
+
+            {   -1,  0,0,0,    false,   },
+        },
+
+
+        // 8 ISO
          {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
 
             // multiple facets, each...
@@ -1486,18 +1707,70 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // left facets
 
             {   1, 4,   4, 0x140000,   6,    false,   },       // L0
-            {   1, 5,   9, 0x190000,   7,    false,   },       // L1
+            {   1, 4,   9, 0x190000,   7,    false,   },       // L1
             {   1, 6,  14, 0x1E0000,   8,    false,   },       // L2 (@CENTER)
 
             // right facets
 
-            {   2, 4,  24, 0x140000,   6,    false,   },
-            {   2, 7,  19, 0x190000,   7,    false,   },
+            {   2, 5,  24, 0x140000,   6,    false,   },
+            {   2, 5,  19, 0x190000,   7,    false,   },
             {   2, 3,  14, 0x1E0000,   8,    false,   },
 
             {   -1,  0,0,0,    false,   },
         },
+
  
+        // 9 TILT
+        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
+
+            // multiple facets, each...
+            // visibleShape, x, y, face# (to get colour), topOnly
+
+            // visibleShape:
+            // 0                TOP
+            // 1                LEFT
+            // 2                RIGHT
+            // 3    ... more rotations to be added
+
+
+            // topOnly:
+            // true             a part of the 3x3 "top" of the layer
+            // false            always drawn
+
+
+            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
+            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
+
+
+            // top facets
+
+            {   7, 1,  17-1, 0x0D0000-0x10000,   0,    true,    },
+            {   7, 7,  11-1, 0x100000-0x10000,   1,    true,    },
+            {   7, 6,  20-1, 0x140000-0x10000,   2,    true,    },
+            {   7, 5,   5-1, 0x130000-0x10000,   3,    true,    },
+            {   7, 4,  14-1, 0x170000-0x20000,   4,    true,    },
+            {   7, 3,  23-1, 0x1C0000-0x20000,   5,    true,    },
+            {   7, 2,   8-1, 0x1A0000-0x10000,   6,    true,    },
+            {   7, 1,  17-1, 0x1F0000-0x20000,   7,    true,    },
+            {   7, 2,  11-1, 0x220000-0x20000,   8,    true,    },
+
+            // left facets
+
+            {   6, 4,   5-1, 0x110000-0x20000,   6,    false,   },       // L0
+            {   6, 4,   8-1, 0x190000-0x30000,   7,    false,   },       // L1
+            {   6, 6,  11-1, 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
+
+            // right facets
+
+            {   5, 5,  23-1, 0x1C0000-0x20000,   6,    false,   },
+            {   5, 5,  17-1, 0x1F0000-0x20000,   7,    false,   },
+            {   5, 3,  11-1, 0x220000-0x20000,   8,    false,   },
+
+            {   -1,  0,0,0,    false,   },
+        },
+
+
+        // 10 ISO
         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
 
             // multiple facets, each...
@@ -1529,13 +1802,66 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // right facets (now face-on)
 
             {   4, 3,   8, 0x240000,   6,    false,   },       // L0
-            {   4, 7,  15, 0x240000,   7,    false,   },       // L1
-            {   4, 4,  22, 0x240000,   8,    false,   },       // L2 (@CENTER)
+            {   4, 5,  15, 0x240000,   7,    false,   },       // L1
+            {   4, 5,  22, 0x240000,   8,    false,   },       // L2 (@CENTER)
 
             {   -1,  0,0,0,    false,   },
         },
  
  
+
+        // 11 tilt2
+         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
+
+            // multiple facets, each...
+            // visibleShape, x, y, face# (to get colour), topOnly
+
+            // visibleShape:
+            // 0                TOP
+            // 1                LEFT
+            // 2                RIGHT
+            // 3    ... more rotations to be added
+
+
+            // topOnly:
+            // true             a part of the 3x3 "top" of the layer
+            // false            always drawn
+
+
+            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
+            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
+
+
+            // top facets
+
+            {   9, 5,  4+(23-(17-1)), 0x0D0000-0x10000,   0,    true,    },
+            {   9, 7,  4+(23-(11-1)), 0x100000-0x10000,   1,    true,    },
+            {   9, 2,  4+(23-(20-1)), 0x140000-0x10000,   2,    true,    },
+            {   9, 1,  4+(23-( 5-1)), 0x130000-0x10000,   3,    true,    },
+            {   9, 4,  4+(23-(14-1)), 0x170000-0x20000,   4,    true,    },
+            {   9, 6,  4+(23-( 8-1)), 0x1A0000-0x10000,   6,    true,    },
+            {   9, 2,  4+(23-(23-1)), 0x1C0000-0x20000,   5,    true,    },
+            {   9, 1,  4+(23-(17-1)), 0x1F0000-0x20000,   7,    true,    },
+            {   9, 3,  4+(23-(11-1)), 0x220000-0x20000,   8,    true,    },
+
+            // right facets
+
+            {   10, 3,   4+(23-(5-1)), 0x110000-0x20000,   6,    false,   },       // L0
+            {   10, 1,   4+(23-(8-1)), 0x190000-0x30000,   7,    false,   },       // L1
+            {   10, 6,  4+(23-(11-1)), 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
+
+            // left facets
+
+            {   11, 3,  4+(23-(23-1)), 0x1C0000-0x20000,   6,    false,   },
+            {   11, 5,  4+(23-(17-1)), 0x1F0000-0x20000,   7,    false,   },
+            {   11, 5,  4+(23-(11-1)), 0x220000-0x20000,   8,    false,   },
+
+            {   -1,  0,0,0,    false,   },
+        },
+
+
+        // 12
+
          {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
 
             // multiple facets, each...
@@ -1567,18 +1893,72 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // left facets
 
             {   1, 3,   4, 0x140000,   6,    false,   },       // L0
-            {   1, 7,   9, 0x190000,   7,    false,   },       // L1
-            {   1, 4,  14, 0x1E0000,   8,    false,   },       // L2 (@CENTER)
+            {   1, 5,   9, 0x190000,   7,    false,   },       // L1
+            {   1, 5,  14, 0x1E0000,   8,    false,   },       // L2 (@CENTER)
 
             // right facets
 
             {   2, 3,  24, 0x140000,   6,    false,   },
             {   2, 1,  19, 0x190000,   7,    false,   },
-            {   2, 2,  14, 0x1E0000,   8,    false,   },
+            {   2, 6,  14, 0x1E0000,   8,    false,   },
 
             {   -1,  0,0,0,    false,   },
         },
- 
+
+
+        // 13 TILT
+
+        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
+
+            // multiple facets, each...
+            // visibleShape, x, y, face# (to get colour), topOnly
+
+            // visibleShape:
+            // 0                TOP
+            // 1                LEFT
+            // 2                RIGHT
+            // 3    ... more rotations to be added
+
+
+            // topOnly:
+            // true             a part of the 3x3 "top" of the layer
+            // false            always drawn
+
+
+            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
+            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
+
+
+            // top facets
+
+            {   7, 5,  17-1, 0x0D0000-0x10000,   0,    true,    },
+            {   7, 2,  11-1, 0x100000-0x10000,   1,    true,    },
+            {   7, 7,  20-1, 0x140000-0x10000,   2,    true,    },
+            {   7, 2,   5-1, 0x130000-0x10000,   3,    true,    },
+            {   7, 4,  14-1, 0x170000-0x20000,   4,    true,    },
+            {   7, 1,  23-1, 0x1C0000-0x20000,   5,    true,    },
+            {   7, 1,   8-1, 0x1A0000-0x10000,   6,    true,    },
+            {   7, 6,  17-1, 0x1F0000-0x20000,   7,    true,    },
+            {   7, 3,  11-1, 0x220000-0x20000,   8,    true,    },
+
+            // left facets
+
+            {   6, 3,   5-1, 0x110000-0x20000,   6,    false,   },       // L0
+            {   6, 5,   8-1, 0x190000-0x30000,   7,    false,   },       // L1
+            {   6, 5,  11-1, 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
+
+            // right facets
+
+            {   5, 3,  23-1, 0x1C0000-0x20000,   6,    false,   },
+            {   5, 1,  17-1, 0x1F0000-0x20000,   7,    false,   },
+            {   5, 6,  11-1, 0x220000-0x20000,   8,    false,   },
+
+            {   -1,  0,0,0,    false,   },
+        },
+
+
+
+        // 14
         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
 
             // multiple facets, each...
@@ -1609,7 +1989,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
 
             // right facets (now face-on)
 
-            {   4, 2,   8, 0x240000,   6,    false,   },       // L0
+            {   4, 6,   8, 0x240000,   6,    false,   },       // L0
             {   4, 1,  15, 0x240000,   7,    false,   },       // L1
             {   4, 3,  22, 0x240000,   8,    false,   },       // L2 (@CENTER)
 
@@ -1618,6 +1998,56 @@ struct facet shapeDef[AXES][ROTATE][25] = {
         },
  
  
+            //xxx
+        // 15 tilt2
+         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
+
+            // multiple facets, each...
+            // visibleShape, x, y, face# (to get colour), topOnly
+
+            // visibleShape:
+            // 0                TOP
+            // 1                LEFT
+            // 2                RIGHT
+            // 3    ... more rotations to be added
+
+
+            // topOnly:
+            // true             a part of the 3x3 "top" of the layer
+            // false            always drawn
+
+
+            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
+            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
+
+
+            // top facets
+
+            {   9, 2,  4+(23-(17-1)), 0x0D0000-0x10000,   0,    true,    },
+            {   9, 2,  4+(23-(11-1)), 0x100000-0x10000,   1,    true,    },
+            {   9, 1,  4+(23-(20-1)), 0x140000-0x10000,   2,    true,    },
+            {   9, 5,  4+(23-( 5-1)), 0x130000-0x10000,   3,    true,    },
+            {   9, 4,  4+(23-(14-1)), 0x170000-0x20000,   4,    true,    },
+            {   9, 7,  4+(23-( 8-1)), 0x1A0000-0x10000,   6,    true,    },
+            {   9, 3,  4+(23-(23-1)), 0x1C0000-0x20000,   5,    true,    },
+            {   9, 6,  4+(23-(17-1)), 0x1F0000-0x20000,   7,    true,    },
+            {   9, 1,  4+(23-(11-1)), 0x220000-0x20000,   8,    true,    },
+
+            // right facets
+
+            {   10, 3,   4+(23-(5-1)), 0x110000-0x20000,   6,    false,   },       // L0
+            {   10, 1,   4+(23-(8-1)), 0x190000-0x30000,   7,    false,   },       // L1
+            {   10, 6,  4+(23-(11-1)), 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
+
+            // left facets
+
+            {   11, 6,  4+(23-(23-1)), 0x1C0000-0x20000,   6,    false,   },
+            {   11, 1,  4+(23-(17-1)), 0x1F0000-0x20000,   7,    false,   },
+            {   11, 3,  4+(23-(11-1)), 0x220000-0x20000,   8,    false,   },
+
+            {   -1,  0,0,0,    false,   },
+        },
+
 
 
 
@@ -1673,9 +2103,6 @@ int stickerColour[][9] = {
 
 
 
-int fno = 0;
-int rotateTop = 0;
-
 
 const unsigned char *shapeSetTop[] = {
     // rotation 0
@@ -1699,6 +2126,18 @@ const unsigned char *shapeSetTop2[] = {
     &top2Facets101[0],
     &top2Facets110[0],
     &top2Facets111[0],
+};
+
+const unsigned char *shapeSetTop3[] = {
+    // rotation 0
+    &top3Facets000[0],
+    &top3Facets001[0],
+    &top3Facets010[0],
+    &top3Facets011[0],
+    &top3Facets100[0],
+    &top3Facets101[0],
+    &top3Facets110[0],
+    &top3Facets111[0],
 };
 
 const unsigned char *shapeSetTop45[] = {
@@ -1748,6 +2187,17 @@ const unsigned char *shapeSetRight2[] = {
     &right2Facets111[0],
 };
 
+const unsigned char *shapeSetRight3[] = {
+    &right3Facets000[0],
+    &right3Facets001[0],
+    &right3Facets010[0],
+    &right3Facets011[0],
+    &right3Facets100[0],
+    &right3Facets101[0],
+    &right3Facets110[0],
+    &right3Facets111[0],
+};
+
 const unsigned char *shapeSetLeft[] = {
     &leftFacets000[0],
     &leftFacets001[0],
@@ -1770,6 +2220,17 @@ const unsigned char *shapeSetLeft2[] = {
     &left2Facets111[0],
 };
 
+const unsigned char *shapeSetLeft3[] = {
+    &left3Facets000[0],
+    &left3Facets001[0],
+    &left3Facets010[0],
+    &left3Facets011[0],
+    &left3Facets100[0],
+    &left3Facets101[0],
+    &left3Facets110[0],
+    &left3Facets111[0],
+};
+
 const unsigned char *shapeBoundary[] = {
     &cubeBoundary[0],
     &cube1Boundary[0],
@@ -1781,14 +2242,12 @@ const unsigned char *shapeBoundary[] = {
     &cubeBoundary[0],
 };
 
-int fLayer = 0;
-
 
 void drawSoftwareSprites() {
 
-    int rr = 0;
-    if (JOY0_FIRE || fLayer == 2)
-        rr = rotateTop;
+    int rr = rotateTop[fLayer];
+//    if (JOY0_FIRE || fLayer == 2)
+//        rr = rotateTop[0];
 
     struct facet *f = &shapeDef[0][rr][fno++];
 
@@ -1801,9 +2260,44 @@ void drawSoftwareSprites() {
         if (++fLayer > 2) {
             fLayer = 0;
 
-            rotateTop++;
-            if (rotateTop > 2)
-                rotateTop = 0;
+
+            if (highlightLayer) {
+                highlightLayer--;
+                showHighlight=  true;
+            }
+
+            else
+                showHighlight = false;
+
+            for (int l = 0; l < 3; l++) {
+
+                if (rotateSpeed[l])
+                    rotateSpeed[l]--;
+    
+                if (!rotateSpeed[l]) {
+
+                    rotateSpeed[l] = 1;
+
+                    rotateTop[l]+= direct[l];
+                    rotateTop[l] &= 15;
+
+                    if (!(rotateTop[l] & 3))
+                        direct[l] = 0;
+
+                }
+
+
+                // if (!(direct[l] + rotateSpeed[l])) {
+                //     direct[l] = ((getRandom32() >> 12) & 0xFF) >= 0x80? -1 : 1;
+                //     rotateSpeed[l] = (getRandom32() & 15) + 1;
+
+
+                // }
+
+
+
+            }
+
 
             finished = true;
         }
@@ -1833,11 +2327,22 @@ void drawSoftwareSprites() {
     case 7: shape = shapeSetTop2;
         break;
     case 8: shape = shapeBoundary;
+        break;
+    case 9: shape = shapeSetTop3;
+        break;
+    case 10: shape = shapeSetLeft3;
+        break;
+    case 11: shape = shapeSetRight3;
+        break;
     }
 
 
+    int theColour = f->colour;
+    if (showHighlight && fLayer == controlledLayer && !(highlightLayer & 1))
+        theColour = 0;
+
     if (!f->topOnly || (fLayer == 2 && f->topOnly))
-        drawBitmap(shape[f->colour], //f->colourstickerColour[f->face][fLayer * 3 + f->square]],
+        drawBitmap(shape[theColour], //f->colourstickerColour[f->face][fLayer * 3 + f->square]],
             ((f->x << 14) & 0xFFFFC000) + 0x00024000,
             (((130 - (fLayer * 13) << 16) + (f->y)) & 0xFFFF0000)  * 3,
             true);

@@ -26,6 +26,15 @@ extern const unsigned char right2Facets101[];
 extern const unsigned char right2Facets110[];
 extern const unsigned char right2Facets111[];
 
+extern const unsigned char right3Facets000[];
+extern const unsigned char right3Facets001[];
+extern const unsigned char right3Facets010[];
+extern const unsigned char right3Facets011[];
+extern const unsigned char right3Facets100[];
+extern const unsigned char right3Facets101[];
+extern const unsigned char right3Facets110[];
+extern const unsigned char right3Facets111[];
+
 extern const unsigned char leftFacets000[];
 extern const unsigned char leftFacets001[];
 extern const unsigned char leftFacets010[];
@@ -44,6 +53,15 @@ extern const unsigned char left2Facets101[];
 extern const unsigned char left2Facets110[];
 extern const unsigned char left2Facets111[];
 
+extern const unsigned char left3Facets000[];
+extern const unsigned char left3Facets001[];
+extern const unsigned char left3Facets010[];
+extern const unsigned char left3Facets011[];
+extern const unsigned char left3Facets100[];
+extern const unsigned char left3Facets101[];
+extern const unsigned char left3Facets110[];
+extern const unsigned char left3Facets111[];
+
 extern const unsigned char topFacets000[];
 extern const unsigned char topFacets001[];
 extern const unsigned char topFacets010[];
@@ -61,6 +79,16 @@ extern const unsigned char top2Facets100[];
 extern const unsigned char top2Facets101[];
 extern const unsigned char top2Facets110[];
 extern const unsigned char top2Facets111[];
+
+
+extern const unsigned char top3Facets000[];
+extern const unsigned char top3Facets001[];
+extern const unsigned char top3Facets010[];
+extern const unsigned char top3Facets011[];
+extern const unsigned char top3Facets100[];
+extern const unsigned char top3Facets101[];
+extern const unsigned char top3Facets110[];
+extern const unsigned char top3Facets111[];
 
 extern const unsigned char topFacet45_000[];
 extern const unsigned char topFacet45_001[];
@@ -81,13 +109,6 @@ extern const unsigned char frontFacet45_101[];
 extern const unsigned char frontFacet45_110[];
 extern const unsigned char frontFacet45_111[];
 
-
-extern const unsigned char eroShip[];
-extern const unsigned char eroShip2[];
-extern const unsigned char rocketShipLeg[];
-extern const unsigned char rocketShipFlame[];
-extern const unsigned char flagUSA[];
-extern const unsigned char shipFuelTank[];
 
 extern void drawBitmap(const unsigned char *bmp, int x, int y, bool relativeToScreen);
 
