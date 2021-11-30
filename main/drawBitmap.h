@@ -3,6 +3,9 @@
 
 #include <stdbool.h>
 
+extern const unsigned char highlighter[];
+extern const unsigned char marker[];
+
 extern const unsigned char cubeBoundary[];
 extern const unsigned char cube1Boundary[];
 extern const unsigned char topFace[];

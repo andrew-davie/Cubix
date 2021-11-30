@@ -1292,6 +1292,8 @@ struct facet {
 };
 
 
+#define MARKER 0
+
 
 struct facet shapeDef[AXES][ROTATE][25] = {
 
@@ -1316,7 +1318,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // false            always drawn
 
 
-
+    #if !MARKER
             // top facets
 
             {   0, 2,  14, 0x0A0000,   0,    true,    },
@@ -1340,6 +1342,36 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             {   2, 3,  24, 0x140000,   6,    false,   },
             {   2, 1,  19, 0x190000,   7,    false,   },
             {   2, 6,  14, 0x1E0000,   8,    false,   },
+
+    #endif
+
+    #if MARKER
+            // top facets
+
+            {  12, 2,  14, 0x0A0000,   0,    true,    },
+            {  12, 1,   9, 0x0F0000,   1,    true,    },
+            {  12, 2,  19, 0x0F0000,   2,    true,    },
+            {  12, 3,   4, 0x140000,   3,    true,    },
+            {  12, 4,  14, 0x140000,   4,    true,    },
+            {  12, 5,  24, 0x140000,   5,    true,    },
+            {  12, 6,   9, 0x190000,   6,    true,    },
+            {  12, 7,  19, 0x190000,   7,    true,    },
+            {  12, 1,  14, 0x1E0000,   8,    true,    },
+
+            // left facets
+
+            {  12, 6,   4, 0x140000,   6,    false,   },       // L0
+            {  12, 1,   9, 0x190000,   7,    false,   },       // L1
+            {  12, 3,  14, 0x1E0000,   8,    false,   },       // L2 (@CENTER)
+
+            // right facets
+
+            {  12, 3,  24, 0x140000,   6,    false,   },
+            {  12, 1,  19, 0x190000,   7,    false,   },
+            {  12, 6,  14, 0x1E0000,   8,    false,   },
+
+    #endif
+
 
             {   -1,  0,0,0,    false,   },
         },
@@ -2101,7 +2133,16 @@ int stickerColour[][9] = {
 };
 
 
-
+const unsigned char *shapeMarker[] = {
+    &marker[0],
+    &marker[0],
+    &marker[0],
+    &marker[0],
+    &marker[0],
+    &marker[0],
+    &marker[0],
+    &marker[0],
+};
 
 
 const unsigned char *shapeSetTop[] = {
@@ -2276,7 +2317,7 @@ void drawSoftwareSprites() {
     
                 if (!rotateSpeed[l]) {
 
-                    rotateSpeed[l] = 1;
+                    rotateSpeed[l] = 20;
 
                     rotateTop[l]+= direct[l];
                     rotateTop[l] &= 15;
@@ -2298,6 +2339,10 @@ void drawSoftwareSprites() {
 
             }
 
+            // drawBitmap(highlighter,
+            //     ((0 << 14) & 0xFFFFC000) + 0x0000C000,
+            //     (((130 - (fLayer * 13) << 16) + (20)) & 0xFFFF0000)  * 3,
+            //     true);
 
             finished = true;
         }
@@ -2334,7 +2379,13 @@ void drawSoftwareSprites() {
         break;
     case 11: shape = shapeSetRight3;
         break;
+    case 12: shape = shapeMarker;
+        break;
     }
+
+    #if MARKER
+        shape = shapeMarker;
+    #endif
 
 
     int theColour = f->colour;
