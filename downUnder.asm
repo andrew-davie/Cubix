@@ -17,7 +17,7 @@
     MAC ldx
     ENDM
 
-CDC = 14
+CDC = 16
 
 ; Symbols prefixed with _ are exported to 'main/defines_from_dasm_for_c.h'
 ; This is done via 'awk' in the makefile.

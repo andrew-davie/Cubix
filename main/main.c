@@ -655,13 +655,13 @@ void InitGameX() {
 
     const int ssy[] = {
 
-        0x190000+0x150000, 0x190000+0x150000,
-        0x1E0000+0x150000, 0x1E0000+0x150000,
-        0x230000+0x150000,
+        0x190000+0x100000, 0x190000+0x100000,
+        0x1E0000+0x100000, 0x1E0000+0x100000,
+        0x230000+0x100000,
 
-        0x190000+0x80000, 0x190000+0x80000,
-        0x1E0000+0x80000, 0x1E0000+0x80000,
-        0x230000+0x80000,
+        0x190000+0x30000, 0x190000+0x30000,
+        0x1E0000+0x30000, 0x1E0000+0x30000,
+        0x230000+0x30000,
 
         0xA0000,
         0xF0000, 0xF0000,
@@ -1077,11 +1077,11 @@ void HandleJoystick() {
 void GameVerticalBlank() {
  
 
-    Scroll();
 
 
     if (finished) {
         pfBuffer ^= 1;
+        Scroll();
         drawScreen();
         finished = false;
     }
@@ -1292,7 +1292,7 @@ struct facet {
 };
 
 
-#define MARKER 0
+#define MARKER 1
 
 
 struct facet shapeDef[AXES][ROTATE][25] = {
@@ -1318,19 +1318,6 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // false            always drawn
 
 
-    #if !MARKER
-            // top facets
-
-            {   0, 2,  14, 0x0A0000,   0,    true,    },
-            {   0, 1,   9, 0x0F0000,   1,    true,    },
-            {   0, 2,  19, 0x0F0000,   2,    true,    },
-            {   0, 3,   4, 0x140000,   3,    true,    },
-            {   0, 4,  14, 0x140000,   4,    true,    },
-            {   0, 5,  24, 0x140000,   5,    true,    },
-            {   0, 6,   9, 0x190000,   6,    true,    },
-            {   0, 7,  19, 0x190000,   7,    true,    },
-            {   0, 1,  14, 0x1E0000,   8,    true,    },
-
             // left facets
 
             {   1, 6,   4, 0x140000,   6,    false,   },       // L0
@@ -1343,34 +1330,19 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             {   2, 1,  19, 0x190000,   7,    false,   },
             {   2, 6,  14, 0x1E0000,   8,    false,   },
 
-    #endif
-
-    #if MARKER
             // top facets
 
-            {  12, 2,  14, 0x0A0000,   0,    true,    },
-            {  12, 1,   9, 0x0F0000,   1,    true,    },
-            {  12, 2,  19, 0x0F0000,   2,    true,    },
-            {  12, 3,   4, 0x140000,   3,    true,    },
-            {  12, 4,  14, 0x140000,   4,    true,    },
-            {  12, 5,  24, 0x140000,   5,    true,    },
-            {  12, 6,   9, 0x190000,   6,    true,    },
-            {  12, 7,  19, 0x190000,   7,    true,    },
-            {  12, 1,  14, 0x1E0000,   8,    true,    },
+            {   0, 2,  14, 0x0A0000,   0,    true,    },
+            {   0, 1,   9, 0x0F0000,   1,    true,    },
+            {   0, 2,  19, 0x0F0000,   2,    true,    },
+            {   0, 3,   4, 0x140000,   3,    true,    },
+            {   0, 4,  14, 0x140000,   4,    true,    },
+            {   0, 5,  24, 0x140000,   5,    true,    },
+            {   0, 6,   9, 0x190000,   6,    true,    },
+            {   0, 7,  19, 0x190000,   7,    true,    },
+            {   0, 1,  14, 0x1E0000,   8,    true,    },
 
-            // left facets
 
-            {  12, 6,   4, 0x140000,   6,    false,   },       // L0
-            {  12, 1,   9, 0x190000,   7,    false,   },       // L1
-            {  12, 3,  14, 0x1E0000,   8,    false,   },       // L2 (@CENTER)
-
-            // right facets
-
-            {  12, 3,  24, 0x140000,   6,    false,   },
-            {  12, 1,  19, 0x190000,   7,    false,   },
-            {  12, 6,  14, 0x1E0000,   8,    false,   },
-
-    #endif
 
 
             {   -1,  0,0,0,    false,   },
@@ -1400,29 +1372,33 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
 
 
-            // top facets
+#define AX1 1
+#define AY1 -0x20000
 
-            {   7, 2,  17-1, 0x0D0000-0x10000,   0,    true,    },
-            {   7, 1,  11-1, 0x100000-0x10000,   1,    true,    },
-            {   7, 2,  20-1, 0x140000-0x10000,   2,    true,    },
-            {   7, 3,   5-1, 0x130000-0x10000,   3,    true,    },
-            {   7, 4,  14-1, 0x170000-0x20000,   4,    true,    },
-            {   7, 5,  23-1, 0x1C0000-0x20000,   5,    true,    },
-            {   7, 6,   8-1, 0x1A0000-0x10000,   6,    true,    },
-            {   7, 7,  17-1, 0x1F0000-0x20000,   7,    true,    },
-            {   7, 1,  11-1, 0x220000-0x20000,   8,    true,    },
 
             // left facets
 
-            {   6, 6,   5-1, 0x110000-0x20000,   6,    false,   },       // L0
-            {   6, 1,   8-1, 0x190000-0x30000,   7,    false,   },       // L1
-            {   6, 3,  11-1, 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
+            {   6, 6,   4+AX1, 0x120000+AY1,   6,    false,   },       // L0
+            {   6, 1,   7+AX1, 0x190000+AY1,   7,    false,   },       // L1
+            {   6, 3,  10+AX1, 0x200000+AY1,   8,    false,   },       // L2 (@CENTER)
 
             // right facets
 
-            {   5, 3,  23-1, 0x1C0000-0x20000,   6,    false,   },
-            {   5, 1,  17-1, 0x1F0000-0x20000,   7,    false,   },
-            {   5, 6,  11-1, 0x220000-0x20000,   8,    false,   },
+            {   5, 3,  22+AX1, 0x1A0000+AY1,   6,    false,   },
+            {   5, 1,  16+AX1, 0x1D0000+AY1,   7,    false,   },
+            {   5, 6,  10+AX1, 0x200000+AY1,   8,    false,   },
+
+            // top facets
+
+            {   7, 2,  16+AX1, 0x0C0000+AY1,   0,    true,    },
+            {   7, 1,  10+AX1, 0x0f0000+AY1,   1,    true,    },
+            {   7, 2,  19+AX1, 0x130000+AY1,   2,    true,    },
+            {   7, 3,   4+AX1, 0x120000+AY1,   3,    true,    },
+            {   7, 4,  13+AX1, 0x160000+AY1,   4,    true,    },
+            {   7, 5,  22+AX1, 0x1A0000+AY1,   5,    true,    },
+            {   7, 6,   7+AX1, 0x190000+AY1,   6,    true,    },
+            {   7, 7,  16+AX1, 0x1D0000+AY1,   7,    true,    },
+            {   7, 1,  10+AX1, 0x200000+AY1,   8,    true,    },
 
             {   -1,  0,0,0,    false,   },
         },
@@ -1445,34 +1421,37 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // true             a part of the 3x3 "top" of the layer
             // false            always drawn
 
+#define AX2 -1
+#define AY2 -0x20000
+
 
             // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
             // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
 
             // top facets
 
-            {   3, 3,  8, 0x0F0000,   0,    true,    },
-            {   3, 1, 15, 0x0F0000,   1,    true,    },
-            {   3, 2, 22, 0x0F0000,   2,    true,    },
-            {   3, 6,  8, 0x160000,   3,    true,    },
-            {   3, 4, 15, 0x160000,   4,    true,    },
-            {   3, 2, 22, 0x160000,   5,    true,    },
-            {   3, 1,  8, 0x1E0000,   6,    true,    },
-            {   3, 7, 15, 0x1E0000,   7,    true,    },
-            {   3, 5, 22, 0x1E0000,   8,    true,    },
+            {   3, 3,  8+AX2, 0x0F0000+AY2,   0,    true,    },
+            {   3, 1, 15+AX2, 0x0F0000+AY2,   1,    true,    },
+            {   3, 2, 22+AX2, 0x0F0000+AY2,   2,    true,    },
+            {   3, 6,  8+AX2, 0x160000+AY2,   3,    true,    },
+            {   3, 4, 15+AX2, 0x160000+AY2,   4,    true,    },
+            {   3, 2, 22+AX2, 0x160000+AY2,   5,    true,    },
+            {   3, 1,  8+AX2, 0x1D0000+AY2,   6,    true,    },
+            {   3, 7, 15+AX2, 0x1D0000+AY2,   7,    true,    },
+            {   3, 5, 22+AX2, 0x1D0000+AY2,   8,    true,    },
 
             // right facets (now face-on)
 
-            {   4, 6,   8, 0x240000,   6,    false,   },       // L0
-            {   4, 1,  15, 0x240000,   7,    false,   },       // L1
-            {   4, 3,  22, 0x240000,   8,    false,   },       // L2 (@CENTER)
+            {   4, 6,   8+AX2, 0x240000-0x60000+AY2,   6,    false,   },       // L0
+            {   4, 1,  15+AX2, 0x240000-0x60000+AY2,   7,    false,   },       // L1
+            {   4, 3,  22+AX2, 0x240000-0x60000+AY2,   8,    false,   },       // L2 (@CENTER)
 
 
             {   -1,  0,0,0,    false,   },
         },
  
  
-        // 3 tilt2
+        // 3 tilt2 +(6,0x30000)
         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
 
             // multiple facets, each...
@@ -1484,6 +1463,8 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // 2                RIGHT
             // 3    ... more rotations to be added
 
+#define AX3 -1
+#define AY3 -0x20000
 
             // topOnly:
             // true             a part of the 3x3 "top" of the layer
@@ -1496,27 +1477,27 @@ struct facet shapeDef[AXES][ROTATE][25] = {
 
             // top facets
 
-            {   9, 3,  5+(23-(17-1)), 0x0D0000-0x10000,   0,    true,    },
-            {   9, 1,  5+(23-(11-1)), 0x100000-0x10000,   1,    true,    },
-            {   9, 6,  5+(23-(20-1)), 0x140000-0x10000,   2,    true,    },
-            {   9, 2,  5+(23-( 5-1)), 0x130000-0x10000,   3,    true,    },
-            {   9, 4,  5+(23-(14-1)), 0x170000-0x20000,   4,    true,    },
-            {   9, 2,  5+(23-( 8-1)), 0x1A0000-0x10000,   6,    true,    },
-            {   9, 1,  5+(23-(23-1)), 0x1C0000-0x20000,   5,    true,    },
-            {   9, 7,  5+(23-(17-1)), 0x1F0000-0x20000,   7,    true,    },
-            {   9, 5,  5+(23-(11-1)), 0x220000-0x20000,   8,    true,    },
+            {   9, 3,  12+AX3, 0x0C0000+AY3,   0,    true,    },
+            {   9, 1,  18+AX3, 0x0F0000+AY3,   1,    true,    },
+            {   9, 6,   9+AX3, 0x130000+AY3,   2,    true,    },
+            {   9, 2,  24+AX3, 0x120000+AY3,   3,    true,    },
+            {   9, 4,  15+AX3, 0x160000+AY3,   4,    true,    },
+            {   9, 2,  21+AX3, 0x190000+AY3,   6,    true,    },
+            {   9, 1,   6+AX3, 0x1A0000+AY3,   5,    true,    },
+            {   9, 7,  12+AX3, 0x1D0000+AY3,   7,    true,    },
+            {   9, 5,  18+AX3, 0x200000+AY3,   8,    true,    },
 
             // right facets
 
-            {   10, 6,   5+(23-(5-1)), 0x110000-0x20000,   6,    false,   },       // L0
-            {   10, 4,   5+(23-(8-1)), 0x190000-0x30000,   7,    false,   },       // L1
-            {   10, 4,  5+(23-(11-1)), 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
+            {   10, 6,  24+AX3, 0x120000+AY3,   6,    false,   },       // L0
+            {   10, 4,  21+AX3, 0x190000+AY3,   7,    false,   },       // L1
+            {   10, 4,  18+AX3, 0x200000+AY3,   8,    false,   },       // L2 (@CENTER)
 
             // left facets
 
-            {   11, 6,  5+(23-(23-1)), 0x1C0000-0x20000,   6,    false,   },
-            {   11, 1,  5+(23-(17-1)), 0x1F0000-0x20000,   7,    false,   },
-            {   11, 3,  5+(23-(11-1)), 0x220000-0x20000,   8,    false,   },
+            {   11, 6,   6+AX3, 0x1A0000+AY3,   6,    false,   },
+            {   11, 1,  12+AX3, 0x1D0000+AY3,   7,    false,   },
+            {   11, 3,  18+AX3, 0x200000+AY3,   8,    false,   },
 
             {   -1,  0,0,0,    false,   },
         },
@@ -1534,6 +1515,8 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // 2                RIGHT
             // 3    ... more rotations to be added
 
+#define AX4 0
+#define AY4 0x00000
 
             // topOnly:
             // true             a part of the 3x3 "top" of the layer
@@ -1541,27 +1524,27 @@ struct facet shapeDef[AXES][ROTATE][25] = {
 
             // top facets
 
-            {   0, 3,  14, 0x0A0000,   0,    true,    },
-            {   0, 6,   9, 0x0F0000,   1,    true,    },
-            {   0, 1,  19, 0x0F0000,   2,    true,    },
-            {   0, 1,   4, 0x140000,   3,    true,    },
-            {   0, 4,  14, 0x140000,   4,    true,    },
-            {   0, 2,  24, 0x140000,   5,    true,    },
-            {   0, 7,   9, 0x190000,   6,    true,    },
-            {   0, 2,  19, 0x190000,   7,    true,    },
-            {   0, 5,  14, 0x1E0000,   8,    true,    },
+            {   0, 3,  14+AX4, 0x0A0000+AY4,   0,    true,    },
+            {   0, 6,   9+AX4, 0x0F0000+AY4,   1,    true,    },
+            {   0, 1,  19+AX4, 0x0F0000+AY4,   2,    true,    },
+            {   0, 1,   4+AX4, 0x140000+AY4,   3,    true,    },
+            {   0, 4,  14+AX4, 0x140000+AY4,   4,    true,    },
+            {   0, 2,  24+AX4, 0x140000+AY4,   5,    true,    },
+            {   0, 7,   9+AX4, 0x190000+AY4,   6,    true,    },
+            {   0, 2,  19+AX4, 0x190000+AY4,   7,    true,    },
+            {   0, 5,  14+AX4, 0x1E0000+AY4,   8,    true,    },
 
             // left facets
 
-            {   1, 6,   4, 0x140000,   6,    false,   },       // L0
-            {   1, 1,   9, 0x190000,   7,    false,   },       // L1
-            {   1, 3,  14, 0x1E0000,   8,    false,   },       // L2 (@CENTER)
+            {   1, 6,   4+AX4, 0x140000+AY4,   6,    false,   },       // L0
+            {   1, 1,   9+AX4, 0x190000+AY4,   7,    false,   },       // L1
+            {   1, 3,  14+AX4, 0x1E0000+AY4,   8,    false,   },       // L2 (@CENTER)
 
             // right facets
 
-            {   2, 6,  24, 0x140000,   6,    false,   },
-            {   2, 4,  19, 0x190000,   7,    false,   },
-            {   2, 4,  14, 0x1E0000,   8,    false,   },
+            {   2, 6,  24+AX4, 0x140000+AY4,   6,    false,   },
+            {   2, 4,  19+AX4, 0x190000+AY4,   7,    false,   },
+            {   2, 4,  14+AX4, 0x1E0000+AY4,   8,    false,   },
 
             {   -1,  0,0,0,    false,   },
         },
@@ -1580,6 +1563,8 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // 2                RIGHT
             // 3    ... more rotations to be added
 
+#define AX5 1
+#define AY5 -0x20000
 
             // topOnly:
             // true             a part of the 3x3 "top" of the layer
@@ -1592,27 +1577,27 @@ struct facet shapeDef[AXES][ROTATE][25] = {
 
             // top facets
 
-            {   7, 3,  17-1, 0x0D0000-0x10000,   0,    true,    },
-            {   7, 6,  11-1, 0x100000-0x10000,   1,    true,    },
-            {   7, 1,  20-1, 0x140000-0x10000,   2,    true,    },
-            {   7, 1,   5-1, 0x130000-0x10000,   3,    true,    },
-            {   7, 4,  14-1, 0x170000-0x20000,   4,    true,    },
-            {   7, 2,  23-1, 0x1C0000-0x20000,   5,    true,    },
-            {   7, 7,   8-1, 0x1A0000-0x10000,   6,    true,    },
-            {   7, 2,  17-1, 0x1F0000-0x20000,   7,    true,    },
-            {   7, 5,  11-1, 0x220000-0x20000,   8,    true,    },
+            {   7, 3,  16+AX5, 0x0C0000+AY5,   0,    true,    },
+            {   7, 6,  10+AX5, 0x0F0000+AY5,   1,    true,    },
+            {   7, 1,  19+AX5, 0x130000+AY5,   2,    true,    },
+            {   7, 1,   4+AX5, 0x120000+AY5,   3,    true,    },
+            {   7, 4,  13+AX5, 0x160000+AY5,   4,    true,    },
+            {   7, 2,  22+AX5, 0x1A0000+AY5,   5,    true,    },
+            {   7, 7,   7+AX5, 0x190000+AY5,   6,    true,    },
+            {   7, 2,  16+AX5, 0x1D0000+AY5,   7,    true,    },
+            {   7, 5,  10+AX5, 0x200000+AY5,   8,    true,    },
 
             // left facets
 
-            {   6, 6,   5-1, 0x110000-0x20000,   6,    false,   },       // L0
-            {   6, 1,   8-1, 0x190000-0x30000,   7,    false,   },       // L1
-            {   6, 3,  11-1, 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
+            {   6, 6,   4+AX5, 0x120000+AY5,   6,    false,   },       // L0
+            {   6, 1,   7+AX5, 0x190000+AY5,   7,    false,   },       // L1
+            {   6, 3,  10+AX5, 0x200000+AY5,   8,    false,   },       // L2 (@CENTER)
 
             // right facets
 
-            {   5, 6,  23-1, 0x1C0000-0x20000,   6,    false,   },
-            {   5, 4,  17-1, 0x1F0000-0x20000,   7,    false,   },
-            {   5, 4,  11-1, 0x220000-0x20000,   8,    false,   },
+            {   5, 6,  22+AX5, 0x1A0000+AY5,   6,    false,   },
+            {   5, 4,  16+AX5, 0x1D0000+AY5,   7,    false,   },
+            {   5, 4,  10+AX5, 0x200000+AY5,   8,    false,   },
 
             {   -1,  0,0,0,    false,   },
         },
@@ -1631,27 +1616,30 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // 3    ... more rotations to be added
 
 
+#define AX6 -1
+#define AY6 -0x20000
+
             // topOnly:
             // true             a part of the 3x3 "top" of the layer
             // false            always drawn
 
             // top facets
 
-            {   3, 1,  8, 0x0F0000,   0,    true,    },
-            {   3, 6, 15, 0x0F0000,   1,    true,    },
-            {   3, 3, 22, 0x0F0000,   2,    true,    },
-            {   3, 7,  8, 0x160000,   3,    true,    },
-            {   3, 4, 15, 0x160000,   4,    true,    },
-            {   3, 1, 22, 0x160000,   5,    true,    },
-            {   3, 5,  8, 0x1E0000,   6,    true,    },
-            {   3, 2, 15, 0x1E0000,   7,    true,    },
-            {   3, 2, 22, 0x1E0000,   8,    true,    },
+            {   3, 1,  8+AX6, 0x0F0000+AY6,   0,    true,    },
+            {   3, 6, 15+AX6, 0x0F0000+AY6,   1,    true,    },
+            {   3, 3, 22+AX6, 0x0F0000+AY6,   2,    true,    },
+            {   3, 7,  8+AX6, 0x160000+AY6,   3,    true,    },
+            {   3, 4, 15+AX6, 0x160000+AY6,   4,    true,    },
+            {   3, 1, 22+AX6, 0x160000+AY6,   5,    true,    },
+            {   3, 5,  8+AX6, 0x1D0000+AY6,   6,    true,    },
+            {   3, 2, 15+AX6, 0x1D0000+AY6,   7,    true,    },
+            {   3, 2, 22+AX6, 0x1D0000+AY6,   8,    true,    },
 
             // right facets (now face-on)
 
-            {   4, 4,   8, 0x240000,   6,    false,   },       // L0
-            {   4, 4,  15, 0x240000,   7,    false,   },       // L1
-            {   4, 6,  22, 0x240000,   8,    false,   },       // L2 (@CENTER)
+            {   4, 4,   8+AX6, 0x1D0000+AY6,   6,    false,   },       // L0
+            {   4, 4,  15+AX6, 0x1D0000+AY6,   7,    false,   },       // L1
+            {   4, 6,  22+AX6, 0x1D0000+AY6,   8,    false,   },       // L2 (@CENTER)
 
             {   -1,  0,0,0,    false,   },
         },
@@ -1674,6 +1662,8 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // true             a part of the 3x3 "top" of the layer
             // false            always drawn
 
+#define AX7 0
+#define AY7 -0x20000
 
             // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
             // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
@@ -1681,27 +1671,27 @@ struct facet shapeDef[AXES][ROTATE][25] = {
 
             // top facets
 
-            {   9, 1,  4+(23-(17-1)), 0x0D0000-0x10000,   0,    true,    },
-            {   9, 6,  4+(23-(11-1)), 0x100000-0x10000,   1,    true,    },
-            {   9, 7,  4+(23-(20-1)), 0x140000-0x10000,   2,    true,    },
-            {   9, 3,  4+(23-( 5-1)), 0x130000-0x10000,   3,    true,    },
-            {   9, 4,  4+(23-(14-1)), 0x170000-0x20000,   4,    true,    },
-            {   9, 1,  4+(23-( 8-1)), 0x1A0000-0x10000,   6,    true,    },
-            {   9, 5,  4+(23-(23-1)), 0x1C0000-0x20000,   5,    true,    },
-            {   9, 2,  4+(23-(17-1)), 0x1F0000-0x20000,   7,    true,    },
-            {   9, 2,  4+(23-(11-1)), 0x220000-0x20000,   8,    true,    },
+            {   9, 1,  11+AX7, 0x0C0000+AY7,   0,    true,    },
+            {   9, 6,  17+AX7, 0x0F0000+AY7,   1,    true,    },
+            {   9, 7,   8+AX7, 0x130000+AY7,   2,    true,    },
+            {   9, 3,  23+AX7, 0x120000+AY7,   3,    true,    },
+            {   9, 4,  14+AX7, 0x160000+AY7,   4,    true,    },
+            {   9, 1,  20+AX7, 0x190000+AY7,   6,    true,    },
+            {   9, 5,   5+AX7, 0x1A0000+AY7,   5,    true,    },
+            {   9, 2,  11+AX7, 0x1D0000+AY7,   7,    true,    },
+            {   9, 2,  17+AX7, 0x200000+AY7,   8,    true,    },
 
             // right facets
 
-            {   10, 5,   4+(23-(5-1)), 0x110000-0x20000,   6,    false,   },       // L0
-            {   10, 5,   4+(23-(8-1)), 0x190000-0x30000,   7,    false,   },       // L1
-            {   10, 3,  4+(23-(11-1)), 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
+            {   10, 5, 23+AX7, 0x120000+AY7,   6,    false,   },       // L0
+            {   10, 5, 20+AX7, 0x190000+AY7,   7,    false,   },       // L1
+            {   10, 3, 17+AX7, 0x200000+AY7,   8,    false,   },       // L2 (@CENTER)
 
             // left facets
 
-            {   11, 4,  4+(23-(23-1)), 0x1C0000-0x20000,   6,    false,   },
-            {   11, 4,  4+(23-(17-1)), 0x1F0000-0x20000,   7,    false,   },
-            {   11, 6,  4+(23-(11-1)), 0x220000-0x20000,   8,    false,   },
+            {   11, 4,  5+AX7, 0x1A0000+AY7,   6,    false,   },
+            {   11, 4, 11+AX7, 0x1D0000+AY7,   7,    false,   },
+            {   11, 6, 17+AX7, 0x200000+AY7,   8,    false,   },
 
             {   -1,  0,0,0,    false,   },
         },
@@ -1720,33 +1710,36 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // 3    ... more rotations to be added
 
 
+#define AX8 0
+#define AY8 0x00000
+
             // topOnly:
             // true             a part of the 3x3 "top" of the layer
             // false            always drawn
 
             // top facets
 
-            {   0, 1,  14, 0x0A0000,   0,    true,    },
-            {   0, 7,   9, 0x0F0000,   1,    true,    },
-            {   0, 6,  19, 0x0F0000,   2,    true,    },
-            {   0, 5,   4, 0x140000,   3,    true,    },
-            {   0, 4,  14, 0x140000,   4,    true,    },
-            {   0, 3,  24, 0x140000,   5,    true,    },
-            {   0, 2,   9, 0x190000,   6,    true,    },
-            {   0, 1,  19, 0x190000,   7,    true,    },
-            {   0, 2,  14, 0x1E0000,   8,    true,    },
+            {   0, 1,  14+AX8, 0x0A0000+AY8,   0,    true,    },
+            {   0, 7,   9+AX8, 0x0F0000+AY8,   1,    true,    },
+            {   0, 6,  19+AX8, 0x0F0000+AY8,   2,    true,    },
+            {   0, 5,   4+AX8, 0x140000+AY8,   3,    true,    },
+            {   0, 4,  14+AX8, 0x140000+AY8,   4,    true,    },
+            {   0, 3,  24+AX8, 0x140000+AY8,   5,    true,    },
+            {   0, 2,   9+AX8, 0x190000+AY8,   6,    true,    },
+            {   0, 1,  19+AX8, 0x190000+AY8,   7,    true,    },
+            {   0, 2,  14+AX8, 0x1E0000+AY8,   8,    true,    },
 
             // left facets
 
-            {   1, 4,   4, 0x140000,   6,    false,   },       // L0
-            {   1, 4,   9, 0x190000,   7,    false,   },       // L1
-            {   1, 6,  14, 0x1E0000,   8,    false,   },       // L2 (@CENTER)
+            {   1, 4,   4+AX8, 0x140000+AY8,   6,    false,   },       // L0
+            {   1, 4,   9+AX8, 0x190000+AY8,   7,    false,   },       // L1
+            {   1, 6,  14+AX8, 0x1E0000+AY8,   8,    false,   },       // L2 (@CENTER)
 
             // right facets
 
-            {   2, 5,  24, 0x140000,   6,    false,   },
-            {   2, 5,  19, 0x190000,   7,    false,   },
-            {   2, 3,  14, 0x1E0000,   8,    false,   },
+            {   2, 5,  24+AX8, 0x140000+AY8,   6,    false,   },
+            {   2, 5,  19+AX8, 0x190000+AY8,   7,    false,   },
+            {   2, 3,  14+AX8, 0x1E0000+AY8,   8,    false,   },
 
             {   -1,  0,0,0,    false,   },
         },
@@ -1769,34 +1762,38 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // true             a part of the 3x3 "top" of the layer
             // false            always drawn
 
+#define AX9 1
+#define AY9 -0x20000
+
 
             // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
             // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
 
 
-            // top facets
-
-            {   7, 1,  17-1, 0x0D0000-0x10000,   0,    true,    },
-            {   7, 7,  11-1, 0x100000-0x10000,   1,    true,    },
-            {   7, 6,  20-1, 0x140000-0x10000,   2,    true,    },
-            {   7, 5,   5-1, 0x130000-0x10000,   3,    true,    },
-            {   7, 4,  14-1, 0x170000-0x20000,   4,    true,    },
-            {   7, 3,  23-1, 0x1C0000-0x20000,   5,    true,    },
-            {   7, 2,   8-1, 0x1A0000-0x10000,   6,    true,    },
-            {   7, 1,  17-1, 0x1F0000-0x20000,   7,    true,    },
-            {   7, 2,  11-1, 0x220000-0x20000,   8,    true,    },
 
             // left facets
 
-            {   6, 4,   5-1, 0x110000-0x20000,   6,    false,   },       // L0
-            {   6, 4,   8-1, 0x190000-0x30000,   7,    false,   },       // L1
-            {   6, 6,  11-1, 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
+            {   6, 4,   4+AX9, 0x120000+AY9,   6,    false,   },       // L0
+            {   6, 4,   7+AX9, 0x190000+AY9,   7,    false,   },       // L1
+            {   6, 6,  10+AX9, 0x200000+AY9,   8,    false,   },       // L2 (@CENTER)
 
             // right facets
 
-            {   5, 5,  23-1, 0x1C0000-0x20000,   6,    false,   },
-            {   5, 5,  17-1, 0x1F0000-0x20000,   7,    false,   },
-            {   5, 3,  11-1, 0x220000-0x20000,   8,    false,   },
+            {   5, 5,  22+AX9, 0x1A0000+AY9,   6,    false,   },
+            {   5, 5,  16+AX9, 0x1D0000+AY9,   7,    false,   },
+            {   5, 3,  10+AX9, 0x200000+AY9,   8,    false,   },
+
+            // top facets
+
+            {   7, 1,  16+AX9, 0x0C0000+AY9,   0,    true,    },
+            {   7, 7,  10+AX9, 0x0F0000+AY9,   1,    true,    },
+            {   7, 6,  19+AX9, 0x130000+AY9,   2,    true,    },
+            {   7, 5,   4+AX9, 0x120000+AY9,   3,    true,    },
+            {   7, 4,  13+AX9, 0x160000+AY9,   4,    true,    },
+            {   7, 3,  22+AX9, 0x1A0000+AY9,   5,    true,    },
+            {   7, 2,   7+AX9, 0x190000+AY9,   6,    true,    },
+            {   7, 1,  16+AX9, 0x1D0000+AY9,   7,    true,    },
+            {   7, 2,  10+AX9, 0x200000+AY9,   8,    true,    },
 
             {   -1,  0,0,0,    false,   },
         },
@@ -1819,30 +1816,33 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // true             a part of the 3x3 "top" of the layer
             // false            always drawn
 
+#define AX10 -1
+#define AY10 -0x20000
+
             // top facets
 
-            {   3, 5,  8, 0x0F0000,   0,    true,    },
-            {   3, 7, 15, 0x0F0000,   1,    true,    },
-            {   3, 1, 22, 0x0F0000,   2,    true,    },
-            {   3, 2,  8, 0x160000,   3,    true,    },
-            {   3, 4, 15, 0x160000,   4,    true,    },
-            {   3, 6, 22, 0x160000,   5,    true,    },
-            {   3, 2,  8, 0x1E0000,   6,    true,    },
-            {   3, 1, 15, 0x1E0000,   7,    true,    },
-            {   3, 3, 22, 0x1E0000,   8,    true,    },
+            {   3, 5,  8+AX10, 0x0F0000+AY10,   0,    true,    },
+            {   3, 7, 15+AX10, 0x0F0000+AY10,   1,    true,    },
+            {   3, 1, 22+AX10, 0x0F0000+AY10,   2,    true,    },
+            {   3, 2,  8+AX10, 0x160000+AY10,   3,    true,    },
+            {   3, 4, 15+AX10, 0x160000+AY10,   4,    true,    },
+            {   3, 6, 22+AX10, 0x160000+AY10,   5,    true,    },
+            {   3, 2,  8+AX10, 0x1D0000+AY10,   6,    true,    },
+            {   3, 1, 15+AX10, 0x1D0000+AY10,   7,    true,    },
+            {   3, 3, 22+AX10, 0x1D0000+AY10,   8,    true,    },
 
             // right facets (now face-on)
 
-            {   4, 3,   8, 0x240000,   6,    false,   },       // L0
-            {   4, 5,  15, 0x240000,   7,    false,   },       // L1
-            {   4, 5,  22, 0x240000,   8,    false,   },       // L2 (@CENTER)
+            {   4, 3,   8+AX10, 0x1D0000+AY10,   6,    false,   },       // L0
+            {   4, 5,  15+AX10, 0x1D0000+AY10,   7,    false,   },       // L1
+            {   4, 5,  22+AX10, 0x1D0000+AY10,   8,    false,   },       // L2 (@CENTER)
 
             {   -1,  0,0,0,    false,   },
         },
  
  
 
-        // 11 tilt2
+        // 11 tilt2 +(6,0x3000)
          {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
 
             // multiple facets, each...
@@ -1863,30 +1863,33 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
             // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
 
+#define AX11 0
+#define AY11 -0x20000
+
 
             // top facets
 
-            {   9, 5,  4+(23-(17-1)), 0x0D0000-0x10000,   0,    true,    },
-            {   9, 7,  4+(23-(11-1)), 0x100000-0x10000,   1,    true,    },
-            {   9, 2,  4+(23-(20-1)), 0x140000-0x10000,   2,    true,    },
-            {   9, 1,  4+(23-( 5-1)), 0x130000-0x10000,   3,    true,    },
-            {   9, 4,  4+(23-(14-1)), 0x170000-0x20000,   4,    true,    },
-            {   9, 6,  4+(23-( 8-1)), 0x1A0000-0x10000,   6,    true,    },
-            {   9, 2,  4+(23-(23-1)), 0x1C0000-0x20000,   5,    true,    },
-            {   9, 1,  4+(23-(17-1)), 0x1F0000-0x20000,   7,    true,    },
-            {   9, 3,  4+(23-(11-1)), 0x220000-0x20000,   8,    true,    },
+            {   9, 5,  11+AX11,  0x0C0000+AY11,   0,    true,    },
+            {   9, 7,  17+AX11,  0x0F0000+AY11,   1,    true,    },
+            {   9, 1,  23+AX11,  0x120000+AY11,   3,    true,    },
+            {   9, 2,   8+AX11,  0x130000+AY11,   2,    true,    },
+            {   9, 4,  14+AX11,  0x160000+AY11,   4,    true,    },
+            {   9, 6,  20+AX11,  0x190000+AY11,   6,    true,    },
+            {   9, 2,   5+AX11,  0x1A0000+AY11,   5,    true,    },
+            {   9, 1,  11+AX11,  0x1D0000+AY11,   7,    true,    },
+            {   9, 3,  17+AX11,  0x200000+AY11,   8,    true,    },
 
             // right facets
 
-            {   10, 3,   4+(23-(5-1)), 0x110000-0x20000,   6,    false,   },       // L0
-            {   10, 1,   4+(23-(8-1)), 0x190000-0x30000,   7,    false,   },       // L1
-            {   10, 6,  4+(23-(11-1)), 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
+            {   10, 3, 23+AX11,  0x120000+AY11,   6,    false,   },       // L0
+            {   10, 1, 20+AX11,  0x190000+AY11,   7,    false,   },       // L1
+            {   10, 6, 17+AX11,  0x200000+AY11,   8,    false,   },       // L2 (@CENTER)
 
             // left facets
 
-            {   11, 3,  4+(23-(23-1)), 0x1C0000-0x20000,   6,    false,   },
-            {   11, 5,  4+(23-(17-1)), 0x1F0000-0x20000,   7,    false,   },
-            {   11, 5,  4+(23-(11-1)), 0x220000-0x20000,   8,    false,   },
+            {   11, 3,   5+AX11,  0x1A0000+AY11,   6,    false,   },
+            {   11, 5,  11+AX11, 0x1D0000+AY11,   7,    false,   },
+            {   11, 5,  17+AX11, 0x200000+AY11,   8,    false,   },
 
             {   -1,  0,0,0,    false,   },
         },
@@ -1905,6 +1908,8 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // 2                RIGHT
             // 3    ... more rotations to be added
 
+#define AX12 0
+#define AY12 0x00000
 
             // topOnly:
             // true             a part of the 3x3 "top" of the layer
@@ -1912,27 +1917,27 @@ struct facet shapeDef[AXES][ROTATE][25] = {
 
             // top facets
 
-            {   0, 5,  14, 0x0A0000,   0,    true,    },
-            {   0, 2,   9, 0x0F0000,   1,    true,    },
-            {   0, 7,  19, 0x0F0000,   2,    true,    },
-            {   0, 2,   4, 0x140000,   3,    true,    },
-            {   0, 4,  14, 0x140000,   4,    true,    },
-            {   0, 1,  24, 0x140000,   5,    true,    },
-            {   0, 1,   9, 0x190000,   6,    true,    },
-            {   0, 6,  19, 0x190000,   7,    true,    },
-            {   0, 3,  14, 0x1E0000,   8,    true,    },
+            {   0, 5,  14+AX12, 0x0A0000+AY12,   0,    true,    },
+            {   0, 2,   9+AX12, 0x0F0000+AY12,   1,    true,    },
+            {   0, 7,  19+AX12, 0x0F0000+AY12,   2,    true,    },
+            {   0, 2,   4+AX12, 0x140000+AY12,   3,    true,    },
+            {   0, 4,  14+AX12, 0x140000+AY12,   4,    true,    },
+            {   0, 1,  24+AX12, 0x140000+AY12,   5,    true,    },
+            {   0, 1,   9+AX12, 0x190000+AY12,   6,    true,    },
+            {   0, 6,  19+AX12, 0x190000+AY12,   7,    true,    },
+            {   0, 3,  14+AX12, 0x1E0000+AY12,   8,    true,    },
 
             // left facets
 
-            {   1, 3,   4, 0x140000,   6,    false,   },       // L0
-            {   1, 5,   9, 0x190000,   7,    false,   },       // L1
-            {   1, 5,  14, 0x1E0000,   8,    false,   },       // L2 (@CENTER)
+            {   1, 3,   4+AX12, 0x140000+AY12,   6,    false,   },       // L0
+            {   1, 5,   9+AX12, 0x190000+AY12,   7,    false,   },       // L1
+            {   1, 5,  14+AX12, 0x1E0000+AY12,   8,    false,   },       // L2 (@CENTER)
 
             // right facets
 
-            {   2, 3,  24, 0x140000,   6,    false,   },
-            {   2, 1,  19, 0x190000,   7,    false,   },
-            {   2, 6,  14, 0x1E0000,   8,    false,   },
+            {   2, 3,  24+AX12, 0x140000+AY12,   6,    false,   },
+            {   2, 1,  19+AX12, 0x190000+AY12,   7,    false,   },
+            {   2, 6,  14+AX12, 0x1E0000+AY12,   8,    false,   },
 
             {   -1,  0,0,0,    false,   },
         },
@@ -1956,34 +1961,36 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // true             a part of the 3x3 "top" of the layer
             // false            always drawn
 
+#define AX13 1
+#define AY13 -0x20000
 
             // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
             // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
 
 
-            // top facets
-
-            {   7, 5,  17-1, 0x0D0000-0x10000,   0,    true,    },
-            {   7, 2,  11-1, 0x100000-0x10000,   1,    true,    },
-            {   7, 7,  20-1, 0x140000-0x10000,   2,    true,    },
-            {   7, 2,   5-1, 0x130000-0x10000,   3,    true,    },
-            {   7, 4,  14-1, 0x170000-0x20000,   4,    true,    },
-            {   7, 1,  23-1, 0x1C0000-0x20000,   5,    true,    },
-            {   7, 1,   8-1, 0x1A0000-0x10000,   6,    true,    },
-            {   7, 6,  17-1, 0x1F0000-0x20000,   7,    true,    },
-            {   7, 3,  11-1, 0x220000-0x20000,   8,    true,    },
-
             // left facets
 
-            {   6, 3,   5-1, 0x110000-0x20000,   6,    false,   },       // L0
-            {   6, 5,   8-1, 0x190000-0x30000,   7,    false,   },       // L1
-            {   6, 5,  11-1, 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
+            {   6, 3,   4+AX13, 0x120000+AY13,   6,    false,   },       // L0
+            {   6, 5,   7+AX13, 0x190000+AY13,   7,    false,   },       // L1
+            {   6, 5,  10+AX13, 0x200000+AY13,   8,    false,   },       // L2 (@CENTER)
 
             // right facets
 
-            {   5, 3,  23-1, 0x1C0000-0x20000,   6,    false,   },
-            {   5, 1,  17-1, 0x1F0000-0x20000,   7,    false,   },
-            {   5, 6,  11-1, 0x220000-0x20000,   8,    false,   },
+            {   5, 3,  22+AX13, 0x1A0000+AY13,   6,    false,   },
+            {   5, 1,  16+AX13, 0x1D0000+AY13,   7,    false,   },
+            {   5, 6,  10+AX13, 0x200000+AY13,   8,    false,   },
+
+            // top facets
+
+            {   7, 5,  16+AX13, 0x0C0000+AY13,   0,    true,    },
+            {   7, 2,  10+AX13, 0x0F0000+AY13,   1,    true,    },
+            {   7, 7,  19+AX13, 0x130000+AY13,   2,    true,    },
+            {   7, 2,   4+AX13, 0x120000+AY13,   3,    true,    },
+            {   7, 4,  13+AX13, 0x160000+AY13,   4,    true,    },
+            {   7, 1,  22+AX13, 0x1A0000+AY13,   5,    true,    },
+            {   7, 1,   7+AX13, 0x190000+AY13,   6,    true,    },
+            {   7, 6,  16+AX13, 0x1D0000+AY13,   7,    true,    },
+            {   7, 3,  10+AX13, 0x200000+AY13,   8,    true,    },
 
             {   -1,  0,0,0,    false,   },
         },
@@ -2002,6 +2009,8 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // 2                RIGHT
             // 3    ... more rotations to be added
 
+#define AX14 -1
+#define AY14 -0x20000
 
             // topOnly:
             // true             a part of the 3x3 "top" of the layer
@@ -2009,29 +2018,28 @@ struct facet shapeDef[AXES][ROTATE][25] = {
 
             // top facets
 
-            {   3, 2,  8, 0x0F0000,   0,    true,    },
-            {   3, 2, 15, 0x0F0000,   1,    true,    },
-            {   3, 5, 22, 0x0F0000,   2,    true,    },
-            {   3, 1,  8, 0x160000,   3,    true,    },
-            {   3, 4, 15, 0x160000,   4,    true,    },
-            {   3, 7, 22, 0x160000,   5,    true,    },
-            {   3, 3,  8, 0x1E0000,   6,    true,    },
-            {   3, 6, 15, 0x1E0000,   7,    true,    },
-            {   3, 1, 22, 0x1E0000,   8,    true,    },
+            {   3, 2,  8+AX14, 0x0F0000+AY14,   0,    true,    },
+            {   3, 2, 15+AX14, 0x0F0000+AY14,   1,    true,    },
+            {   3, 5, 22+AX14, 0x0F0000+AY14,   2,    true,    },
+            {   3, 1,  8+AX14, 0x160000+AY14,   3,    true,    },
+            {   3, 4, 15+AX14, 0x160000+AY14,   4,    true,    },
+            {   3, 7, 22+AX14, 0x160000+AY14,   5,    true,    },
+            {   3, 3,  8+AX14, 0x1D0000+AY14,   6,    true,    },
+            {   3, 6, 15+AX14, 0x1D0000+AY14,   7,    true,    },
+            {   3, 1, 22+AX14, 0x1D0000+AY14,   8,    true,    },
 
             // right facets (now face-on)
 
-            {   4, 6,   8, 0x240000,   6,    false,   },       // L0
-            {   4, 1,  15, 0x240000,   7,    false,   },       // L1
-            {   4, 3,  22, 0x240000,   8,    false,   },       // L2 (@CENTER)
+            {   4, 6,   8+AX14, 0x1D0000+AY14,   6,    false,   },       // L0
+            {   4, 1,  15+AX14, 0x1D0000+AY14,   7,    false,   },       // L1
+            {   4, 3,  22+AX14, 0x1D0000+AY14,   8,    false,   },       // L2 (@CENTER)
 
 
             {   -1,  0,0,0,    false,   },
         },
  
  
-            //xxx
-        // 15 tilt2
+        // 15 tilt2  +(6,0x30000)
          {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
 
             // multiple facets, each...
@@ -2048,34 +2056,37 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // true             a part of the 3x3 "top" of the layer
             // false            always drawn
 
+#define AX15 0
+#define AY15 -0x20000
 
             // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
             // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
 
 
-            // top facets
 
-            {   9, 2,  4+(23-(17-1)), 0x0D0000-0x10000,   0,    true,    },
-            {   9, 2,  4+(23-(11-1)), 0x100000-0x10000,   1,    true,    },
-            {   9, 1,  4+(23-(20-1)), 0x140000-0x10000,   2,    true,    },
-            {   9, 5,  4+(23-( 5-1)), 0x130000-0x10000,   3,    true,    },
-            {   9, 4,  4+(23-(14-1)), 0x170000-0x20000,   4,    true,    },
-            {   9, 7,  4+(23-( 8-1)), 0x1A0000-0x10000,   6,    true,    },
-            {   9, 3,  4+(23-(23-1)), 0x1C0000-0x20000,   5,    true,    },
-            {   9, 6,  4+(23-(17-1)), 0x1F0000-0x20000,   7,    true,    },
-            {   9, 1,  4+(23-(11-1)), 0x220000-0x20000,   8,    true,    },
+            // // right facets
 
-            // right facets
-
-            {   10, 3,   4+(23-(5-1)), 0x110000-0x20000,   6,    false,   },       // L0
-            {   10, 1,   4+(23-(8-1)), 0x190000-0x30000,   7,    false,   },       // L1
-            {   10, 6,  4+(23-(11-1)), 0x200000-0x20000,   8,    false,   },       // L2 (@CENTER)
+            {   10, 3,  23+AX15, 0x120000+AY15,   6,    false,   },       // L0
+            {   10, 1,  20+AX15, 0x190000+AY15,   7,    false,   },       // L1
+            {   10, 6,  17+AX15, 0x200000+AY15,   8,    false,   },       // L2 (@CENTER)
 
             // left facets
 
-            {   11, 6,  4+(23-(23-1)), 0x1C0000-0x20000,   6,    false,   },
-            {   11, 1,  4+(23-(17-1)), 0x1F0000-0x20000,   7,    false,   },
-            {   11, 3,  4+(23-(11-1)), 0x220000-0x20000,   8,    false,   },
+            {   11, 6,   5+AX15, 0x1A0000+AY15,   6,    false,   },
+            {   11, 1,  11+AX15, 0x1D0000+AY15,   7,    false,   },
+            {   11, 3,  17+AX15, 0x200000+AY15,   8,    false,   },
+
+            // top facets
+
+            {   9, 2,  11+AX15, 0x0C0000+AY15,   0,    true,    },
+            {   9, 2,  17+AX15, 0x0F0000+AY15,   1,    true,    },
+            {   9, 1,   8+AX15, 0x130000+AY15,   2,    true,    },
+            {   9, 5,  23+AX15, 0x120000+AY15,   3,    true,    },
+            {   9, 4,  14+AX15, 0x160000+AY15,   4,    true,    },
+            {   9, 7,  20+AX15, 0x190000+AY15,   6,    true,    },
+            {   9, 3,   5+AX15, 0x1A0000+AY15,   5,    true,    },
+            {   9, 6,  11+AX15, 0x1D0000+AY15,   7,    true,    },
+            {   9, 1,  17+AX15, 0x200000+AY15,   8,    true,    },
 
             {   -1,  0,0,0,    false,   },
         },
@@ -2290,6 +2301,9 @@ void drawSoftwareSprites() {
 //    if (JOY0_FIRE || fLayer == 2)
 //        rr = rotateTop[0];
 
+//    rr = 2;
+
+
     struct facet *f = &shapeDef[0][rr][fno++];
 
     // no more facets --> finished drawing
@@ -2317,10 +2331,12 @@ void drawSoftwareSprites() {
     
                 if (!rotateSpeed[l]) {
 
-                    rotateSpeed[l] = 20;
+                    rotateSpeed[l] = 1;
 
                     rotateTop[l]+= direct[l];
                     rotateTop[l] &= 15;
+
+
 
                     if (!(rotateTop[l] & 3))
                         direct[l] = 0;
@@ -2338,6 +2354,19 @@ void drawSoftwareSprites() {
 
 
             }
+
+    // if (!rotateSpeed[2]) {
+
+    //     rotateTop[2]++;
+    //     if (rotateTop[2] > 15)
+    //         rotateTop[2] = 0;
+
+    //     rotateSpeed[2] = 20;
+    // }
+
+    // rotateSpeed[2]--;
+
+
 
             // drawBitmap(highlighter,
             //     ((0 << 14) & 0xFFFFC000) + 0x0000C000,
@@ -2384,7 +2413,11 @@ void drawSoftwareSprites() {
     }
 
     #if MARKER
-        shape = shapeMarker;
+
+    for (int m = 0; m < 2; m++) {
+
+        if (m)
+            shape = shapeMarker;
     #endif
 
 
@@ -2394,10 +2427,13 @@ void drawSoftwareSprites() {
 
     if (!f->topOnly || (fLayer == 2 && f->topOnly))
         drawBitmap(shape[theColour], //f->colourstickerColour[f->face][fLayer * 3 + f->square]],
-            ((f->x << 14) & 0xFFFFC000) + 0x00024000,
-            (((130 - (fLayer * 13) << 16) + (f->y)) & 0xFFFF0000)  * 3,
+            ((f->x << 14) & 0xFFFFC000) + 0x00014000,
+            ((((118 - (fLayer * 13)) << 16) + (f->y)))  * 3,
             true);
 
+    #if MARKER
+    }
+    #endif
 
 
     // return;

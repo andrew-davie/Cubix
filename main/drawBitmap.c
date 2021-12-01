@@ -20,7 +20,7 @@ extern void* DDR;
 
 
 const unsigned char marker[] = {
-    1,6,0,6,
+    1,6,0,9,
 
     X_______
     X_______
@@ -82,7 +82,7 @@ const unsigned char rightFacets000[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHTFACET(0,0,0)
@@ -92,7 +92,7 @@ const unsigned char rightFacets001[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHTFACET(0xFF,0,0)
@@ -102,7 +102,7 @@ const unsigned char rightFacets010[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHTFACET(0,0xFF,0)
@@ -112,7 +112,7 @@ const unsigned char rightFacets011[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHTFACET(0xFF,0xFF,0)
@@ -122,7 +122,7 @@ const unsigned char rightFacets100[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHTFACET(0,0,0xFF)
@@ -133,7 +133,7 @@ const unsigned char rightFacets101[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHTFACET(0xFF,0,0xFF)
@@ -143,7 +143,7 @@ const unsigned char rightFacets110[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHTFACET(0,0xFF,0xFF)
@@ -153,7 +153,7 @@ const unsigned char rightFacets111[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHTFACET(0xFF,0xFF,0xFF)
@@ -161,9 +161,6 @@ const unsigned char rightFacets111[] = {
 
 
 #define RIGHT2FACET(a,b,c) \
-a & ________ \
-b & ________ \
-c & ________ \
 a & ______XX \
 b & ______XX \
 c & ______XX \
@@ -194,22 +191,22 @@ c & ___XXXXX \
 a & ___XXXXX \
 b & ___XXXXX \
 c & ___XXXXX \
+a & ___XXXXX \
+b & ___XXXXX \
+c & ___XXXXX \
 a & ___XXXX_ \
 b & ___XXXX_ \
 c & ___XXXX_ \
 a & ___XX___ \
 b & ___XX___ \
 c & ___XX___ \
-a & ________ \
-b & ________ \
-c & ________ \
 
 
 const unsigned char right2Facets000[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    4,9,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHT2FACET(0,0,0)
@@ -218,8 +215,8 @@ const unsigned char right2Facets000[] = {
 const unsigned char right2Facets001[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    4,9,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHT2FACET(0xFF,0,0)
@@ -228,8 +225,8 @@ const unsigned char right2Facets001[] = {
 const unsigned char right2Facets010[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    4,9,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHT2FACET(0,0xFF,0)
@@ -238,8 +235,8 @@ const unsigned char right2Facets010[] = {
 const unsigned char right2Facets011[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    4,9,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHT2FACET(0xFF,0xFF,0)
@@ -248,8 +245,8 @@ const unsigned char right2Facets011[] = {
 const unsigned char right2Facets100[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    4,9,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHT2FACET(0,0,0xFF)
@@ -259,8 +256,8 @@ const unsigned char right2Facets100[] = {
 const unsigned char right2Facets101[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    4,9,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHT2FACET(0xFF,0,0xFF)
@@ -269,8 +266,8 @@ const unsigned char right2Facets101[] = {
 const unsigned char right2Facets110[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    4,9,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHT2FACET(0,0xFF,0xFF)
@@ -279,8 +276,8 @@ const unsigned char right2Facets110[] = {
 const unsigned char right2Facets111[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    4,9,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHT2FACET(0xFF,0xFF,0xFF)
@@ -420,22 +417,22 @@ c & XXXXX___ \
 a & XXXXX___ \
 b & XXXXX___ \
 c & XXXXX___ \
+a & XXXXX___ \
+b & XXXXX___ \
+c & XXXXX___ \
 a & _XXXX___ \
 b & _XXXX___ \
 c & _XXXX___ \
 a & ___XX___ \
 b & ___XX___ \
 c & ___XX___ \
-a & ________ \
-b & ________ \
-c & ________ \
 
 
 const unsigned char right3Facets000[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,6,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHT3FACET(0,0,0)
@@ -445,7 +442,7 @@ const unsigned char right3Facets001[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,6,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHT3FACET(0xFF,0,0)
@@ -455,7 +452,7 @@ const unsigned char right3Facets010[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,6,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHT3FACET(0,0xFF,0)
@@ -465,7 +462,7 @@ const unsigned char right3Facets011[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,6,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHT3FACET(0xFF,0xFF,0)
@@ -475,7 +472,7 @@ const unsigned char right3Facets100[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,6,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHT3FACET(0,0,0xFF)
@@ -486,7 +483,7 @@ const unsigned char right3Facets101[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,6,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHT3FACET(0xFF,0,0xFF)
@@ -496,7 +493,7 @@ const unsigned char right3Facets110[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,6,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHT3FACET(0,0xFF,0xFF)
@@ -506,7 +503,7 @@ const unsigned char right3Facets111[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,6,               // center point (PIXELS) from 0,0 top left
 
 
     RIGHT3FACET(0xFF,0xFF,0xFF)
@@ -516,16 +513,16 @@ const unsigned char right3Facets111[] = {
 
 
 #define LEFTFACET(a,b,c) \
-a & ________ \
+a & X_______ \
 b & X_______ \
 c & X_______ \
-a & X_______ \
+a & XX______ \
 b & XX______ \
 c & XX______ \
-a & XX______ \
+a & XXX_____ \
 b & XXX_____ \
 c & XXX_____ \
-a & XXX_____ \
+a & XXXX____ \
 b & XXXX____ \
 c & XXXX____ \
 a & XXXX____ \
@@ -564,7 +561,7 @@ const unsigned char leftFacets000[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFTFACET(0,0,0)
@@ -574,7 +571,7 @@ const unsigned char leftFacets001[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFTFACET(0xFF,0,0)
@@ -584,7 +581,7 @@ const unsigned char leftFacets010[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFTFACET(0,0xFF,0)
@@ -594,7 +591,7 @@ const unsigned char leftFacets011[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFTFACET(0xFF,0xFF,0)
@@ -604,7 +601,7 @@ const unsigned char leftFacets100[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFTFACET(0,0,0xFF)
@@ -615,7 +612,7 @@ const unsigned char leftFacets101[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFTFACET(0xFF,0,0xFF)
@@ -625,7 +622,7 @@ const unsigned char leftFacets110[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFTFACET(0,0xFF,0xFF)
@@ -635,7 +632,7 @@ const unsigned char leftFacets111[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,45,               // center point (PIXELS) from 0,0 top left
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFTFACET(0xFF,0xFF,0xFF)
@@ -645,55 +642,55 @@ const unsigned char leftFacets111[] = {
 a & ________ \
 b & ________ \
 c & ________ \
+a & _X______ \
+b & _X______ \
+c & _X______ \
+a & _X______ \
+b & _X______ \
+c & _X______ \
+a & _XX_____ \
+b & _XX_____ \
+c & _XX_____ \
+a & _XX_____ \
+b & _XX_____ \
+c & _XX_____ \
+a & _XX_____ \
+b & _XX_____ \
+c & _XX_____ \
+a & _XX_____ \
+b & _XX_____ \
+c & _XX_____ \
+a & _XX_____ \
+b & _XX_____ \
+c & _XX_____ \
+a & _XX_____ \
+b & _XX_____ \
+c & _XX_____ \
+a & _XX_____ \
+b & _XX_____ \
+c & _XX_____ \
+a & _XX_____ \
+b & _XX_____ \
+c & _XX_____ \
+a & _XX_____ \
+b & _XX_____ \
+c & _XX_____ \
+a & __X_____ \
+b & __X_____ \
+c & __X_____ \
+a & __X_____ \
+b & __X_____ \
+c & __X_____ \
 a & ________ \
 b & ________ \
 c & ________ \
-a & _X______ \
-b & _X______ \
-c & _X______ \
-a & _X______ \
-b & _X______ \
-c & _X______ \
-a & _X______ \
-b & _XX_____ \
-c & _XX_____ \
-a & _XX_____ \
-b & _XX_____ \
-c & _XX_____ \
-a & _XX_____ \
-b & _XX_____ \
-c & _XX_____ \
-a & _XX_____ \
-b & _XX_____ \
-c & _XX_____ \
-a & _XX_____ \
-b & _XX_____ \
-c & _XX_____ \
-a & _XX_____ \
-b & _XX_____ \
-c & _XX_____ \
-a & _XX_____ \
-b & _XX_____ \
-c & _XX_____ \
-a & _XX_____ \
-b & _XX_____ \
-c & _XX_____ \
-a & __X_____ \
-b & __X_____ \
-c & __X_____ \
-a & __X_____ \
-b & __X_____ \
-c & __X_____ \
-a & __X_____ \
-b & __X_____ \
-c & __X_____ \
 
 
 const unsigned char left2Facets000[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,48,               // center point (PIXELS) from 0,0 top left
+    4,12,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT2FACET(0,0,0)
@@ -703,7 +700,7 @@ const unsigned char left2Facets001[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,48,               // center point (PIXELS) from 0,0 top left
+    4,12,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT2FACET(0xFF,0,0)
@@ -713,7 +710,7 @@ const unsigned char left2Facets010[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,48,               // center point (PIXELS) from 0,0 top left
+    4,12,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT2FACET(0,0xFF,0)
@@ -723,7 +720,7 @@ const unsigned char left2Facets011[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,48,               // center point (PIXELS) from 0,0 top left
+    4,12,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT2FACET(0xFF,0xFF,0)
@@ -733,7 +730,7 @@ const unsigned char left2Facets100[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,48,               // center point (PIXELS) from 0,0 top left
+    4,12,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT2FACET(0,0,0xFF)
@@ -744,7 +741,7 @@ const unsigned char left2Facets101[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,48,               // center point (PIXELS) from 0,0 top left
+    4,12,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT2FACET(0xFF,0,0xFF)
@@ -754,7 +751,7 @@ const unsigned char left2Facets110[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,48,               // center point (PIXELS) from 0,0 top left
+    4,12,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT2FACET(0,0xFF,0xFF)
@@ -764,7 +761,7 @@ const unsigned char left2Facets111[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,48,               // center point (PIXELS) from 0,0 top left
+    4,12,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT2FACET(0xFF,0xFF,0xFF)
@@ -784,7 +781,10 @@ c & ______X_ \
 a & ______X_ \
 b & ______X_ \
 c & ______X_ \
-a & ______X_ \
+a & _____XX_ \
+b & _____XX_ \
+c & _____XX_ \
+a & _____XX_ \
 b & _____XX_ \
 c & _____XX_ \
 a & _____XX_ \
@@ -817,13 +817,16 @@ c & _____X__ \
 a & _____X__ \
 b & _____X__ \
 c & _____X__ \
+a & ________ \
+b & ________ \
+c & ________ \
 
 
 const unsigned char left3Facets000[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,48,               // center point (PIXELS) from 0,0 top left
+    3,15,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT3FACET(0,0,0)
@@ -833,7 +836,7 @@ const unsigned char left3Facets001[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,48,               // center point (PIXELS) from 0,0 top left
+    3,15,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT3FACET(0xFF,0,0)
@@ -843,7 +846,7 @@ const unsigned char left3Facets010[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,48,               // center point (PIXELS) from 0,0 top left
+    3,15,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT3FACET(0,0xFF,0)
@@ -853,7 +856,7 @@ const unsigned char left3Facets011[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,48,               // center point (PIXELS) from 0,0 top left
+    3,15,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT3FACET(0xFF,0xFF,0)
@@ -863,7 +866,7 @@ const unsigned char left3Facets100[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,48,               // center point (PIXELS) from 0,0 top left
+    3,15,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT3FACET(0,0,0xFF)
@@ -874,7 +877,7 @@ const unsigned char left3Facets101[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,48,               // center point (PIXELS) from 0,0 top left
+    3,15,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT3FACET(0xFF,0,0xFF)
@@ -884,7 +887,7 @@ const unsigned char left3Facets110[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,48,               // center point (PIXELS) from 0,0 top left
+    3,15,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT3FACET(0,0xFF,0xFF)
@@ -894,7 +897,7 @@ const unsigned char left3Facets111[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,48,               // center point (PIXELS) from 0,0 top left
+    3,15,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT3FACET(0xFF,0xFF,0xFF)
@@ -964,43 +967,43 @@ c & ________ \
 
 
 const unsigned char topFacet45_000[] = {
-    1, 60, 8,60,
+    1, 60, 2,15,
     TOPFACET45(0,0,0)
 };
 
 const unsigned char topFacet45_001[] = {
-    1, 60, 8,60,
+    1, 60, 2,15,
     TOPFACET45(0xFF,0,0)
 };
 
 const unsigned char topFacet45_010[] = {
-    1, 60, 8,60,
+    1, 60, 2,15,
     TOPFACET45(0,0xFF,0)
 };
 
 const unsigned char topFacet45_011[] = {
-    1, 60, 8,60,
+    1, 60, 2,15,
     TOPFACET45(0xFF,0xFF,0)
 };
 
 const unsigned char topFacet45_100[] = {
-    1, 60, 8,60,
+    1, 60, 2,15,
     TOPFACET45(0,0,0xFF)
 };
 
 
 const unsigned char topFacet45_101[] = {
-    1, 60, 8,60,
+    1, 60, 2,15,
     TOPFACET45(0xFF,0,0xFF)
 };
 
 const unsigned char topFacet45_110[] = {
-    1, 60, 8,60,
+    1, 60, 2,15,
     TOPFACET45(0,0xFF,0xFF)
 };
 
 const unsigned char topFacet45_111[] = {
-    1, 60, 8,60,
+    1, 60, 2,15,
     TOPFACET45(0xFF,0xFF,0xFF)
 };
 
@@ -1041,73 +1044,46 @@ c & XXXXXX__ \
 a & XXXXXX__ \
 b & XXXXXX__ \
 c & XXXXXX__ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
 
 
 const unsigned char frontFacet45_000[] = {
-    1, 60, 8,60,
+    1, 33, 2,0,
     FRONTFACET45(0,0,0)
 };
 
 const unsigned char frontFacet45_001[] = {
-    1, 60, 8,60,
+    1, 33, 2,0,
     FRONTFACET45(0xFF,0,0)
 };
 
 const unsigned char frontFacet45_010[] = {
-    1, 60, 8,60,
+    1, 33, 2,0,
     FRONTFACET45(0,0xFF,0)
 };
 
 const unsigned char frontFacet45_011[] = {
-    1, 60, 8,60,
+    1, 33, 2,0,
     FRONTFACET45(0xFF,0xFF,0)
 };
 
 const unsigned char frontFacet45_100[] = {
-    1, 60, 8,60,
+    1, 33, 2,0,
     FRONTFACET45(0,0,0xFF)
 };
 
 
 const unsigned char frontFacet45_101[] = {
-    1, 60, 8,60,
+    1, 33, 2,0,
     FRONTFACET45(0xFF,0,0xFF)
 };
 
 const unsigned char frontFacet45_110[] = {
-    1, 60, 8,60,
+    1, 33, 2,0,
     FRONTFACET45(0,0xFF,0xFF)
 };
 
 const unsigned char frontFacet45_111[] = {
-    1, 60, 8,60,
+    1, 33, 2,0,
     FRONTFACET45(0xFF,0xFF,0xFF)
 };
 
@@ -1144,7 +1120,7 @@ const unsigned char topFacets000[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     21,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,57,               // center point (PIXELS) from 0,0 top left
+    3,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOPFACET(0,0,0)
@@ -1154,7 +1130,7 @@ const unsigned char topFacets001[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     21,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,57,               // center point (PIXELS) from 0,0 top left
+    3,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOPFACET(0xFF,0,0)
@@ -1164,7 +1140,7 @@ const unsigned char topFacets010[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     21,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,57,               // center point (PIXELS) from 0,0 top left
+    3,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOPFACET(0,0xFF,0)
@@ -1174,7 +1150,7 @@ const unsigned char topFacets011[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     21,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,57,               // center point (PIXELS) from 0,0 top left
+    3,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOPFACET(0xFF,0xFF,0)
@@ -1184,7 +1160,7 @@ const unsigned char topFacets100[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     21,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,57,               // center point (PIXELS) from 0,0 top left
+    3,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOPFACET(0,0,0xFF)
@@ -1195,7 +1171,7 @@ const unsigned char topFacets101[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     21,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,57,               // center point (PIXELS) from 0,0 top left
+    3,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOPFACET(0xFF,0,0xFF)
@@ -1205,7 +1181,7 @@ const unsigned char topFacets110[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     21,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,57,               // center point (PIXELS) from 0,0 top left
+    3,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOPFACET(0,0xFF,0xFF)
@@ -1215,7 +1191,7 @@ const unsigned char topFacets111[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     21,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,57,               // center point (PIXELS) from 0,0 top left
+    3,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOPFACET(0xFF,0xFF,0xFF)
@@ -1254,7 +1230,7 @@ const unsigned char top2Facets000[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,60,               // center point (PIXELS) from 0,0 top left
+    4,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOP2FACET(0,0,0)
@@ -1264,7 +1240,7 @@ const unsigned char top2Facets001[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,60,               // center point (PIXELS) from 0,0 top left
+    4,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOP2FACET(0xFF,0,0)
@@ -1274,7 +1250,7 @@ const unsigned char top2Facets010[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,60,               // center point (PIXELS) from 0,0 top left
+    4,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOP2FACET(0,0xFF,0)
@@ -1284,7 +1260,7 @@ const unsigned char top2Facets011[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,60,               // center point (PIXELS) from 0,0 top left
+    4,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOP2FACET(0xFF,0xFF,0)
@@ -1294,7 +1270,7 @@ const unsigned char top2Facets100[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,60,               // center point (PIXELS) from 0,0 top left
+    4,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOP2FACET(0,0,0xFF)
@@ -1305,7 +1281,7 @@ const unsigned char top2Facets101[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,60,               // center point (PIXELS) from 0,0 top left
+    4,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOP2FACET(0xFF,0,0xFF)
@@ -1315,7 +1291,7 @@ const unsigned char top2Facets110[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,60,               // center point (PIXELS) from 0,0 top left
+    4,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOP2FACET(0,0xFF,0xFF)
@@ -1325,7 +1301,7 @@ const unsigned char top2Facets111[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,60,               // center point (PIXELS) from 0,0 top left
+    4,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOP2FACET(0xFF,0xFF,0xFF)
@@ -1368,7 +1344,7 @@ const unsigned char top3Facets000[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,60,               // center point (PIXELS) from 0,0 top left
+    3,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOP3FACET(0,0,0)
@@ -1378,7 +1354,7 @@ const unsigned char top3Facets001[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,60,               // center point (PIXELS) from 0,0 top left
+    3,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOP3FACET(0xFF,0,0)
@@ -1388,7 +1364,7 @@ const unsigned char top3Facets010[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,60,               // center point (PIXELS) from 0,0 top left
+    3,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOP3FACET(0,0xFF,0)
@@ -1398,7 +1374,7 @@ const unsigned char top3Facets011[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,60,               // center point (PIXELS) from 0,0 top left
+    3,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOP3FACET(0xFF,0xFF,0)
@@ -1408,7 +1384,7 @@ const unsigned char top3Facets100[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,60,               // center point (PIXELS) from 0,0 top left
+    3,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOP3FACET(0,0,0xFF)
@@ -1419,7 +1395,7 @@ const unsigned char top3Facets101[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,60,               // center point (PIXELS) from 0,0 top left
+    3,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOP3FACET(0xFF,0,0xFF)
@@ -1429,7 +1405,7 @@ const unsigned char top3Facets110[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,60,               // center point (PIXELS) from 0,0 top left
+    3,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOP3FACET(0,0xFF,0xFF)
@@ -1439,7 +1415,7 @@ const unsigned char top3Facets111[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
     24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,60,               // center point (PIXELS) from 0,0 top left
+    3,21,               // center point (PIXELS) from 0,0 top left
 
 
     TOP3FACET(0xFF,0xFF,0xFF)
@@ -1668,8 +1644,8 @@ ON-SCREEN INDEXING
 visibleCube[27];
 
 only 0-8 have a TOP
-only 0,1,2,3,6,9,10,11,15,12,9 have a side
-left: 0,3,6,9,12,15,18,21,24
+only 0,1,2,4,6,9,10,11,15,12,9 have a side
+left: 0,4,6,9,12,15,18,21,24
 right: 0,1,2,9,10,11,18,19,20
 
      8
