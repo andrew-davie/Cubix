@@ -78,6 +78,7 @@ int cubePtr;
 
 int parallax;
 bool finished = true;
+bool swap = false;
 
 int drillHeight;
 
@@ -139,9 +140,9 @@ bool thisFrame[2][40];
 int fLayer = 0;
 int layer = 0;
 int initSpeed[3] = { 1,3,5};
-int direct[3] = {1,-1,1};
+int direct[3] = {0,0,0};
 int fno = 0;
-int rotateTop[] = {1,1,1};
+int rotateTop[] = {0,0,0};
 int rotateSpeed[] = {1,1,1};
 
 
@@ -539,19 +540,6 @@ void addScore(int score) {
 const unsigned char (*overlayWord)[5];
 #endif
 
-void resetTracking() {
-
-    // Set scroll track
-
-    scrollX =(rockfordX - (HALFWAYX>>2)) << 16;
-    scrollY = ((rockfordY - 4) * TRILINES) << 16;
-
-    scrollSpeed = 0;
-    targetScrollSpeed = 0;
-    scrollYSpeed = 0;
-    targetYScrollSpeed = 0;
-}
-
 
 
 void setColours() {
@@ -795,8 +783,8 @@ extern int rinc;
 
 
 
-    scrollX = 38 << 14; //((((getRandom32() & 0xFF) * 38) >> 8) + 1) << 16;
-    scrollY = 20 << 16; //((((getRandom32() & 0xFF) * 20) >> 8) + 1) << 16;
+    scrollX = 0x0000; //((((getRandom32() & 0xFF) * 38) >> 8) + 1) << 16;
+    scrollY = 0x600000; //((((getRandom32() & 0xFF) * 20) >> 8) + 1) << 16;
 
 
     InitAudio();
@@ -1024,49 +1012,97 @@ int controlledLayer = 0;
 int highlightLayer = 0;
 bool showHighlight = false;
 int jDelay = 0;
+int changedLayer = 0;
+int lastJOY0_FIRE = 0;
+int drawMode = 1;
+int facetIndex = 0;
 
 void HandleJoystick() {
 
     if (!jDelay && !highlightLayer) {
 
         if (JOY0_UP) {
+
+            if (!drawMode) {
+                swap = true;
+                return;
+            }
+
+
             highlightLayer = 3;
-            jDelay = 20;
+            jDelay = 10;
+            changedLayer = 10;
             controlledLayer++;
             if (controlledLayer > 2)
                 controlledLayer = 0;
+
         }
 
-        if (JOY0_DOWN) {
+        else if (JOY0_DOWN) {
+
+            if (!drawMode) {
+                swap = true;
+                return;
+            }
+
             highlightLayer = 3;
-            jDelay = 20;
+            jDelay = 10;
+            changedLayer = 10;
             controlledLayer--;
             if (controlledLayer < 0)
                 controlledLayer = 2;
         }
 
-        if (JOY0_LEFT && !(rotateTop[controlledLayer] & 3)) {
+        else if (JOY0_LEFT && !((rotateTop[0]|rotateTop[1]|rotateTop[2]) & 3)) {
+
+
+             if (!drawMode) {
+                swap = true;
+                return;
+            }
+
 
             if (JOY0_FIRE)
-                for (int layer = 0; layer < 3; layer++)
+                for (int layer = 0; layer < 3; layer++) {
+                    rotateSpeed[layer] = 1;
                     direct[layer] = 1;
+//                    rotateTop[layer] &= !3;
+                }
 
 
             direct[controlledLayer] = 1;
         }
 
 
-        if (JOY0_RIGHT && !(rotateTop[controlledLayer] & 3)) {
+        else if (JOY0_RIGHT && !((rotateTop[0]|rotateTop[1]|rotateTop[2]) & 3)) {
+
+            if (!drawMode) {
+                swap = true;
+                return;
+            }
 
             if (JOY0_FIRE)
-                for (int layer = 0; layer < 3; layer++)
+                for (int layer = 0; layer < 3; layer++) {
+                    rotateSpeed[layer] = 1;
                     direct[layer] = -1;
+//                    rotateTop[layer] &= !3;
+                }
 
 
             direct[controlledLayer] = -1;
         }
 
+        else if (!swap && (!JOY0_FIRE && lastJOY0_FIRE)) {
+            swap = true;
+        }
+
+
+        lastJOY0_FIRE = JOY0_FIRE;
+
     }
+
+
+
 
     if (jDelay)
         jDelay--;
@@ -1077,6 +1113,14 @@ void HandleJoystick() {
 void GameVerticalBlank() {
  
 
+    if (finished && swap) {
+        drawMode ^= 1;
+        fLayer = 0;
+        fno = 0;
+        facetIndex = 0;
+        finished = true;
+        swap = false;
+    }
 
 
     if (finished) {
@@ -1088,7 +1132,6 @@ void GameVerticalBlank() {
 
     // else
     //     drawSoftwareSprites();
-
 
     HandleJoystick();
 
@@ -1292,7 +1335,7 @@ struct facet {
 };
 
 
-#define MARKER 1
+#define MARKER 0
 
 
 struct facet shapeDef[AXES][ROTATE][25] = {
@@ -1345,7 +1388,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
 
 
 
-            {   -1,  0,0,0,    false,   },
+            {   -1,  -1, 0,0,0,    false,   },
         },
  
 
@@ -1400,7 +1443,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             {   7, 7,  16+AX1, 0x1D0000+AY1,   7,    true,    },
             {   7, 1,  10+AX1, 0x200000+AY1,   8,    true,    },
 
-            {   -1,  0,0,0,    false,   },
+            {   -1,  -1, 0,0,0,    false,   },
         },
 
         // 2 flat
@@ -1422,7 +1465,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // false            always drawn
 
 #define AX2 -1
-#define AY2 -0x20000
+#define AY2 -0x30000
 
 
             // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
@@ -1442,12 +1485,12 @@ struct facet shapeDef[AXES][ROTATE][25] = {
 
             // right facets (now face-on)
 
-            {   4, 6,   8+AX2, 0x240000-0x60000+AY2,   6,    false,   },       // L0
-            {   4, 1,  15+AX2, 0x240000-0x60000+AY2,   7,    false,   },       // L1
-            {   4, 3,  22+AX2, 0x240000-0x60000+AY2,   8,    false,   },       // L2 (@CENTER)
+            {   4, 6,   8+AX2, 0x1D0000+AY2,   6,    false,   },       // L0
+            {   4, 1,  15+AX2, 0x1D0000+AY2,   7,    false,   },       // L1
+            {   4, 3,  22+AX2, 0x1D0000+AY2,   8,    false,   },       // L2 (@CENTER)
 
 
-            {   -1,  0,0,0,    false,   },
+            {   -1,  -1, 0,0,0,    false,   },
         },
  
  
@@ -1499,7 +1542,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             {   11, 1,  12+AX3, 0x1D0000+AY3,   7,    false,   },
             {   11, 3,  18+AX3, 0x200000+AY3,   8,    false,   },
 
-            {   -1,  0,0,0,    false,   },
+            {   -1,  -1, 0,0,0,    false,   },
         },
 
         // 4 ISO
@@ -1546,7 +1589,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             {   2, 4,  19+AX4, 0x190000+AY4,   7,    false,   },
             {   2, 4,  14+AX4, 0x1E0000+AY4,   8,    false,   },
 
-            {   -1,  0,0,0,    false,   },
+            {   -1,  -1, 0,0,0,    false,   },
         },
 
 
@@ -1599,7 +1642,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             {   5, 4,  16+AX5, 0x1D0000+AY5,   7,    false,   },
             {   5, 4,  10+AX5, 0x200000+AY5,   8,    false,   },
 
-            {   -1,  0,0,0,    false,   },
+            {   -1,  -1, 0,0,0,    false,   },
         },
 
 
@@ -1617,7 +1660,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
 
 
 #define AX6 -1
-#define AY6 -0x20000
+#define AY6 -0x30000
 
             // topOnly:
             // true             a part of the 3x3 "top" of the layer
@@ -1641,7 +1684,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             {   4, 4,  15+AX6, 0x1D0000+AY6,   7,    false,   },       // L1
             {   4, 6,  22+AX6, 0x1D0000+AY6,   8,    false,   },       // L2 (@CENTER)
 
-            {   -1,  0,0,0,    false,   },
+            {   -1,  -1, 0,0,0,    false,   },
         },
  
 
@@ -1693,7 +1736,8 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             {   11, 4, 11+AX7, 0x1D0000+AY7,   7,    false,   },
             {   11, 6, 17+AX7, 0x200000+AY7,   8,    false,   },
 
-            {   -1,  0,0,0,    false,   },
+
+            {   -1,  -1, 0,0,0,    false,   },
         },
 
 
@@ -1741,7 +1785,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             {   2, 5,  19+AX8, 0x190000+AY8,   7,    false,   },
             {   2, 3,  14+AX8, 0x1E0000+AY8,   8,    false,   },
 
-            {   -1,  0,0,0,    false,   },
+            {   -1,  -1, 0,0,0,    false,   },
         },
 
  
@@ -1795,7 +1839,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             {   7, 1,  16+AX9, 0x1D0000+AY9,   7,    true,    },
             {   7, 2,  10+AX9, 0x200000+AY9,   8,    true,    },
 
-            {   -1,  0,0,0,    false,   },
+            {   -1,  -1, 0,0,0,    false,   },
         },
 
 
@@ -1837,7 +1881,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             {   4, 5,  15+AX10, 0x1D0000+AY10,   7,    false,   },       // L1
             {   4, 5,  22+AX10, 0x1D0000+AY10,   8,    false,   },       // L2 (@CENTER)
 
-            {   -1,  0,0,0,    false,   },
+            {   -1,  -1, 0,0,0,    false,   },
         },
  
  
@@ -1891,7 +1935,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             {   11, 5,  11+AX11, 0x1D0000+AY11,   7,    false,   },
             {   11, 5,  17+AX11, 0x200000+AY11,   8,    false,   },
 
-            {   -1,  0,0,0,    false,   },
+            {   -1,  -1, 0,0,0,    false,   },
         },
 
 
@@ -1939,7 +1983,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             {   2, 1,  19+AX12, 0x190000+AY12,   7,    false,   },
             {   2, 6,  14+AX12, 0x1E0000+AY12,   8,    false,   },
 
-            {   -1,  0,0,0,    false,   },
+            {   -1,  -1, 0,0,0,    false,   },
         },
 
 
@@ -1992,7 +2036,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             {   7, 6,  16+AX13, 0x1D0000+AY13,   7,    true,    },
             {   7, 3,  10+AX13, 0x200000+AY13,   8,    true,    },
 
-            {   -1,  0,0,0,    false,   },
+            {   -1,  -1, 0,0,0,    false,   },
         },
 
 
@@ -2035,7 +2079,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             {   4, 3,  22+AX14, 0x1D0000+AY14,   8,    false,   },       // L2 (@CENTER)
 
 
-            {   -1,  0,0,0,    false,   },
+            {   -1,  -1, 0,0,0,    false,   },
         },
  
  
@@ -2088,7 +2132,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             {   9, 6,  11+AX15, 0x1D0000+AY15,   7,    true,    },
             {   9, 1,  17+AX15, 0x200000+AY15,   8,    true,    },
 
-            {   -1,  0,0,0,    false,   },
+            {   -1,  -1, 0,0,0,    false,   },
         },
 
 
@@ -2295,13 +2339,227 @@ const unsigned char *shapeBoundary[] = {
 };
 
 
+
+/*
+               +---+---+---+  
+               |   |   |   |
+               +---+---+---+  
+               |   |tOP|   |
+               +---+---+---+  
+               |   |   |   |
+               +---+---+---+  
+
++---+---+---+  +---+---+---+  +---+---+---+  +---+---+---+  
+|  0|  1|  2|  |   |   |   |  |   |   |   |  |   |   |   |  
++---+---+---+  +---+---+---+  +---+---+---+  +---+---+---+  
+|   | BL|   |  |   | FL|   |  |   |FR |   |  |   | BR|   |  
++---+---+---+  +---+---+---+  +---+---+---+  +---+---+---+  
+|   |   |   |  |   |   |   |  |   |   |   |  |   |   |   |  
++---+---+---+  +---+---+---+  +---+---+---+  +---+---+---+  
+
+               +---+---+---+  
+               |   |   |   |
+               +---+---+---+  
+               |   |BOT|   |
+               +---+---+---+  
+               |   |   |   |
+               +---+---+---+
+*/
+
+#define FACETX 3               
+#define FACETXOFFSET 0
+#define FACETXOFFSET2 (FACETXOFFSET  + (FACETX * 3 + 1))
+#define FACETXOFFSET3 (FACETXOFFSET2 + (FACETX * 3 + 1))
+#define FACETXOFFSET4 (FACETXOFFSET3 + (FACETX * 3 + 1))
+
+#define FACETY 6
+#define FACETYOFFSET 0
+#define FACETYOFFSET2 (FACETYOFFSET  + (FACETY * 3 + 2))
+#define FACETYOFFSET3 (FACETYOFFSET2 + (FACETY * 3 + 2))
+
+
+int facetX[] = {
+
+    // BL
+    0*FACETX+FACETXOFFSET, 1*FACETX+FACETXOFFSET, 2*FACETX+FACETXOFFSET,
+    0*FACETX+FACETXOFFSET, 1*FACETX+FACETXOFFSET, 2*FACETX+FACETXOFFSET,
+    0*FACETX+FACETXOFFSET, 1*FACETX+FACETXOFFSET, 2*FACETX+FACETXOFFSET,
+
+    //TOP
+    0*FACETX+FACETXOFFSET2, 1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
+    0*FACETX+FACETXOFFSET2, 1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
+    0*FACETX+FACETXOFFSET2, 1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
+
+    //FL
+    0*FACETX+FACETXOFFSET2 ,1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
+    0*FACETX+FACETXOFFSET2 ,1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
+    0*FACETX+FACETXOFFSET2 ,1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
+
+    //BOT
+    0*FACETX+FACETXOFFSET2, 1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
+    0*FACETX+FACETXOFFSET2, 1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
+    0*FACETX+FACETXOFFSET2, 1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
+
+    //FR
+    0*FACETX+FACETXOFFSET3, 1*FACETX+FACETXOFFSET3, 2*FACETX+FACETXOFFSET3,
+    0*FACETX+FACETXOFFSET3, 1*FACETX+FACETXOFFSET3, 2*FACETX+FACETXOFFSET3,
+    0*FACETX+FACETXOFFSET3, 1*FACETX+FACETXOFFSET3, 2*FACETX+FACETXOFFSET3,
+
+    // BR
+    0*FACETX+FACETXOFFSET4, 1*FACETX+FACETXOFFSET4, 2*FACETX+FACETXOFFSET4,
+    0*FACETX+FACETXOFFSET4, 1*FACETX+FACETXOFFSET4, 2*FACETX+FACETXOFFSET4,
+    0*FACETX+FACETXOFFSET4, 1*FACETX+FACETXOFFSET4, 2*FACETX+FACETXOFFSET4,
+
+    -1,
+};
+
+int facetY[] = {
+
+    0 * FACETY + FACETYOFFSET2, 0 * FACETY + FACETYOFFSET2, 0 * FACETY + FACETYOFFSET2,
+    1 * FACETY + FACETYOFFSET2, 1 * FACETY + FACETYOFFSET2, 1 * FACETY + FACETYOFFSET2,
+    2 * FACETY + FACETYOFFSET2, 2 * FACETY + FACETYOFFSET2, 2 * FACETY + FACETYOFFSET2,
+
+    0 * FACETY + FACETYOFFSET, 0 * FACETY + FACETYOFFSET, 0 * FACETY + FACETYOFFSET,
+    1 * FACETY + FACETYOFFSET, 1 * FACETY + FACETYOFFSET, 1 * FACETY + FACETYOFFSET,
+    2 * FACETY + FACETYOFFSET, 2 * FACETY + FACETYOFFSET, 2 * FACETY + FACETYOFFSET,
+
+    0 * FACETY + FACETYOFFSET2, 0 * FACETY + FACETYOFFSET2, 0 * FACETY + FACETYOFFSET2,
+    1 * FACETY + FACETYOFFSET2, 1 * FACETY + FACETYOFFSET2, 1 * FACETY + FACETYOFFSET2,
+    2 * FACETY + FACETYOFFSET2, 2 * FACETY + FACETYOFFSET2, 2 * FACETY + FACETYOFFSET2,
+
+    0 * FACETY + FACETYOFFSET3, 0 * FACETY + FACETYOFFSET3, 0 * FACETY + FACETYOFFSET3,
+    1 * FACETY + FACETYOFFSET3, 1 * FACETY + FACETYOFFSET3, 1 * FACETY + FACETYOFFSET3,
+    2 * FACETY + FACETYOFFSET3, 2 * FACETY + FACETYOFFSET3, 2 * FACETY + FACETYOFFSET3,
+
+    0 * FACETY + FACETYOFFSET2, 0 * FACETY + FACETYOFFSET2, 0 * FACETY + FACETYOFFSET2,
+    1 * FACETY + FACETYOFFSET2, 1 * FACETY + FACETYOFFSET2, 1 * FACETY + FACETYOFFSET2,
+    2 * FACETY + FACETYOFFSET2, 2 * FACETY + FACETYOFFSET2, 2 * FACETY + FACETYOFFSET2,
+
+    0 * FACETY + FACETYOFFSET2, 0 * FACETY + FACETYOFFSET2, 0 * FACETY + FACETYOFFSET2,
+    1 * FACETY + FACETYOFFSET2, 1 * FACETY + FACETYOFFSET2, 1 * FACETY + FACETYOFFSET2,
+    2 * FACETY + FACETYOFFSET2, 2 * FACETY + FACETYOFFSET2, 2 * FACETY + FACETYOFFSET2,
+};
+
+
+int mapColour[] = {
+
+    1,2,3, 4,5,6, 7,1,2,
+    3,4,5, 6,7,1, 2,3,4,
+    5,6,7, 1,2,3, 4,5,6,
+
+    3,4,5, 6,7,1, 2,3,4,
+    5,6,7, 1,2,3, 4,5,6,
+    1,2,3, 4,5,6, 7,1,2,
+
+    3,4,5, 6,7,1, 2,3,4,
+    5,6,7, 1,2,3, 4,5,6,
+    1,2,3, 4,5,6, 7,1,2,
+
+    3,4,5, 6,7,1, 2,3,4,
+    5,6,7, 1,2,3, 4,5,6,
+    1,2,3, 4,5,6, 7,1,2,
+
+    3,4,5, 6,7,1, 2,3,4,
+    5,6,7, 1,2,3, 4,5,6,
+    1,2,3, 4,5,6, 7,1,2,
+
+    3,4,5, 6,7,1, 2,3,4,
+    5,6,7, 1,2,3, 4,5,6,
+    1,2,3, 4,5,6, 7,1,2,
+
+};
+
+
+#define SMALLFACET(a,b,c) \
+1,18,0,0, \
+a & XXX_____ \
+b & XXX_____ \
+c & XXX_____ \
+a & XXX_____ \
+b & XXX_____ \
+c & XXX_____ \
+a & XXX_____ \
+b & XXX_____ \
+c & XXX_____ \
+a & XXX_____ \
+b & XXX_____ \
+c & XXX_____ \
+a & XXX_____ \
+b & XXX_____ \
+c & XXX_____ \
+a & XXX_____ \
+b & XXX_____ \
+c & XXX_____
+
+const unsigned char facetColour0[] = {
+    SMALLFACET(0,0,0)
+};
+const unsigned char facetColour1[] = {
+    SMALLFACET(0xFF,0,0)
+};
+const unsigned char facetColour2[] = {
+    SMALLFACET(0,0xFF,0)
+};
+const unsigned char facetColour3[] = {
+    SMALLFACET(0xFF,0xFF,0)
+};
+const unsigned char facetColour4[] = {
+    SMALLFACET(0,0,0xFF)
+};
+const unsigned char facetColour5[] = {
+    SMALLFACET(0xFF,0,0xFF)
+};
+const unsigned char facetColour6[] = {
+    SMALLFACET(0,0xFF,0xFF)
+};
+const unsigned char facetColour7[] = {
+    SMALLFACET(0xFF,0xFF,0xFF)
+};
+
+
+const unsigned char *shapeSetFacet[] = {
+    facetColour0,
+    facetColour1,
+    facetColour2,
+    facetColour3,
+    facetColour4,
+    facetColour5,
+    facetColour6,
+    facetColour7,
+};
+
+void drawOverviewSoftwareSprites() {
+
+
+    drawBitmap(shapeSetFacet[mapColour[facetIndex]], //f->colourstickerColour[f->face][fLayer * 3 + f->square]],
+        ((facetX[facetIndex] << 14) & 0xFFFFC000) + 0x00004000,
+        ((100 + facetY[facetIndex]) << 16)   * 3,
+        true);
+
+    if (facetX[++facetIndex] < 0) {
+        facetIndex = 0;
+        finished = true;
+    }
+}
+
+
+int rr = 0;
+
 void drawSoftwareSprites() {
 
-    int rr = rotateTop[fLayer];
+
+    if (drawMode == 0) {
+        drawOverviewSoftwareSprites();
+        return;
+    }
+
+
+
+    rr = rotateTop[fLayer];
 //    if (JOY0_FIRE || fLayer == 2)
 //        rr = rotateTop[0];
 
-//    rr = 2;
+    // rr = 14;
 
 
     struct facet *f = &shapeDef[0][rr][fno++];
@@ -2314,15 +2572,20 @@ void drawSoftwareSprites() {
 
         if (++fLayer > 2) {
             fLayer = 0;
+            finished = true;
 
 
             if (highlightLayer) {
                 highlightLayer--;
                 showHighlight=  true;
             }
-
             else
                 showHighlight = false;
+
+
+            if (changedLayer) {
+                changedLayer--;
+            }
 
             for (int l = 0; l < 3; l++) {
 
@@ -2332,26 +2595,12 @@ void drawSoftwareSprites() {
                 if (!rotateSpeed[l]) {
 
                     rotateSpeed[l] = 1;
-
                     rotateTop[l]+= direct[l];
                     rotateTop[l] &= 15;
 
-
-
                     if (!(rotateTop[l] & 3))
                         direct[l] = 0;
-
                 }
-
-
-                // if (!(direct[l] + rotateSpeed[l])) {
-                //     direct[l] = ((getRandom32() >> 12) & 0xFF) >= 0x80? -1 : 1;
-                //     rotateSpeed[l] = (getRandom32() & 15) + 1;
-
-
-                // }
-
-
 
             }
 
@@ -2367,13 +2616,19 @@ void drawSoftwareSprites() {
     // rotateSpeed[2]--;
 
 
+        // if (changedLayer) {
+        //     drawBitmap(rollArrowRight,
+        //         ((0<< 14) & 0xFFFFC000) + 0x0078000,
+        //         (((135 - (controlledLayer * 13) << 16) + (20)) & 0xFFFF0000)  * 3,
+        //         true);
+        // }
+
 
             // drawBitmap(highlighter,
             //     ((0 << 14) & 0xFFFFC000) + 0x0000C000,
             //     (((130 - (fLayer * 13) << 16) + (20)) & 0xFFFF0000)  * 3,
             //     true);
 
-            finished = true;
         }
 
 
@@ -2422,13 +2677,16 @@ void drawSoftwareSprites() {
 
 
     int theColour = f->colour;
-    if (showHighlight && fLayer == controlledLayer && !(highlightLayer & 1))
-        theColour = 0;
+    if (showHighlight && fLayer == controlledLayer ) //&& !(highlightLayer & 1))
+        if (!(highlightLayer & 1))
+            theColour = 0;
+        // else   
+        //      theColour = 0;
 
     if (!f->topOnly || (fLayer == 2 && f->topOnly))
         drawBitmap(shape[theColour], //f->colourstickerColour[f->face][fLayer * 3 + f->square]],
             ((f->x << 14) & 0xFFFFC000) + 0x00014000,
-            ((((118 - (fLayer * 13)) << 16) + (f->y)))  * 3,
+            ((((118+2 - (fLayer * 13)) << 16) + (f->y)))  * 3,
             true);
 
     #if MARKER

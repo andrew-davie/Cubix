@@ -70,8 +70,8 @@ _DS_GRP1a = DS12DATA
 ;_DS_GRP1c = DS16DATA
     
 ; timer values
-VB_TIM64T = 42;46; //7; //7
-OS_TIM64T = 28; 41; //33 ;-3
+VB_TIM64T = 56;46; //7; //7
+OS_TIM64T = 30; 41; //33 ;-3
 
 ; color values
 _BLACK           = $00
@@ -362,6 +362,8 @@ Temp            ds 1
 
         ORG $7000
         RORG $F000
+
+
         
     ; this and SplashMenuOS in bank 5 are used to switch between the banks                
 SplashMenuVB:        

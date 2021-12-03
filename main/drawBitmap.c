@@ -20,14 +20,12 @@ extern void* DDR;
 
 
 const unsigned char marker[] = {
-    1,6,0,9,
+    1,3,0,1+10,
 
     X_______
     X_______
     X_______
-    X_______
-    X_______
-    X_______
+
 };
 
 
@@ -967,43 +965,43 @@ c & ________ \
 
 
 const unsigned char topFacet45_000[] = {
-    1, 60, 2,15,
+    1, 60, 2,18,
     TOPFACET45(0,0,0)
 };
 
 const unsigned char topFacet45_001[] = {
-    1, 60, 2,15,
+    1, 60, 2,18,
     TOPFACET45(0xFF,0,0)
 };
 
 const unsigned char topFacet45_010[] = {
-    1, 60, 2,15,
+    1, 60, 2,18,
     TOPFACET45(0,0xFF,0)
 };
 
 const unsigned char topFacet45_011[] = {
-    1, 60, 2,15,
+    1, 60, 2,18,
     TOPFACET45(0xFF,0xFF,0)
 };
 
 const unsigned char topFacet45_100[] = {
-    1, 60, 2,15,
+    1, 60, 2,18,
     TOPFACET45(0,0,0xFF)
 };
 
 
 const unsigned char topFacet45_101[] = {
-    1, 60, 2,15,
+    1, 60, 2,18,
     TOPFACET45(0xFF,0,0xFF)
 };
 
 const unsigned char topFacet45_110[] = {
-    1, 60, 2,15,
+    1, 60, 2,18,
     TOPFACET45(0,0xFF,0xFF)
 };
 
 const unsigned char topFacet45_111[] = {
-    1, 60, 2,15,
+    1, 60, 2,18,
     TOPFACET45(0xFF,0xFF,0xFF)
 };
 
@@ -1083,7 +1081,7 @@ const unsigned char frontFacet45_110[] = {
 };
 
 const unsigned char frontFacet45_111[] = {
-    1, 33, 2,0,
+    1, 33, 2,3,
     FRONTFACET45(0xFF,0xFF,0xFF)
 };
 
@@ -1421,6 +1419,64 @@ const unsigned char top3Facets111[] = {
     TOP3FACET(0xFF,0xFF,0xFF)
 };
 
+
+#define WHITE(B) \
+    B B B
+
+
+const unsigned char rollArrowRight[] = {
+
+    2,48,0,0,
+
+    ________ ________ 
+    ________ ________ 
+    _______X ________ 
+    _______X ________ 
+    ______XX X_______ 
+    ______XX X_______ 
+    ______XX X_______ 
+    ______XX X_______ 
+    ______XX X_______ 
+    _______X XX______ 
+    _______X XX______ 
+    _______X XX______ 
+    _______X XX______ 
+    ________ XX______ 
+    ________ XX______ 
+    ________ XX______ 
+    ________ XX______ 
+    ________ XX______ 
+    ________ XX______ 
+    ________ XX______ 
+    ________ XX______ 
+    ________ XX______ 
+    _____X__ XX______ 
+    _____X__ XX______ 
+    _____X_X XX______ 
+    _____X_X XX______ 
+    ____XX_X XX______ 
+    ____XXXX XX______ 
+    ____XXXX XX______ 
+    ____XXXX X_______ 
+    ___XXXXX X_______ 
+    ___XXXXX X_______ 
+    ___XXXXX X_______ 
+    ___XXXXX ________ 
+    __XXXXX_ ________ 
+    __XXXXX_ ________ 
+    __XXXXX_ ________ 
+    __XXXXXX ________ 
+    ___XXXXX ________ 
+    ____XXXX ________ 
+    _____XXX ________ 
+    _______X ________ 
+    ________ ________ 
+    ________ ________ 
+    ________ ________ 
+    ________ ________ 
+    ________ ________ 
+
+};
 
 
 
@@ -1791,7 +1847,7 @@ void drawBitmap(const unsigned char *bmp, int x, int y, bool relativeToScreen) {
 
 
 
-    int pixT = (y - (scrollY * 3)) - (bmp[BMP_CENTER_Y] << 16);
+    int pixT = (y - ((scrollY & 0xFFFF0000) * 3)) - (bmp[BMP_CENTER_Y] << 16);
     int pixB = pixT + (bmp[BMP_HEIGHT] << 16);
     if (pixB < 0 || pixT >= (_ARENA_SCANLINES << 16)) {
         return;
@@ -1800,7 +1856,7 @@ void drawBitmap(const unsigned char *bmp, int x, int y, bool relativeToScreen) {
 
 
     for (int line = 0; line < bmp[BMP_HEIGHT]; line += 3) {
-        int scanline = line + screenStart - bmp[BMP_CENTER_Y] + ((y - (scrollY * 3)) >> 16);
+        int scanline = line + screenStart - bmp[BMP_CENTER_Y] + ((y - ((scrollY & 0xFFFF0000) * 3)) >> 16);
         if (scanline >= screenStart && scanline < _ARENA_SCANLINES-2) {
 
             for (int ssl = 0; ssl < 3; ssl++) {
