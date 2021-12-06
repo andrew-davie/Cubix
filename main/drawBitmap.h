@@ -1,5 +1,5 @@
 #ifndef __DRAWBITMAP_H
-#define __DRAWBITMAP_H
+#define __DRAWBITMAP_H 
 
 #include <stdbool.h>
 

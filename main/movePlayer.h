@@ -4,11 +4,8 @@
 extern int absRockfordX;
 extern int absRockfordY;
 
-extern int playerSpeedX;
-extern int playerSpeedY;
 
-void movePlayer();
-void doPlayer();
+//void movePlayer();
 
 
 #endif

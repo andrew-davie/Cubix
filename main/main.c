@@ -28,7 +28,6 @@
 
 #include "characterset.h"
 #include "logo.h"
-#include "attribute.h"
 #include "bitshapes.h"
 #include "drawplayer.h"
 #include "overlay.h"
@@ -39,76 +38,23 @@
 #include "drawBitmap.h"
 
 
-#define DIGIT_SIZE 18           /* displayed lines */
-#define DIGIT_SIZE_ROLLER 24        /* stored lines - rolling with spaces! */
-
-
-#define DIGIT_DOGE   (11 * DIGIT_SIZE_ROLLER)
-#define DIGIT_TIME      (12 * DIGIT_SIZE_ROLLER)
-#define DIGIT_SPACE     (13 * DIGIT_SIZE_ROLLER)
-#define DIGIT_LIVES     (14 * DIGIT_SIZE_ROLLER)
-#define DIGIT_CAVE      (15 * DIGIT_SIZE_ROLLER)
-#define DIGIT_LEVEL     (16 * DIGIT_SIZE_ROLLER)
-#define DIGIT_DOGE_L    (17 * DIGIT_SIZE_ROLLER)
-
-#define FLASH_DEAD 0x4F
-
-
 ////////////////////////////////////////////////////////////////////////////////
-// CONFIGURABLE UX
 
-#define IDLE_TIME          500     /* cycle time in game-over state between Overview/Normal display */
-#define SPARKLE            100     /* # frames to sparkle BG on extra life */
-#define EXPAND_SPEED         6     /* Amoeba expansion rate larger = faster, expansion speed for amoeba (/128)) */
-#define ROLL_SPEED           3     /* score digit rolling. Factor of DIGIT_SIZE_ROLLER only (1/2/3/4/6/8/12) */
-#define SCOREVISIBLETIME   130     /* # frames to show changed scoreline item before reverting to defaults */
-#define DEAD_RESTART        20     /* # frames to hold trigger after loss of life, to start next life */
+void setPalette(int start, int size, int step);
+void resetMobileEndpoints();
 
-#define MAX_PEBBLES        100     /* # random pebbles to put in dirt */
-
-    // Delays on RESET and SELECT are to allow non-ambiguous press of SELECT+RESET for suicide
-
-#define RESET_DELAY         20     /* # frames to hold RESET before it is detected */
-#define SELECT_DELAY        10     /* # frames to hold SELECT before it is detected */
-
-////////////////////////////////////////////////////////////////////////////////
 
 int pfBuffer;
-int cubePtr;
 
 int parallax;
-bool finished = true;
+bool finished = false;
 bool swap = false;
 
-int drillHeight;
 
-int scoreLineCurrent[10];
-int scoreLineNew[10];
-int water, lava;
-unsigned char *lastWater;
 unsigned char bgPalette[24];
 
-#define SPACESHIPS 19
-int spaceshipY[SPACESHIPS];
-//int spaceshipAccel[SPACESHIPS];
-int spaceshipWait[SPACESHIPS];
-int spaceshipMode[SPACESHIPS];
-int spaceshipX[SPACESHIPS];
-int spaceshipVar[SPACESHIPS];
-int spaceshipSquare[SPACESHIPS];
-int spaceshipRightShape[SPACESHIPS];
-int spaceshipLeftShape[SPACESHIPS];
-int spaceshipTopShape[SPACESHIPS];
-
-//int spaceshipTargetX[SPACESHIPS];
-//int spaceshipVar[SPACESHIPS];
-unsigned const char *spaceShipShape[SPACESHIPS];
-
 int tuneIndex;
-int millingTime;                // negative = expired
 
-
-int scoreCycle;
 
 int doge;
 int time;
@@ -134,7 +80,17 @@ unsigned char charDust3[CHAR_SIZE];
 #endif
 
 
-bool thisFrame[2][40];
+
+const int initMapColour[] = {
+
+    1,2,3, 4,5,6, 7,1,2,
+    3,4,5, 6,7,1, 2,3,4,
+    5,6,7, 1,2,3, 4,5,6,
+    3,4,5, 6,7,1, 2,3,4,
+    5,6,7, 1,2,3, 4,5,6,
+    1,2,3, 4,5,6, 7,1,2,
+};
+
 
 
 int fLayer = 0;
@@ -146,15 +102,18 @@ int rotateTop[] = {0,0,0};
 int rotateSpeed[] = {1,1,1};
 
 
+#define FACETS 54
 
+char mobileFacetX[FACETS];
+char mobileFacetY[FACETS];
+char mobileFacetEndX[FACETS];
+char mobileFacetEndY[FACETS];
+char mobileDrawOrder[FACETS];
+char mobileCol[FACETS];
 
-void setAnimation(int animID);
+const int facetX[];
+const int facetY[];
 
-
-
-struct Animation AnimIdx[TYPE_MAX];
-
-//unsigned char AnimIdx[TYPE_MAX];
 
 
 //==============================================================================
@@ -207,7 +166,7 @@ unsigned char is_7800;  // 0 = 2600, non-zero = 7800
 
 //const unsigned char *arena_increments =(unsigned char *)_ARENA_INCREMENTS;
 
-unsigned char mm_tv_type = 0;  // 0 = NTSC, 1 = PAL, 2 = SECAM
+unsigned char mm_tv_type = 1;  // 0 = NTSC, 1 = PAL, 2 = SECAM
 
 enum Direction rockfordDirection = RIGHT;
 
@@ -216,32 +175,6 @@ int frameAdjustY;
 int frameAdjustSmallX;
 int frameAdjustSmallY;
 
-bool amoebaAudio;
-bool exitTrigger;
-int diamondGrabTime;
-
-
-// Timers
-
-int flashTime;                  // frames for initial HOLD on BG colour flashing
-
-int idleTimer;
-
-unsigned int sparkleTimer;
-
-// Scoring
-
-int actualScore;
-int partialScore;
-int forceScoreDraw;
-
-
-
-
-
-bool exitMode;
-
-unsigned char ScorePtr[6];
 
 unsigned int frameCounter;
 unsigned int frameToggler;
@@ -249,9 +182,9 @@ unsigned int gameSpeed;
 unsigned int toggler;
 
 
-#define DISPLAY_NORMAL 0
+// #define DISPLAY_NORMAL 0
 
-#define DISPLAY_OVERVIEW 1
+//#define DISPLAY_OVERVIEW 1
 #define DISPLAY_NONE 2
 
 unsigned char displayMode, lastDisplayMode;
@@ -261,7 +194,7 @@ unsigned int triggerPressCounter = 0;
 unsigned int dogeCollected;
 
 //#define PUSH_DELAY 10
-#define DELAY_AFTER_PUSH 3
+// #define DELAY_AFTER_PUSH 3
 unsigned int pushCounter;
 unsigned int halt;
 
@@ -271,9 +204,6 @@ int rockfordX, rockfordY;
 bool rockfordDead;
 int lives;
 
-int selectResetDelay;;
-int resetDelay = 0;
-int selectDelay = 0;
 
 int diamondValue;
 int extraDogeCoinValue;
@@ -282,10 +212,20 @@ int amoebaCounter = 0;
 int amoebaGrew = 1;
 int lastAmoebaGrew = 0;
 int cave = 0;
-bool caveCompleted;
 unsigned char bufferedSWCHA = 0xFF;
 
 unsigned int maxScrollXSpeed;
+
+
+
+int controlledLayer = 0;
+int highlightLayer = 0;
+bool showHighlight = false;
+int jDelay = 0;
+int changedLayer = 0;
+int lastJOY0_FIRE = 0;
+int drawMode = 1;
+int facetIndex = 0;
 
 
 // COMPILE-TIME REVERSE BITS IN BYTE
@@ -347,25 +287,25 @@ const unsigned char NTSCtoPAL[16] =
     0xd0, 0xb0, 0x90, 0x70, 0x50, 0x30, 0x30, 0x20
 };
 
-const unsigned char NTSCtoSECAM[16] =
-{
-    0x0e,   // 0 = white            e = white
-    0x0c,   // 1 = yellow           c = yellow
-    0x0c,   // 2 = yellowish orange c = yellow
-    0x04,   // 3 = reddish orange   4 = red
-    0x04,   // 4 = red              4 = red
-    0x06,   // 5 = reddish purple   6 = purple
-    0x06,   // 6 = purple           6 = purple
-    0x06,   // 7 = bluish purple    6 = purple
-    0x02,   // 8 = blue             2 = blue
-    0x02,   // 9 = blue             2 = blue
-    0x0a,   // a = bluish cyan      a = cyan
-    0x0a,   // b = cyan             a = cyan
-    0x08,   // c = green            8 = green
-    0x08,   // d = green            8 = green
-    0x08,   // e = olive green      8 = green
-    0x0c    // f = brown            c = yellow
-};
+// const unsigned char NTSCtoSECAM[16] =
+// {
+//     0x0e,   // 0 = white            e = white
+//     0x0c,   // 1 = yellow           c = yellow
+//     0x0c,   // 2 = yellowish orange c = yellow
+//     0x04,   // 3 = reddish orange   4 = red
+//     0x04,   // 4 = red              4 = red
+//     0x06,   // 5 = reddish purple   6 = purple
+//     0x06,   // 6 = purple           6 = purple
+//     0x06,   // 7 = bluish purple    6 = purple
+//     0x02,   // 8 = blue             2 = blue
+//     0x02,   // 9 = blue             2 = blue
+//     0x0a,   // a = bluish cyan      a = cyan
+//     0x0a,   // b = cyan             a = cyan
+//     0x08,   // c = green            8 = green
+//     0x08,   // d = green            8 = green
+//     0x08,   // e = olive green      8 = green
+//     0x0c    // f = brown            c = yellow
+// };
 
 enum DIR {
     DIR_UP = 1,
@@ -425,19 +365,12 @@ void GameVerticalBlank();
 void InitGameBuffers();
 void Initialize();
 void drawScreen();
-//void SplashOverScan();
-//void SplashVerticalBlank();
 void Scheduler();
 void SetupBoard();
 
-// extern void DecodeCave(const unsigned char *cave);
-extern bool DecodeExplicitData();
 
 void drawOverviewScreen();
 unsigned int getRandom32();
-
-extern int RandSeed1, RandSeed2;
-extern void NextRandom(int *RandSeed1, int *RandSeed2);
 
 
 
@@ -452,34 +385,27 @@ extern void NextRandom(int *RandSeed1, int *RandSeed2);
 //==============================================================================
 
 
-void setFlash(int colour, int time) {
-    ARENA_COLOR = colour;
-    flashTime = time;
-}
-
-
-
 unsigned char ColourConvert(unsigned char color) {
 
-    if (mm_tv_type == PAL) {
-        return NTSCtoPAL[color>>4] +    // convert chroma value
-               (color & 0x0f);          // retain luma value
-    }
+    // if (mm_tv_type == PAL) {
+    //     return NTSCtoPAL[color>>4] +    // convert chroma value
+    //            (color & 0x0f);          // retain luma value
+    // }
 
-    else if (mm_tv_type == SECAM) {
-        return color < 2 ? 0 : NTSCtoSECAM[color>>4];
-    }
+    // else if (mm_tv_type == SECAM) {
+    //     return color < 2 ? 0 : NTSCtoSECAM[color>>4];
+    // }
 
-    else
+    // else
         return color;
 }
 
 
 
 enum SCHEDULE {
+    SCHEDULE_UNPACK_CAVE,
     SCHEDULE_START,
     SCHEDULE_PROCESSBOARD,
-    SCHEDULE_UNPACK_CAVE,
 };
 
 enum SCHEDULE gameSchedule = SCHEDULE_START;
@@ -517,28 +443,6 @@ int main() {
 
 
 
-void addScore(int score) {
-
-    actualScore += score;
-    scoreCycle = 1;
-    forceScoreDraw = SCOREVISIBLETIME;
-
-    partialScore += score;
-    while (partialScore >= 500) {
-        partialScore -= 500;
-        if (lives < 9) {
-
-            lives++;
-            sparkleTimer = SPARKLE;
-            scoreCycle = 1;
-            AddAudio(SFX_EXTRA);
-        }
-    }
-}
-
-#if ENABLE_OVERLAY
-const unsigned char (*overlayWord)[5];
-#endif
 
 
 
@@ -558,8 +462,8 @@ void setColours() {
     }
 */
 
-    unsigned char scorecol = lives? 0x29 : 0x49;
-    unsigned char bgCol = flashTime ? ARENA_COLOR : 0;
+    // unsigned char scorecol = lives? 0x29 : 0x49;
+    unsigned char bgCol = 0;
 
     i = 0;
     // if (displayMode == DISPLAY_NORMAL)
@@ -615,87 +519,6 @@ bool hasLeftFace[] = {
 
 void InitGameX() {
 
-    for (int i = 0; i < 2; i++)
-        thisFrame[0][i] = thisFrame[1][i] = false;
-
-#define SPCX 4
-#define SPCY 1
-
-
-
-
-    const int ssx[] = {
-
-        4, 24,
-        9, 19,
-        14,
-
-        4, 24,
-        9, 19,
-        14,
-
-        14,
-        9,19,
-        4, 14, 24,
-        9,19,
-        14,
-    };
-
-    const int ssy[] = {
-
-        0x190000+0x100000, 0x190000+0x100000,
-        0x1E0000+0x100000, 0x1E0000+0x100000,
-        0x230000+0x100000,
-
-        0x190000+0x30000, 0x190000+0x30000,
-        0x1E0000+0x30000, 0x1E0000+0x30000,
-        0x230000+0x30000,
-
-        0xA0000,
-        0xF0000, 0xF0000,
-        0x140000, 0x140000, 0x140000,
-        0x190000, 0x190000,
-        0x1E0000,
-     };
-
-
-    for (int sno = 0; sno < SPACESHIPS; sno++) {
-//        spaceshipY[sno] = -((120 + (getRandom32() & 0x20)) <<16); //16 << 16;
-        // spaceshipAccel[sno] = 0;
-        spaceshipWait[sno] = 0;
-        spaceshipMode[sno] = 0;
-        spaceshipVar[sno] = 0;
-        spaceshipSquare[sno] = sno;
-        
-//        spaceshipX[sno] = 5 << 14; //(((getRandom32() & 0xFF) >> 8) * 160) << 14;
-
-        spaceshipY[sno] = ((ssy[sno])); // << 16) * 3;
-        spaceshipX[sno] = ssx[sno] << 14;
-
-        do
-            spaceshipRightShape[sno] = getRandom32() & 7;
-        while (spaceshipRightShape[sno] < 2);
-        do
-            spaceshipLeftShape[sno] = getRandom32() & 7;
-        while (spaceshipLeftShape[sno] < 2);
-        do
-            spaceshipTopShape[sno] = getRandom32() & 7;
-        while (spaceshipTopShape[sno] < 2);
-//        spaceshipTopShape[sno] = sno & 7;
-
-        // spaceshipTargetX[sno] = 5 << 16;
-
-        // if (getRandom32() & 1)
-        //     spaceShipShape[sno] = &eroShip[0];
-        // else
-        //     spaceShipShape[sno] = &eroShip2[0];
-
-
-    }
-
-    drillHeight = 1;
-
-
 
 #if ENABLE_PARALLAX
 
@@ -708,12 +531,10 @@ void InitGameX() {
 
 
 
+    drawMode = 1;
 
 
     dripFree = true;
-    water = 0;
-    lava = 0;
-    lastWater = 0;
 
 #if ENABLE_SHAKE
     shakeTime = 0;
@@ -735,32 +556,15 @@ extern int rinc;
 
     rockfordX = 1;
     rockfordY = 19;
-    // rockfordY = 12;
-    playerX = (rockfordX * 4) << 16;
-    playerY = (rockfordY * PIECE_DEPTH/3) << 16;
-
-    playerSpeedX = 20000;
-    playerSpeedY = 30000;
-
-
-    exitTrigger = false;
-    exitMode = false;
-    idleTimer = 0;
-    terminalDelay = 0;
-
     tuneIndex = -1;
-    amoebaAudio = false;
+
     gameSchedule = SCHEDULE_START;
-
-//rockfordX = 20; //tmp
-//rockfordY = 10; //tmp
-
     
     KillRepeatingAudio();
 
     pushCounter = 0;
     halt = 0;
-    sparkleTimer = 0;
+
 
     amoebaGrew = 1;
     lastDisplayMode = DISPLAY_NONE;
@@ -779,10 +583,6 @@ extern int rinc;
     gameSpeed = GAMESPEED * DEBUG_SLOWDOWN; //12;
     frameCounter = gameSpeed;               // force initial 
 
-    setFlash(0,0);
-
-
-
     scrollX = 0x0000; //((((getRandom32() & 0xFF) * 38) >> 8) + 1) << 16;
     scrollY = 0x600000; //((((getRandom32() & 0xFF) * 20) >> 8) + 1) << 16;
 
@@ -790,18 +590,6 @@ extern int rinc;
     InitAudio();
     AddAudio(SFX_TICK);
 
-
-#if ENABLE_OVERLAY
-
-    if (overlayWord != overlayBoulderDash) {
-        overlayWord = overlayBoulderDash;
-
-        fSpeed = 0x120;
-        fIndex = 0;
-        rotateOffset = 0;
-    }
-
-#endif
 
     frameAdjustX = frameAdjustY = 0;
     frameAdjustSmallX = frameAdjustSmallY = 0;
@@ -812,49 +600,47 @@ extern int rinc;
         bgPalette[bgLine] = caveList[cave].caveColour[0][3+ bgLine];
 
 
-//    DecodeCave(caveList[cave].cavePtr);
     gameSchedule = SCHEDULE_UNPACK_CAVE;
-
-
-
-
-
-    forceScoreDraw = SCOREVISIBLETIME;
-
-    // for (int i = 0; i < (40*24)/8; i++)
-    //     RAM[_UNCOVER + i] = 0xFF;
-
-    for (int i = 0; i < TYPE_MAX; i++) {
-        AnimIdx[i].index = -2;
-        AnimIdx[i].count = 0;
-    }
-
-//    AnimIdx[TYPE_BOULDER_SHAKE].count = -1;
-
-
-
-    playerAnimationID = -1;
-    setAnimation(ID_BLANK);
-
-//    attractCounter = 0;
-//    setColours();
-
-    caveCompleted = false;
-
-    selectResetDelay = 0;
-    scoreCycle = 2;
-
-    for (int i = 0; i < 10; i++)
-        scoreLineCurrent[i] = -1;
-
-
-    // uncoverCount = 1; // or 100
-    //AddAudio(SFX_UNCOVER);
-//    AddAudio(SFX_DEADBEAT2);
-
 }
 
+void initFacets() {
+    facetIndex = 0;
+    resetMobileEndpoints();
 
+    for (int facet = 0; facet < FACETS; facet++) {
+ 
+ 
+        do
+        {
+            mobileCol[facet] = getRandom32() & 7;
+        } while (mobileCol[facet] == 0);
+        
+ 
+ 
+        int r = (((getRandom32() & 0xFF) * 160)) >> 8;
+        r *= r;
+        r >>= 11;
+
+        if (getRandom32() & 1)
+            r = -r;
+
+
+        mobileFacetX[facet] = 18 + r;
+
+        r = (((getRandom32() & 0xFF) * 220)) >> 8;
+        r *= r;
+        r >>= 11;
+
+        if (getRandom32() & 1)
+            r = -r;
+
+        mobileFacetY[facet] = 30 + r; // + (r * r < 0? -r : r);
+
+        mobileDrawOrder[facet] = facet;
+        //mobileFacetColour[facet] = initMapColour[facet];
+    }
+
+}
 
 void Initialize() {
     
@@ -880,17 +666,16 @@ void Initialize() {
         setIncrement(i, 1, 0);
 
 
-    actualScore = 0;
-    partialScore = 0;
-
     cave = 0;
     lives = 3;
     level = 0;
 
-    selectResetDelay = 0;
-
 
     pfBuffer = 0;
+
+
+    initFacets();
+
 
 
     InitAudio();
@@ -898,18 +683,12 @@ void Initialize() {
 
     InitGameBuffers();
 
-    setPalette(0, PIECE_DEPTH, 3, 3);
+    drawMode = 1;
+
+    setPalette(0, PIECE_DEPTH, 3);
 }
 
 
-
-
-
-
-void GameScheduleDrawSprites();
-// #if ENABLE_OVERLAY
-// void GameScheduleDrawOverlay();
-// #endif
 void GameScheduleAnimate();
 void GameScheduleProcessBoardRow();
 
@@ -984,124 +763,249 @@ void InitGameDatastreams() {
 
 
 void GameOverscan() {
-
-
-    // for (int sp=0; sp< 1; sp++) {
-    //     drawSoftwareSprites();
-    //     if (finished) {
-    //         pfBuffer ^= 1;
-    //         drawScreen();
-    //         finished = false;
-    //         break;
-    //     }
-    // }
-
-    // InitGameDatastreams();
-
-    // Scroll();
-    // GameScheduleDrawSprites();
-
-    // InitGameDatastreams();
-//    playAudio();
-//    GameScheduleAnimate();
+    playAudio();
 }
 
 
 
-int controlledLayer = 0;
-int highlightLayer = 0;
-bool showHighlight = false;
-int jDelay = 0;
-int changedLayer = 0;
-int lastJOY0_FIRE = 0;
-int drawMode = 1;
-int facetIndex = 0;
+
+
+#define PULSE 0 /*0x80*/
+
+const int facetEndX[];
+const int facetEndY[];
+
+void rotateLeft(int face) {
+
+    switch (face) {
+
+    case 0:
+        {                
+            mobileFacetEndX[0] = facetEndX[6];
+            mobileFacetEndY[0] = facetEndY[6];
+            mobileFacetEndX[1] = facetEndX[3];
+            mobileFacetEndY[1] = facetEndY[3];
+            mobileFacetEndX[2] = facetEndX[0];
+            mobileFacetEndY[2] = facetEndY[0];
+            mobileFacetEndX[3] = facetEndX[7];
+            mobileFacetEndY[3] = facetEndY[7];
+            mobileFacetEndX[5] = facetEndX[1];
+            mobileFacetEndY[5] = facetEndY[1];
+            mobileFacetEndX[6] = facetEndX[8];
+            mobileFacetEndY[6] = facetEndY[8];
+            mobileFacetEndX[7] = facetEndX[5];
+            mobileFacetEndY[7] = facetEndY[5];
+            mobileFacetEndX[8] = facetEndX[2];
+            mobileFacetEndY[8] = facetEndY[2];
+
+
+            mobileFacetEndX[9] = facetEndX[53];
+            mobileFacetEndY[9] = facetEndY[53];
+            mobileFacetEndX[12] = facetEndX[50];
+            mobileFacetEndY[12] = facetEndY[50];
+            mobileFacetEndX[15] = facetEndX[47];
+            mobileFacetEndY[15] = facetEndY[47];
+
+            mobileFacetEndX[47] = facetEndX[33];
+            mobileFacetEndY[47] = facetEndY[33];
+            mobileFacetEndX[50] = facetEndX[30];
+            mobileFacetEndY[50] = facetEndY[30];
+            mobileFacetEndX[53] = facetEndX[27];
+            mobileFacetEndY[53] = facetEndY[27];
+
+            mobileFacetEndX[27] = facetEndX[18];
+            mobileFacetEndY[27] = facetEndY[18];
+            mobileFacetEndX[30] = facetEndX[21];
+            mobileFacetEndY[30] = facetEndY[21];
+            mobileFacetEndX[33] = facetEndX[24];
+            mobileFacetEndY[33] = facetEndY[24];
+
+            mobileFacetEndX[18] = facetEndX[9];
+            mobileFacetEndY[18] = facetEndY[9];
+            mobileFacetEndX[21] = facetEndX[12];
+            mobileFacetEndY[21] = facetEndY[12];
+            mobileFacetEndX[24] = facetEndX[15];
+            mobileFacetEndY[24] = facetEndY[15];
+
+
+
+
+            mobileCol[0] |= PULSE;
+            mobileCol[1] |= PULSE;
+            mobileCol[2] |= PULSE;
+            mobileCol[3] |= PULSE;
+            mobileCol[5] |= PULSE;
+            mobileCol[6] |= PULSE;
+            mobileCol[7] |= PULSE;
+            mobileCol[8] |= PULSE;
+            mobileCol[9] |= PULSE;
+            mobileCol[12] |= PULSE;
+            mobileCol[15] |= PULSE;
+            mobileCol[47] |= PULSE;
+            mobileCol[50] |= PULSE;
+            mobileCol[53] |= PULSE;
+            mobileCol[27] |= PULSE;
+            mobileCol[30] |= PULSE;
+            mobileCol[33] |= PULSE;
+            mobileCol[18] |= PULSE;
+            mobileCol[21] |= PULSE;
+            mobileCol[24] |= PULSE;
+
+
+        }
+        break;
+
+    default:
+        break;
+    }
+
+
+}
+
+const int facetEndX[];
+const int facetEndY[];
+
+void resetMobileEndpoints() {
+
+    for (int facet = 0; facet < FACETS; facet++) {
+        mobileFacetEndX[facet] = facetEndX[facet];
+        mobileFacetEndY[facet] = facetEndY[facet];
+    }
+}
+
+void redoDrawOrder() {
+
+    for (int f = FACETS-1; f >= 0; f--)
+        mobileDrawOrder[f] = f;
+
+    int prior = FACETS-1;
+    for (int f = FACETS-1; f >= 0; f--) {
+
+        if ((mobileFacetX[f] != mobileFacetEndX[f])
+            || (mobileFacetY[f] != mobileFacetEndY[f])) {
+            mobileDrawOrder[f] = mobileDrawOrder[prior];
+            mobileDrawOrder[prior] = f;
+            prior--;
+        }
+    }
+}
+
+char moving = 0;
+
+
+bool canMove() {
+    for (int facet = 0; facet < FACETS; facet++)
+        if (mobileFacetX[facet] != mobileFacetEndX[facet] || mobileFacetY[facet] != mobileFacetEndY[facet])
+            return false;
+
+    return true;
+}
+
+
 
 void HandleJoystick() {
 
-    if (!jDelay && !highlightLayer) {
 
-        if (JOY0_UP) {
+    if (!drawMode) {
 
-            if (!drawMode) {
-                swap = true;
-                return;
+
+        if (JOY0_LEFT) {
+
+            if (facetIndex == 0 && canMove()) {
+                rotateLeft(0);
+                redoDrawOrder();
             }
-
-
-            highlightLayer = 3;
-            jDelay = 10;
-            changedLayer = 10;
-            controlledLayer++;
-            if (controlledLayer > 2)
-                controlledLayer = 0;
-
         }
 
-        else if (JOY0_DOWN) {
-
-            if (!drawMode) {
-                swap = true;
-                return;
+        else if (JOY0_RIGHT && canMove()) {
+            if (facetIndex == 0) {
+                rotateLeft(0);
+                rotateLeft(0);
+                rotateLeft(0);
+                redoDrawOrder();
             }
-
-            highlightLayer = 3;
-            jDelay = 10;
-            changedLayer = 10;
-            controlledLayer--;
-            if (controlledLayer < 0)
-                controlledLayer = 2;
         }
 
-        else if (JOY0_LEFT && !((rotateTop[0]|rotateTop[1]|rotateTop[2]) & 3)) {
-
-
-             if (!drawMode) {
-                swap = true;
-                return;
-            }
-
-
-            if (JOY0_FIRE)
-                for (int layer = 0; layer < 3; layer++) {
-                    rotateSpeed[layer] = 1;
-                    direct[layer] = 1;
-//                    rotateTop[layer] &= !3;
-                }
-
-
-            direct[controlledLayer] = 1;
-        }
-
-
-        else if (JOY0_RIGHT && !((rotateTop[0]|rotateTop[1]|rotateTop[2]) & 3)) {
-
-            if (!drawMode) {
-                swap = true;
-                return;
-            }
-
-            if (JOY0_FIRE)
-                for (int layer = 0; layer < 3; layer++) {
-                    rotateSpeed[layer] = 1;
-                    direct[layer] = -1;
-//                    rotateTop[layer] &= !3;
-                }
-
-
-            direct[controlledLayer] = -1;
-        }
-
-        else if (!swap && (!JOY0_FIRE && lastJOY0_FIRE)) {
+        else if (!swap && (!JOY0_FIRE && lastJOY0_FIRE))
             swap = true;
-        }
 
 
-        lastJOY0_FIRE = JOY0_FIRE;
 
     }
 
 
+    else {
+
+        if (!jDelay && !highlightLayer) {
+
+            if (JOY0_UP) {
+
+                highlightLayer = 3;
+                jDelay = 10;
+                changedLayer = 10;
+                controlledLayer++;
+                if (controlledLayer > 2)
+                    controlledLayer = 0;
+
+            }
+
+            else if (JOY0_DOWN) {
+
+                highlightLayer = 3;
+                jDelay = 10;
+                changedLayer = 10;
+                controlledLayer--;
+                if (controlledLayer < 0)
+                    controlledLayer = 2;
+            }
+
+            else if (JOY0_LEFT && !((rotateTop[0]|rotateTop[1]|rotateTop[2]) & 3)) {
+
+
+                if (JOY0_FIRE)
+                    for (int layer = 0; layer < 3; layer++) {
+                        rotateSpeed[layer] = 1;
+                        direct[layer] = 1;
+    //                    rotateTop[layer] &= !3;
+                    }
+
+
+                direct[controlledLayer] = 1;
+
+    //            AddAudio(SFX_PUSH);
+
+            }
+
+
+            else if (JOY0_RIGHT && !((rotateTop[0]|rotateTop[1]|rotateTop[2]) & 3)) {
+
+                if (JOY0_FIRE)
+                    for (int layer = 0; layer < 3; layer++) {
+                        rotateSpeed[layer] = 1;
+                        direct[layer] = -1;
+    //                    rotateTop[layer] &= !3;
+                    }
+
+
+                direct[controlledLayer] = -1;
+    //            AddAudio(SFX_PUSH);
+            }
+
+            else if (!swap && (!JOY0_FIRE && lastJOY0_FIRE)) {
+                swap = true;
+
+                initFacets();
+
+
+
+            }
+
+
+
+        }
+    }
+
+    lastJOY0_FIRE = JOY0_FIRE;
 
 
     if (jDelay)
@@ -1110,91 +1014,8 @@ void HandleJoystick() {
 
 
 
-void GameVerticalBlank() {
- 
 
-    if (finished && swap) {
-        drawMode ^= 1;
-        fLayer = 0;
-        fno = 0;
-        facetIndex = 0;
-        finished = true;
-        swap = false;
-    }
-
-
-    if (finished) {
-        pfBuffer ^= 1;
-        Scroll();
-        drawScreen();
-        finished = false;
-    }
-
-    // else
-    //     drawSoftwareSprites();
-
-    HandleJoystick();
-
-    GameScheduleDrawSprites();
-
-
-
-    frameCounter++;
-    frameToggler++;
-
-
-    // for (int sp=0; sp< 3; sp++) {
-    //     if (finished) {
-    //         pfBuffer ^= 1;
-    //         drawScreen();
-    //         finished = false;
-    //         break;
-    //     }
-
-
-    //     drawSoftwareSprites();
-
-    // }
-
-    InitGameDatastreams();
-
-
-    // if (time && /*!uncoverCount &&*/ !rockfordDead) {
-
-    //     time--;
-    //     if ((time & 0xFF) == 0xFF) {
-
-    //         time -= 0xC4;           // magic!  - (-256+60)
-    //         if (time < 0xA00) {
-    //             scoreCycle = 0;
-    //             forceScoreDraw = SCOREVISIBLETIME;
-    //             AddAudio(SFX_COUNTDOWN2);
-    //         }
-    //     }
-    // }
-
-
-
-//     if (gameSchedule != SCHEDULE_UNPACK_CAVE) {
-
-// //        drawBitmap(&rocketShip[0], 30, lava-(scrollY>>16), false);
-
-
-// //        GameScheduleAnimate();
-// // #if ENABLE_OVERLAY
-// //         GameScheduleDrawOverlay();
-// // #endif
-//         // Uncover();
-
-// extern void     looneyTuneFade();
-
-//         looneyTuneFade();
-//     }
-}
-
-
-
-void setPalette(int start, int size, int step, int tweak) {
+void setPalette(int start, int size, int step) {
 
     setColours();
 
@@ -1217,57 +1038,8 @@ void setPalette(int start, int size, int step, int tweak) {
     int i = start;
     while (i < _ARENA_SCANLINES) {
 
-        // if (lava && absLine >= lavaLine) {
 
-        //     unsigned char lavaCol = 0x44;
-        //     int delta = (absLine - lavaLine);
-
-        //     if (delta < 14) {
-        //         lavaCol = 0x2E - (delta >> 2);
-        //     } else {
-
-        //         lavaCol = 0x4A - (delta >> 3);
-        //         if (lavaCol < 0x44)
-        //             lavaCol = 0x44;
-        //     }
-
-        //     //if (!flashTime) {
-        //         RAM[_BUF_COLUBK + i ] = 
-        //         RAM[_BUF_COLUBK + i + 1 ] =
-        //         RAM[_BUF_COLUBK + i + 2] = ColourConvert(lavaCol);
-        //     //}
-
-        //     RAM[_BUF_COLUPF + i] = ColourConvert(0x48);
-        //     RAM[_BUF_COLUPF + i + 1 ] = ColourConvert(0x28);
-        //     RAM[_BUF_COLUPF + i + 2 ] = ColourConvert(0x3c);
-
-        // }
-        
-        // else if (water && absLine >= waterLine) {
-
-        //     unsigned char waterCol = 0x90;
-        //     int delta = absLine - waterLine;
-        //     if (delta < 32) {
-        //         waterCol += (32 - delta) >> 2;
-        //     }
-
-
-        //     //if (!flashTime) {
-
-        //         RAM[_BUF_COLUBK + i ] = ColourConvert(waterCol);
-        //         RAM[_BUF_COLUBK + i + 1 ] = ColourConvert(waterCol);
-        //         RAM[_BUF_COLUBK + i + 2 ] = ColourConvert(waterCol);
-
-        //     //}
-
-        //     RAM[_BUF_COLUPF + i ] = ColourConvert(0xA4);
-        //     RAM[_BUF_COLUPF + i + 1] = ColourConvert(0x84);     // boulder body
-        //     RAM[_BUF_COLUPF + i + 2] = ColourConvert(0x94);     // flow + inside stream colour
-
-        // }
-        // else {
-            RAM[_BUF_COLUPF + i] = ColourConvert(bgPalette[pfCharLine]);
-        // }
+        RAM[_BUF_COLUPF + i] = ColourConvert(bgPalette[pfCharLine]);
         
             
         bgCharLine += 3;            
@@ -1288,7 +1060,7 @@ void setPalette(int start, int size, int step, int tweak) {
 
 void setOverviewPalette() {
 
-    setPalette(0, 9, 7, 6);
+    setPalette(0, 9, 7);
 
 }
 
@@ -1297,32 +1069,93 @@ void setDisplayPalette() {
 }
 
 
-
-int sortOrder[SPACESHIPS];
-
+const unsigned char *shapeSetFacet[];
 
 
+void drawOverviewSoftwareSprites() {
 
 
-// three axes
-// A/B/C layers for each
-// each layer has a rotation (0-3)
-// for all facets {
-    // facet shape
-    // x,y posn
-    // face=cube=ref-> lookup colour
-    //      --> lookup shape[colour] --> pattern to draw
-    //}
+    int f = mobileDrawOrder[facetIndex];
 
+    int col = mobileCol[f];
+    if (col & PULSE ) {
+        mobileCol[f] &= ~PULSE;
+        col = 7;
+    } else {
+
+
+        if (mobileFacetX[f] < mobileFacetEndX[f]) {
+
+            int rspeed = mobileFacetEndX[f] - mobileFacetX[f];
+            rspeed >>= 2;
+            rspeed++;
+            // if (rspeed > 2)
+            //     rspeed = 2;
+
+            mobileFacetX[f] += rspeed; //((mobileFacetEndX[f] - mobileFacetX[f]) >> 3) + 1;
+            // mobileCol[f] ^= PULSE;
+            // if (mobileFacetX[f] == mobileFacetEndX[f] && mobileFacetY[f] == mobileFacetEndY[f])
+            //     mobileCol[f] |= PULSE;
+        }
+
+        if (mobileFacetY[f] < mobileFacetEndY[f]) {
+
+            int rspeed = mobileFacetEndY[f] - mobileFacetY[f];
+            rspeed >>= 1;
+            rspeed++;
+            // if (rspeed > 5)
+            //     rspeed = 5;
+
+            mobileFacetY[f] += rspeed; //((mobileFacetEndY[f] - mobileFacetY[f]) >> 2) + 1;
+            // mobileCol[f] ^= PULSE;
+            // if (mobileFacetX[f] == mobileFacetEndX[f] && mobileFacetY[f] == mobileFacetEndY[f])
+            //     mobileCol[f] |= PULSE;
+        }
+
+        if (mobileFacetX[f] > mobileFacetEndX[f]) {
+
+            int rspeed = mobileFacetX[f] - mobileFacetEndX[f];
+            rspeed >>= 2;
+            rspeed++;
+//            mobileFacetX[f] += rspeed; //((mobileFacetEndX[f] - mobileFacetX[f]) >> 3) + 1;
+            //     rspeed = 2;
+
+            mobileFacetX[f] -= rspeed; //((mobileFacetX[f] - mobileFacetEndX[f]) >> 3) + 1;
+            // mobileCol[f] ^= PULSE;
+            // if (mobileFacetX[f] == mobileFacetEndX[f] && mobileFacetY[f] == mobileFacetEndY[f])
+            //     mobileCol[f] |= PULSE;
+        }
+
+        if (mobileFacetY[f] > mobileFacetEndY[f]) {
+
+            int rspeed = mobileFacetY[f] - mobileFacetEndY[f];
+            rspeed >>= 1;
+            rspeed++;
+            // if (rspeed > 5)
+            //     rspeed = 5;
+
+            mobileFacetY[f] -= rspeed; //((mobileFacetY[f] - mobileFacetEndY[f]) >> 2) + 1;
+            // mobileCol[f] ^= PULSE;
+            // if (mobileFacetX[f] == mobileFacetEndX[f] && mobileFacetY[f] == mobileFacetEndY[f])
+            //     mobileCol[f] |= PULSE;
+        }
+
+    }
+
+    drawBitmap(shapeSetFacet[col],
+        ((mobileFacetX[f] << 14) & 0xFFFFC000) + 0x00004000,
+        ((100 + mobileFacetY[f]) << 16)   * 3,
+        true);
+
+    if (++facetIndex >= FACETS) {
+        facetIndex = 0;
+        finished = true;
+    }
+}
 
 
 #define AXES 1
 #define ROTATE 16
-
-
-
-
-
 
 
 struct facet {
@@ -1465,7 +1298,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // false            always drawn
 
 #define AX2 -1
-#define AY2 -0x30000
+#define AY2 -0x20000
 
 
             // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
@@ -1660,7 +1493,7 @@ struct facet shapeDef[AXES][ROTATE][25] = {
 
 
 #define AX6 -1
-#define AY6 -0x30000
+#define AY6 -0x20000
 
             // topOnly:
             // true             a part of the 3x3 "top" of the layer
@@ -2177,17 +2010,6 @@ int visibleFace[] = {
 
 
 
-int stickerColour[][9] = {
-
-    { 1,1,1,1,7,1,1,1,1 },
-    { 2,2,2,2,2,2,6,6,6 },
-    { 3,3,3,3,3,3,3,3,3 },
-    { 1,1,1,1,7,1,1,1,1 },
-    { 2,2,2,2,2,2,6,6,6 },
-    { 3,3,3,3,3,3,3,3,3 },
-};
-
-
 const unsigned char *shapeMarker[] = {
     &marker[0],
     &marker[0],
@@ -2378,95 +2200,141 @@ const unsigned char *shapeBoundary[] = {
 #define FACETYOFFSET3 (FACETYOFFSET2 + (FACETY * 3 + 2))
 
 
-int facetX[] = {
+#define FACETX2 5
+#define FACETY2 5
+
+#define FACETXBLOFFSET 5
+#define FACETXTOPOFFSET 12
+#define FACETXFLOFFSET 0
+#define FACETXBOTOFFSET FACETXTOPOFFSET
+#define FACETXFROFFSET 20
+#define FACETXBROFFSET 16
+
+#define FACETYBLOFFSET 12
+#define FACETYTOPOFFSET 6
+#define FACETYFLOFFSET 12
+#define FACETYBOTOFFSET 24
+#define FACETYFROFFSET 12
+#define FACETYBROFFSET 12
+
+const int facetX[] = {
 
     // BL
-    0*FACETX+FACETXOFFSET, 1*FACETX+FACETXOFFSET, 2*FACETX+FACETXOFFSET,
-    0*FACETX+FACETXOFFSET, 1*FACETX+FACETXOFFSET, 2*FACETX+FACETXOFFSET,
-    0*FACETX+FACETXOFFSET, 1*FACETX+FACETXOFFSET, 2*FACETX+FACETXOFFSET,
+    0*FACETX2 + FACETXBLOFFSET, 1*FACETX2 + FACETXBLOFFSET, 2*FACETX2 + FACETXBLOFFSET,
+    0*FACETX2 + FACETXBLOFFSET, 1*FACETX2 + FACETXBLOFFSET, 2*FACETX2 + FACETXBLOFFSET,
+    0*FACETX2 + FACETXBLOFFSET, 1*FACETX2 + FACETXBLOFFSET, 2*FACETX2 + FACETXBLOFFSET,
 
     //TOP
-    0*FACETX+FACETXOFFSET2, 1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
-    0*FACETX+FACETXOFFSET2, 1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
-    0*FACETX+FACETXOFFSET2, 1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
+    0*FACETX2 + FACETXTOPOFFSET, 1*FACETX2 + FACETXTOPOFFSET, 2*FACETX2 + FACETXTOPOFFSET,
+    0*FACETX2 + FACETXTOPOFFSET, 1*FACETX2 + FACETXTOPOFFSET, 2*FACETX2 + FACETXTOPOFFSET,
+    0*FACETX2 + FACETXTOPOFFSET, 1*FACETX2 + FACETXTOPOFFSET, 2*FACETX2 + FACETXTOPOFFSET,
 
     //FL
-    0*FACETX+FACETXOFFSET2 ,1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
-    0*FACETX+FACETXOFFSET2 ,1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
-    0*FACETX+FACETXOFFSET2 ,1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
+    0*FACETX2 + FACETXFLOFFSET ,1*FACETX2 + FACETXFLOFFSET, 2*FACETX2 + FACETXFLOFFSET,
+    0*FACETX2 + FACETXFLOFFSET ,1*FACETX2 + FACETXFLOFFSET, 2*FACETX2 + FACETXFLOFFSET,
+    0*FACETX2 + FACETXFLOFFSET ,1*FACETX2 + FACETXFLOFFSET, 2*FACETX2 + FACETXFLOFFSET,
 
     //BOT
-    0*FACETX+FACETXOFFSET2, 1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
-    0*FACETX+FACETXOFFSET2, 1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
-    0*FACETX+FACETXOFFSET2, 1*FACETX+FACETXOFFSET2, 2*FACETX+FACETXOFFSET2,
+    0*FACETX2 + FACETXBOTOFFSET, 1*FACETX2 + FACETXBOTOFFSET, 2*FACETX2 + FACETXBOTOFFSET,
+    0*FACETX2 + FACETXBOTOFFSET, 1*FACETX2 + FACETXBOTOFFSET, 2*FACETX2 + FACETXBOTOFFSET,
+    0*FACETX2 + FACETXBOTOFFSET, 1*FACETX2 + FACETXBOTOFFSET, 2*FACETX2 + FACETXBOTOFFSET,
 
     //FR
-    0*FACETX+FACETXOFFSET3, 1*FACETX+FACETXOFFSET3, 2*FACETX+FACETXOFFSET3,
-    0*FACETX+FACETXOFFSET3, 1*FACETX+FACETXOFFSET3, 2*FACETX+FACETXOFFSET3,
-    0*FACETX+FACETXOFFSET3, 1*FACETX+FACETXOFFSET3, 2*FACETX+FACETXOFFSET3,
+    0*FACETX2 + FACETXFROFFSET, 1*FACETX2 + FACETXFROFFSET, 2*FACETX2 + FACETXFROFFSET,
+    0*FACETX2 + FACETXFROFFSET, 1*FACETX2 + FACETXFROFFSET, 2*FACETX2 + FACETXFROFFSET,
+    0*FACETX2 + FACETXFROFFSET, 1*FACETX2 + FACETXFROFFSET, 2*FACETX2 + FACETXFROFFSET,
 
     // BR
-    0*FACETX+FACETXOFFSET4, 1*FACETX+FACETXOFFSET4, 2*FACETX+FACETXOFFSET4,
-    0*FACETX+FACETXOFFSET4, 1*FACETX+FACETXOFFSET4, 2*FACETX+FACETXOFFSET4,
-    0*FACETX+FACETXOFFSET4, 1*FACETX+FACETXOFFSET4, 2*FACETX+FACETXOFFSET4,
+    0*FACETX2 + FACETXBROFFSET, 1*FACETX2 + FACETXBROFFSET, 2*FACETX2 + FACETXBROFFSET,
+    0*FACETX2 + FACETXBROFFSET, 1*FACETX2 + FACETXBROFFSET, 2*FACETX2 + FACETXBROFFSET,
+    0*FACETX2 + FACETXBROFFSET, 1*FACETX2 + FACETXBROFFSET, 2*FACETX2 + FACETXBROFFSET,
 
     -1,
 };
 
-int facetY[] = {
+const int facetY[] = {
 
-    0 * FACETY + FACETYOFFSET2, 0 * FACETY + FACETYOFFSET2, 0 * FACETY + FACETYOFFSET2,
-    1 * FACETY + FACETYOFFSET2, 1 * FACETY + FACETYOFFSET2, 1 * FACETY + FACETYOFFSET2,
-    2 * FACETY + FACETYOFFSET2, 2 * FACETY + FACETYOFFSET2, 2 * FACETY + FACETYOFFSET2,
-
-    0 * FACETY + FACETYOFFSET, 0 * FACETY + FACETYOFFSET, 0 * FACETY + FACETYOFFSET,
-    1 * FACETY + FACETYOFFSET, 1 * FACETY + FACETYOFFSET, 1 * FACETY + FACETYOFFSET,
-    2 * FACETY + FACETYOFFSET, 2 * FACETY + FACETYOFFSET, 2 * FACETY + FACETYOFFSET,
-
-    0 * FACETY + FACETYOFFSET2, 0 * FACETY + FACETYOFFSET2, 0 * FACETY + FACETYOFFSET2,
-    1 * FACETY + FACETYOFFSET2, 1 * FACETY + FACETYOFFSET2, 1 * FACETY + FACETYOFFSET2,
-    2 * FACETY + FACETYOFFSET2, 2 * FACETY + FACETYOFFSET2, 2 * FACETY + FACETYOFFSET2,
-
-    0 * FACETY + FACETYOFFSET3, 0 * FACETY + FACETYOFFSET3, 0 * FACETY + FACETYOFFSET3,
-    1 * FACETY + FACETYOFFSET3, 1 * FACETY + FACETYOFFSET3, 1 * FACETY + FACETYOFFSET3,
-    2 * FACETY + FACETYOFFSET3, 2 * FACETY + FACETYOFFSET3, 2 * FACETY + FACETYOFFSET3,
-
-    0 * FACETY + FACETYOFFSET2, 0 * FACETY + FACETYOFFSET2, 0 * FACETY + FACETYOFFSET2,
-    1 * FACETY + FACETYOFFSET2, 1 * FACETY + FACETYOFFSET2, 1 * FACETY + FACETYOFFSET2,
-    2 * FACETY + FACETYOFFSET2, 2 * FACETY + FACETYOFFSET2, 2 * FACETY + FACETYOFFSET2,
-
-    0 * FACETY + FACETYOFFSET2, 0 * FACETY + FACETYOFFSET2, 0 * FACETY + FACETYOFFSET2,
-    1 * FACETY + FACETYOFFSET2, 1 * FACETY + FACETYOFFSET2, 1 * FACETY + FACETYOFFSET2,
-    2 * FACETY + FACETYOFFSET2, 2 * FACETY + FACETYOFFSET2, 2 * FACETY + FACETYOFFSET2,
+    0 * FACETY2 + FACETYBLOFFSET,  0 * FACETY2 + FACETYBLOFFSET, 0 * FACETY2 + FACETYBLOFFSET,
+    1 * FACETY2 + FACETYBLOFFSET,  1 * FACETY2 + FACETYBLOFFSET, 1 * FACETY2 + FACETYBLOFFSET,
+    2 * FACETY2 + FACETYBLOFFSET,  2 * FACETY2 + FACETYBLOFFSET, 2 * FACETY2 + FACETYBLOFFSET,
+    0 * FACETY2 + FACETYTOPOFFSET,  0 * FACETY2 + FACETYTOPOFFSET,  0 * FACETY2 + FACETYTOPOFFSET,
+    1 * FACETY2 + FACETYTOPOFFSET,  1 * FACETY2 + FACETYTOPOFFSET,  1 * FACETY2 + FACETYTOPOFFSET,
+    2 * FACETY2 + FACETYTOPOFFSET,  2 * FACETY2 + FACETYTOPOFFSET,  2 * FACETY2 + FACETYTOPOFFSET,
+    0 * FACETY2 + FACETYFLOFFSET,  0 * FACETY2 + FACETYFLOFFSET, 0 * FACETY2 + FACETYFLOFFSET,
+    1 * FACETY2 + FACETYFLOFFSET,  1 * FACETY2 + FACETYFLOFFSET, 1 * FACETY2 + FACETYFLOFFSET,
+    2 * FACETY2 + FACETYFLOFFSET,  2 * FACETY2 + FACETYFLOFFSET, 2 * FACETY2 + FACETYFLOFFSET,
+    0 * FACETY2 + FACETYBOTOFFSET, 0 * FACETY2 + FACETYBOTOFFSET, 0 * FACETY2 + FACETYBOTOFFSET,
+    1 * FACETY2 + FACETYBOTOFFSET, 1 * FACETY2 + FACETYBOTOFFSET, 1 * FACETY2 + FACETYBOTOFFSET,
+    2 * FACETY2 + FACETYBOTOFFSET, 2 * FACETY2 + FACETYBOTOFFSET, 2 * FACETY2 + FACETYBOTOFFSET,
+    0 * FACETY2 + FACETYFROFFSET,  0 * FACETY2 + FACETYFROFFSET, 0 * FACETY2 + FACETYFROFFSET,
+    1 * FACETY2 + FACETYFROFFSET,  1 * FACETY2 + FACETYFROFFSET, 1 * FACETY2 + FACETYFROFFSET,
+    2 * FACETY2 + FACETYFROFFSET,  2 * FACETY2 + FACETYFROFFSET, 2 * FACETY2 + FACETYFROFFSET,
+    0 * FACETY2 + FACETYBROFFSET,  0 * FACETY2 + FACETYBROFFSET, 0 * FACETY2 + FACETYBROFFSET,
+    1 * FACETY2 + FACETYBROFFSET,  1 * FACETY2 + FACETYBROFFSET, 1 * FACETY2 + FACETYBROFFSET,
+    2 * FACETY2 + FACETYBROFFSET,  2 * FACETY2 + FACETYBROFFSET, 2 * FACETY2 + FACETYBROFFSET,
 };
 
 
-int mapColour[] = {
+const int facetEndX[] = {
 
-    1,2,3, 4,5,6, 7,1,2,
-    3,4,5, 6,7,1, 2,3,4,
-    5,6,7, 1,2,3, 4,5,6,
+    // BL
+    0*FACETX  + FACETXOFFSET, 1*FACETX  + FACETXOFFSET, 2*FACETX  + FACETXOFFSET,
+    0*FACETX  + FACETXOFFSET, 1*FACETX  + FACETXOFFSET, 2*FACETX  + FACETXOFFSET,
+    0*FACETX  + FACETXOFFSET, 1*FACETX  + FACETXOFFSET, 2*FACETX  + FACETXOFFSET,
 
-    3,4,5, 6,7,1, 2,3,4,
-    5,6,7, 1,2,3, 4,5,6,
-    1,2,3, 4,5,6, 7,1,2,
+    //TOP
+    0*FACETX  + FACETXOFFSET2, 1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
+    0*FACETX  + FACETXOFFSET2, 1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
+    0*FACETX  + FACETXOFFSET2, 1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
 
-    3,4,5, 6,7,1, 2,3,4,
-    5,6,7, 1,2,3, 4,5,6,
-    1,2,3, 4,5,6, 7,1,2,
+    //FL
+    0*FACETX  + FACETXOFFSET2 ,1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
+    0*FACETX  + FACETXOFFSET2 ,1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
+    0*FACETX  + FACETXOFFSET2 ,1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
 
-    3,4,5, 6,7,1, 2,3,4,
-    5,6,7, 1,2,3, 4,5,6,
-    1,2,3, 4,5,6, 7,1,2,
+    //BOT
+    0*FACETX  + FACETXOFFSET2, 1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
+    0*FACETX  + FACETXOFFSET2, 1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
+    0*FACETX  + FACETXOFFSET2, 1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
 
-    3,4,5, 6,7,1, 2,3,4,
-    5,6,7, 1,2,3, 4,5,6,
-    1,2,3, 4,5,6, 7,1,2,
+    //FR
+    0*FACETX  + FACETXOFFSET3, 1*FACETX  + FACETXOFFSET3, 2*FACETX  + FACETXOFFSET3,
+    0*FACETX  + FACETXOFFSET3, 1*FACETX  + FACETXOFFSET3, 2*FACETX  + FACETXOFFSET3,
+    0*FACETX  + FACETXOFFSET3, 1*FACETX  + FACETXOFFSET3, 2*FACETX  + FACETXOFFSET3,
 
-    3,4,5, 6,7,1, 2,3,4,
-    5,6,7, 1,2,3, 4,5,6,
-    1,2,3, 4,5,6, 7,1,2,
+    // BR
+    0*FACETX  + FACETXOFFSET4, 1*FACETX  + FACETXOFFSET4, 2*FACETX  + FACETXOFFSET4,
+    0*FACETX  + FACETXOFFSET4, 1*FACETX  + FACETXOFFSET4, 2*FACETX  + FACETXOFFSET4,
+    0*FACETX  + FACETXOFFSET4, 1*FACETX  + FACETXOFFSET4, 2*FACETX  + FACETXOFFSET4,
 
+    -1,
+};
+
+const int facetEndY[] = {
+
+    0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2,
+    1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2,
+    2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2,
+
+    0 * FACETY  + FACETYOFFSET, 0 * FACETY  + FACETYOFFSET, 0 * FACETY  + FACETYOFFSET,
+    1 * FACETY  + FACETYOFFSET, 1 * FACETY  + FACETYOFFSET, 1 * FACETY  + FACETYOFFSET,
+    2 * FACETY  + FACETYOFFSET, 2 * FACETY  + FACETYOFFSET, 2 * FACETY  + FACETYOFFSET,
+
+    0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2,
+    1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2,
+    2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2,
+
+    0 * FACETY  + FACETYOFFSET3, 0 * FACETY  + FACETYOFFSET3, 0 * FACETY  + FACETYOFFSET3,
+    1 * FACETY  + FACETYOFFSET3, 1 * FACETY  + FACETYOFFSET3, 1 * FACETY  + FACETYOFFSET3,
+    2 * FACETY  + FACETYOFFSET3, 2 * FACETY  + FACETYOFFSET3, 2 * FACETY  + FACETYOFFSET3,
+
+    0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2,
+    1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2,
+    2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2,
+
+    0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2,
+    1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2,
+    2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2,
 };
 
 
@@ -2517,7 +2385,7 @@ const unsigned char facetColour7[] = {
 };
 
 
-const unsigned char *shapeSetFacet[] = {
+const unsigned char *shapeSetFacet[8] = {
     facetColour0,
     facetColour1,
     facetColour2,
@@ -2528,19 +2396,6 @@ const unsigned char *shapeSetFacet[] = {
     facetColour7,
 };
 
-void drawOverviewSoftwareSprites() {
-
-
-    drawBitmap(shapeSetFacet[mapColour[facetIndex]], //f->colourstickerColour[f->face][fLayer * 3 + f->square]],
-        ((facetX[facetIndex] << 14) & 0xFFFFC000) + 0x00004000,
-        ((100 + facetY[facetIndex]) << 16)   * 3,
-        true);
-
-    if (facetX[++facetIndex] < 0) {
-        facetIndex = 0;
-        finished = true;
-    }
-}
 
 
 int rr = 0;
@@ -2603,32 +2458,6 @@ void drawSoftwareSprites() {
                 }
 
             }
-
-    // if (!rotateSpeed[2]) {
-
-    //     rotateTop[2]++;
-    //     if (rotateTop[2] > 15)
-    //         rotateTop[2] = 0;
-
-    //     rotateSpeed[2] = 20;
-    // }
-
-    // rotateSpeed[2]--;
-
-
-        // if (changedLayer) {
-        //     drawBitmap(rollArrowRight,
-        //         ((0<< 14) & 0xFFFFC000) + 0x0078000,
-        //         (((135 - (controlledLayer * 13) << 16) + (20)) & 0xFFFF0000)  * 3,
-        //         true);
-        // }
-
-
-            // drawBitmap(highlighter,
-            //     ((0 << 14) & 0xFFFFC000) + 0x0000C000,
-            //     (((130 - (fLayer * 13) << 16) + (20)) & 0xFFFF0000)  * 3,
-            //     true);
-
         }
 
 
@@ -2637,7 +2466,7 @@ void drawSoftwareSprites() {
     }
 
 
-    const unsigned char **shape;
+    const unsigned char **shape = shapeSetTop;
     switch (f->face) {
     case 0: shape = shapeSetTop;
         break;
@@ -2684,7 +2513,7 @@ void drawSoftwareSprites() {
         //      theColour = 0;
 
     if (!f->topOnly || (fLayer == 2 && f->topOnly))
-        drawBitmap(shape[theColour], //f->colourstickerColour[f->face][fLayer * 3 + f->square]],
+        drawBitmap(shape[theColour],
             ((f->x << 14) & 0xFFFFC000) + 0x00014000,
             ((((118+2 - (fLayer * 13)) << 16) + (f->y)))  * 3,
             true);
@@ -2694,205 +2523,44 @@ void drawSoftwareSprites() {
     #endif
 
 
-    // return;
 
 
-
-    int cube = sortOrder[cubePtr];
-
-
-    // if ((getRandom32() & 0xFF) < 10)
-    //     if (getRandom32() & 1)
-    //         spaceShipShape[cube] = &eroShip[0];
-    //     else
-    //         spaceShipShape[cube] = &eroShip2[0];
-
-    // spaceShipShape[cube] = &topFace[0];
-
-
-
-    #if 0
-
-    // functional normal cube...
-
-    if (hasTopFace[cube]) {
-
-        const unsigned char *facetTopColour[] = {
-            &topFacets000[0],
-            &topFacets001[0],
-            &topFacets010[0],
-            &topFacets011[0],
-            &topFacets100[0],
-            &topFacets101[0],
-            &topFacets110[0],
-            &topFacets111[0],
-        };
-
-        if ((getRandom32() & 0xff) < 28) {
-            int fcol = getRandom32() & 7;
-            if (fcol > 0 && fcol < 7 && fcol != spaceshipRightShape[cube] && fcol != spaceshipLeftShape[cube])
-                spaceshipTopShape[cube] = fcol;
-        }
-
-        drawBitmap(facetTopColour[spaceshipTopShape[cube]],
-            (spaceshipX[cube] & 0xFFFFC000) + 0x00024000,
-            (((103 << 16) + spaceshipY[cube]) & 0xFFFF0000)  * 3,
-            true);
-    }
-
-    // drawBitmap(&innerFacets[0],
-    //     (spaceshipX[cube] & 0xFFFFC000) + 0x00024000,
-    //     (((104 << 16) + spaceshipY[cube]) & 0xFFFF0000)  * 3,
-    //     true);
-
-    if (hasRightFace[cube]) {
-
-        const unsigned char *facetRightColour[] = {
-            &rightFacets000[0],
-            &rightFacets001[0],
-            &rightFacets010[0],
-            &rightFacets011[0],
-            &rightFacets100[0],
-            &rightFacets101[0],
-            &rightFacets110[0],
-            &rightFacets111[0],
-        };
-
-        if ((getRandom32() & 0xff) < 28) {
-            int fcol = getRandom32() & 7;
-            if (fcol > 0 && fcol < 7 && fcol != spaceshipLeftShape[cube] && fcol != spaceshipTopShape[cube])
-                spaceshipRightShape[cube] = fcol;
-        }
-
-        drawBitmap(facetRightColour[spaceshipRightShape[cube]],
-            (spaceshipX[cube] & 0xFFFFC000) + 0x00024000,
-            (((104 << 16) + spaceshipY[cube]) & 0xFFFF0000)  * 3,
-            true);
-    }
-
-    if (hasLeftFace[cube]) {
-
-        const unsigned char *facetLeftColour[] = {
-            &leftFacets000[0],
-            &leftFacets001[0],
-            &leftFacets010[0],
-            &leftFacets011[0],
-            &leftFacets100[0],
-            &leftFacets101[0],
-            &leftFacets110[0],
-            &leftFacets111[0],
-        };
-
-        if ((getRandom32() & 0xff) < 28) {
-            int fcol = getRandom32() & 7;
-            if (fcol > 0 && fcol < 7 && fcol != spaceshipRightShape[cube] && fcol != spaceshipTopShape[cube])
-                spaceshipLeftShape[cube] = fcol;
-        }
-
-        drawBitmap(facetLeftColour[spaceshipLeftShape[cube]],
-            (spaceshipX[cube] & 0xFFFFC000) + 0x00024000,
-            (((104 << 16) + spaceshipY[cube]) & 0xFFFF0000)  * 3,
-            true);
-    }
-
-
-
-    #endif
-
-    #if 0
-
-    if (hasTopFace[cube]) {
-
-        const unsigned char *facetTopColour[] = {
-            &topFacet45_000[0],
-            &topFacet45_001[0],
-            &topFacet45_010[0],
-            &topFacet45_011[0],
-            &topFacet45_100[0],
-            &topFacet45_101[0],
-            &topFacet45_110[0],
-            &topFacet45_111[0],
-        };
-
-        const int ssx[] = {
-
-            0,0,0,0,
-            0,0,0,0,
-            0,0,
-
-            2+6, 9+6, 16+6,
-            2+6, 9+6, 16+6,
-            2+6, 9+6, 16+6,
-
-        };
-
-        const int ssy[] = {
-
-            0,0,0,0,
-            0,0,0,0,
-            0,0,
-
-            0x190000+0x0e0000, 0x190000+0x0e0000, 0x190000+0x0e0000,
-            0x220000+0x0e0000, 0x220000+0x0e0000, 0x220000+0x0e0000,
-            0x2b0000+0x0e0000, 0x2b0000+0x0e0000, 0x2b0000+0x0e0000,
-        
-        };
-
-
-
-
-
-        if ((getRandom32() & 0xff) < 28) {
-            int fcol = getRandom32() & 7;
-            if (fcol > 0 && fcol < 7 && fcol != spaceshipRightShape[cube] && fcol != spaceshipLeftShape[cube])
-                spaceshipTopShape[cube] = fcol;
-        }
-
-        drawBitmap(facetTopColour[spaceshipTopShape[cube]],
-            ((ssx[cube] << 14) & 0xFFFFC000) + 0x00024000,
-            (((90 << 16) + ssy[cube]) & 0xFFFF0000)  * 3,
-            true);
-    }
-
-    #endif
-
-    if (++cubePtr >= SPACESHIPS) {
-        cubePtr = 0;
-    }
-
-
-
-
+  
 }
 
 
 
+void GameVerticalBlank() {
+ 
 
-void GameScheduleDrawSprites() {
+    if (finished) {
 
+        if (swap) {
+            drawMode ^= 1;
+            fLayer = 0;
+            fno = 0;
+            facetIndex = 0;
+            swap = false;
+        }
+
+
+        pfBuffer ^= 1;
+        Scroll();
+        drawScreen();
+        finished = false;
+    }
+
+    HandleJoystick();
 
     setDisplayPalette();
-//    drawScore();
 
+    frameCounter++;
+    frameToggler++;
 
-  //  for (int sp = 0; sp < 1; sp++) {
-
-        // if (finished) {
-        //     pfBuffer ^= 1;
-        //     drawScreen();
-        //     finished = false;
-        //     break;
-        // }
-
-        // drawSoftwareSprites();
-    //}
-
- //   doPlayer();
-
-
-//    lastDisplayMode = displayMode;
+    InitGameDatastreams();
 
 }
+
 
 
 
@@ -2940,345 +2608,6 @@ void InitGameBuffers() {
 
 
 
-
-
-void moveRockford(unsigned char *this, unsigned char blanker) {
-
-#if 0
-
-    static const unsigned char direct[] = {
-        DIR_UP,
-        DIR_DOWN,
-        DIR_LEFT,
-        DIR_RIGHT,
-    };
-
-    static const int offsetD[] = {
-        -40,
-        +40,
-        -1,
-        +1,
-    };
-
-    static const int faceDirection[] = {
-        0,
-        0,
-        LEFT,
-        RIGHT,
-    };
-
-    static const int newAnim[] = {
-        ID_WALK_VERT,
-        ID_WALK_VERT_DOWN,
-        ID_WALK,
-        ID_WALK,
-    };
-
-    static const char newSnatch[] = {
-        ID_SNATCH_UP,
-        ID_SNATCH_DOWN,
-        ID_SNATCH,
-        ID_SNATCH,
-    };
-
-
-    if (exitMode)
-        return;
-
-
-#define DIRT_DIRT 0x80
-#define DIRT_DOGE 0x40
-
-    unsigned char dirtFlag = 0;
-
-// exitTrigger = true; //tmp
-
-    for (int dir = 0; dir < 4; dir++ ) {
-
-        int offset = offsetD[dir];
-
-        if ((bufferedSWCHA & (direct[dir] << 4)) == 0) {       // direction button?
-
-//                    setFlash(0x46,1);
-
-            unsigned char destType = CharToType[*(this+offset) & (0x7F|0x80)];  // dubious masking of FLAG
-
-            bufferedSWCHA = 0xFF; //|= (direct[dir] << 4);
-
-            if (faceDirection[dir]) {
-                if (rockfordDirection != faceDirection[dir]) {
-                    pushCounter = 0;
-                    rockfordDirection = faceDirection[dir];
-                }
-            }
-
-            if (Attribute[destType] & (ATT_BLANK | ATT_PERMEABLE | ATT_GRAB | ATT_EXIT)) {
-            
-                pushCounter = 0;
-
-                if (destType == TYPE_DIRT
-                    ||destType == TYPE_DIRT2
-                    ||destType == TYPE_DIRT3) {
-                        AddAudio(SFX_DIRT);
-                        dirtFlag = DIRT_DIRT;
-                        //AnimIdx[TYPE_DUST] = 0;
-                }
-
-                if (destType == TYPE_BLANK)
-                    AddAudio(SFX_SPACE);
-
-                if (destType == TYPE_OUTBOX) {
-                    exitMode = true;
-                    setAnimation(ID_SHAKE); //? fail
-                }
-
-                if (Attribute[destType] & ATT_GRAB) {
-
-                    addScore(doge? diamondValue: extraDogeCoinValue);
-
-                    if (doge) {
-                        if (!--doge) {
-                            setFlash(0x0F, 4);     //open door
-                            exitTrigger = true;
-                            AddAudio(SFX_EXIT);
-                        }
-                    }
-
-
-                    dogeCollected++;
-                    diamondGrabTime = 10;
-                    dirtFlag = DIRT_DOGE;
-
-                    AddAudio(SFX_DOGE);
-                }
-
-                if (JOY0_FIRE) {
-
-                    if (Attribute[destType] & (ATT_GRAB | ATT_PERMEABLE)
-                        && !(Attribute[destType] & ATT_BLANK)) {  // snatch?
-                        *(this+offset) = (
-                               (destType == TYPE_DIRT)
-                            || (destType == TYPE_DIRT2)
-                            || (destType == TYPE_DIRT3)
-                            ? CH_DUST : CH_DOGE_GRAB) ; // | FLAG_THISFRAME;
-                        diamondGrabTime = 1;
-                        setAnimation(newSnatch[dir]);
-                    }
-                    else
-                    {
-                        setAnimation(ID_JUMP);
-                    }
-                    
-                }
-
-                else {
-
-                    rockfordX += xInc[direct[dir]];
-                    rockfordY += yInc[direct[dir]];
-
-                    frameAdjustX = frameAdjustY = 0;
-
-                    *(this+offsetD[dir]) = CH_ROCKFORD ; // | FLAG_THISFRAME;
-                    *this = (dirtFlag == DIRT_DIRT ? CH_DUST : blanker) ; // | FLAG_THISFRAME;
-
-                    if (dirtFlag & DIRT_DIRT) {
-                        AnimIdx[TYPE_ROCKFORD].index = -2;
-                        AnimIdx[TYPE_ROCKFORD].count = 0;
-                    }
-
-                    if (dirtFlag & DIRT_DOGE) {
-                        AnimIdx[TYPE_ROCKFORD].index = 6;
-                        AnimIdx[TYPE_ROCKFORD].count = 0;
-                    }
-
-                    int anim = newAnim[dir];
-                    //if (anim == ID_WALK && dirtFlag)
-                    //    anim = ID_PUSHWALK;
-
-                    setAnimation(anim);
-                }
-
-
-            } else {
-
-                if (faceDirection[dir] && (Attribute[destType] & ATT_PUSH)) {
-
-                    pushCounter++;
-
-                    if (pushCounter > 1)
-                        setAnimation(ID_PUSH);
-                    else
-                        setAnimation(ID_JUMP);
-
-
-                    if (pushCounter > 20 || (pushCounter > 5 && (getRandom32() & 7) < 2)) { 
-                        if (Attribute[CharToType[(*(this+ 2 * offset))&(0x7F|0x80) ]] & ATT_BLANK) {
-
-                            halt = DELAY_AFTER_PUSH;
-                            pushCounter = 0;
-
-                            *(this + 2 * offset) = CH_BOULDER ; // | FLAG_THISFRAME;
-                            if (JOY0_FIRE)
-                                *(this+offset) = blanker ; // | FLAG_THISFRAME;
-                            else {
-                                rockfordX += offset;
-                                *(this+offset) = CH_ROCKFORD ; // | FLAG_THISFRAME;
-                                *this = blanker ; // | FLAG_THISFRAME;
-                            }
-
-                            AddAudio(SFX_PUSH);
-
-                        }
-                    }
-                }
-
-                else
-                    setAnimation(ID_JUMP);
-            }
-
-            return;
-        }
-    }
-
-    // no direction was detected...
-
-    pushCounter = 0;
-
-    if (*(this-40) == (CH_DOGE_FALLING ; // | FLAG_THISFRAME)
-        || *(this-40) == (CH_BOULDER_FALLING ; // | FLAG_THISFRAME))
-            setAnimation(ID_DIE);
-
-    else {
-
-        playerAnimationLoop = 0;                   // bypass any looping!
-
-        static const unsigned char animID[] = {
-            ID_BLINK,       200, 
-            ID_WIPE_HAIR,   20,
-            ID_IMPATIENT,   12, 
-            ID_TURN,        17, 
-            ID_LOOK,        30, 
-            ID_SHADES,      25, 
-            ID_ARMSCROSSED, 13,
-        };
-
-        // choose an idle animation
-
-        unsigned int rnd = getRandom32();
-        if (playerAnimationID == ID_STAND && (rnd & 0xFF) < 0x60) {
-            rnd = getRandom32();
-            int idle = ((rnd & 0xFF * 7) >> 8) << 1; 
-            rnd = getRandom32();
-            if ((rnd & 0x3FF) < animID[idle + 1])
-                setAnimation(animID[idle]);
-                
-        }
-    }
-#endif
-
-}
-
-
-void fixRock(unsigned char *rock) {
-
-
-    unsigned char linkage = CH_ROCK0;
-
-    if (CharToType[*(rock+1)] == TYPE_ROCK)
-        linkage += 1;
-    if (CharToType[*(rock+40)] == TYPE_ROCK)
-        linkage += 2;
-    if (CharToType[*(rock-1)] == TYPE_ROCK)
-        linkage += 4;
-    if (CharToType[*(rock-40)] == TYPE_ROCK)
-        linkage += 8;
-
-    *rock = linkage;
-}
-
-
-void doRoll(unsigned char *this, unsigned int creature) {
-
-
-    if (boardRow > ROW_MAXIMUM - 3)
-        return;
-
-    unsigned char _DOWN = CharToType[*(this + 40)&(0x7F|0x80)];
-    unsigned char *LEFTWARDS = this - 1;
-    unsigned char *RIGHTWARDS = this + 1;
-
-    unsigned char c = creature == CH_DOGE ? CH_DOGE : CH_ROCK0;
-
-
-#if ENABLE_SHAKE
-    if (Attribute[_DOWN] & ATT_ROLL
-        || (shakeTime && (getRandom32() & 0xFF) < 10)) {
-#else
-    if (Attribute[_DOWN] & ATT_ROLL) {
-#endif
-
-        if (boardCol > 0 && (Attribute[CharToType[*LEFTWARDS]] & ATT_ROCKFORDYBLANK)) {
-
-            unsigned char lowerLeft = *(LEFTWARDS + 40);
-            unsigned char typeLL = CharToType[lowerLeft];
-            unsigned char typeL = CharToType[*LEFTWARDS];
-
-            if (CharToType[creature] == TYPE_ROCK
-                && ((typeLL == TYPE_ROCKFORD && (Attribute[typeL] & ATT_BLANK))
-                || (typeL == TYPE_ROCKFORD && (Attribute[typeLL] & ATT_BLANK))))
-                    *this = CH_BOULDER_SHAKE;
-
-            else if (Attribute[typeL] & Attribute[typeLL] & ATT_BLANK) {
-//                KillAudio(SFX_SHAKE);
-                AddAudio(SFX_PUSH);    
-                *LEFTWARDS = CH_ROCK0; //BOULDER_FALLING; // | FLAG_THISFRAME;
-                *this = CH_BLANK ; // | FLAG_THISFRAME;
-                thisFrame[1][boardCol-1] = true;
-                return;
-            }
-        }
-        
-        if (boardCol < 39
-            && (Attribute[CharToType[*RIGHTWARDS]] & ATT_ROCKFORDYBLANK)) {
-
-            unsigned char lowerRight = *(RIGHTWARDS + 40);
-            unsigned char typeLR = CharToType[lowerRight];
-            unsigned char typeR = CharToType[*RIGHTWARDS];
-
-            if (CharToType[creature] == TYPE_ROCK &&
-                ((typeLR == TYPE_ROCKFORD && (Attribute[typeR] & ATT_BLANK))
-                || (typeR == TYPE_ROCKFORD && (Attribute[typeLR] & ATT_BLANK)))
-                )
-                    *this = CH_BOULDER_SHAKE;
-
-            else if (Attribute[typeR] & Attribute[typeLR]  & ATT_BLANK) {
-
-//                KillAudio(SFX_SHAKE);
-                AddAudio(SFX_PUSH);    
-
-                *RIGHTWARDS = CH_ROCK0; //CH_BOULDER_FALLING; // | FLAG_THISFRAME;
-                *this = CH_BLANK ; // | FLAG_THISFRAME;
-                thisFrame[0][boardCol+1] = true;
-
-                return;
-            }
-        }
-
-        if (creature == CH_BOULDER_SHAKE)
-            *this = CH_ROCK0;
-
-    }
-
-    //else if (creature == CH_BOULDER_SHAKE)
-    //    *this = CH_BOULDER;
-
-}
-
-
-const int dir[] = { -1, 
-1, -40, 40, -41, 41, -39, 39 };
-
-
 void GameScheduleProcessBoardRow() {
 
     if (!finished)
@@ -3286,275 +2615,6 @@ void GameScheduleProcessBoardRow() {
 
 }
 
-
-
-
-const char AnimPreOut[] = {
-    CH_DOORCLOSED,255,
-};
-
-const char AnimFlashOut[] = {
-
-    CH_DOOROPEN_0,20,
-    CH_DOOROPEN_1,20,
-//    CH_BLANK,254,
-    255
-};
-
-
-const char AnimBoulderShake[] = {
-    CH_BOULDER_SHAKE,3,
-    CH_ROCK0,3,
-    255
-};
-
-
-const char AnimDogeCoin[] = {
-    
-    CH_DOGE,8,
-    CH_DOGE_PULSE_1,6,
-    CH_DOGE_PULSE_2,4,
-    CH_DOGE_PULSE_3,3,
-    CH_DOGE_PULSE_4,3,
-    CH_DOGE_PULSE_5,4,
-    CH_DOGE,8,
-    CH_DOGE_PULSE_5,4,
-    CH_DOGE_PULSE_4,3,
-    CH_DOGE_PULSE_3,3,
-    CH_DOGE_PULSE_2,4,
-    CH_DOGE_PULSE_1,6,
-    CH_DOGE,8,
-    255,
-};
-
-
-const char AnimEgg[] = {
-    CH_EGG, 30,
-    CH_EGG2, 20,
-    255,
-};
-
-
-const char AnimZzapUP[] = {
-    CH_ZZAP, 14,
-    CH_ZZAP2, 14,
-    CH_ZZAP1, 14,
-    255,
-};
-
-const char AnimZzapDOWN[] = {
-    CH_ZZAP1, 8,
-    CH_ZZAP2, 8,
-    CH_ZZAP, 8,
-    255,
-};
-
-const char AnimDrill[] = {
-    CH_DRILL2, 8,
-    CH_DRILL1, 8,
-    CH_DRILL, 8,
-    255,
-};
-
-
-
-const char AnimRockford[] = {
-
-    CH_DUST, 8,
-    CH_DUST2, 8,
-    CH_DUST3, 8,
-    CH_ROCKFORD,255,
-
-    CH_DOGE, 3,
-    CH_DOGE_GRAB,5,
-    CH_ROCKFORD,255,
-
-};
-
-const char AnimDrip[] = {
-    CH_DRIP, 3,
-    CH_BLANK_ALTERNATE_3, 3,
-    CH_DRIP, 3,
-    CH_BLANK_ALTERNATE_3, 3,
-    CH_DRIP, 22,
-
-    CH_DRIP1, 6,
-    CH_DRIP2, 5,
-    CH_DRIP3, 3,
-    CH_DRIP3, 1,
-
-    CH_DRIP1, 4,
-    CH_DRIP2, 4,
-    CH_DRIP3, 3,
-    CH_DRIP3, 255
-};
-
-const char AnimDripSplash[] = {
-    CH_DRIPX, 4,
-    CH_BLANK_ALTERNATE_3, 2,
-    CH_DRIPX, 1,
-    CH_BLANK_ALTERNATE_3, 255,
-};
-
-
-const char AnimBlank[] = {
-    CH_BLANK, 255,
-};
-
-const char AnimBelt[] = {
-
-    CH_BELT, 5,
-    CH_BELT1, 5,
-    CH_BELT2, 5,
-    CH_BELT3, 5,
-    255,
-};
-
-const char AnimBelt2[] = {
-
-    CH_BELT3, 9,
-    CH_BELT2, 9,
-    CH_BELT1, 9,
-    CH_BELT, 9,
-    255,
-};
-
-
-
-const char (*Animate[TYPE_MAX])[] = {
-
-    // indexed by object TYPE
-    // 0 if the object does not animate
-
-    0,                          // 00 BLANK_PARALLAX
-    &AnimBlank,                 // 01 BLANK
-    0,                          // 02 DIRT            
-    0,                          // 03 BRICKWALL       
-    &AnimPreOut,                // 04 OUTBOX_PRE      
-    &AnimFlashOut,              // 05 OUTBOX          
-    0,                          // 06 BOULDER_FALLING 
-    0,                          // 07 STEELWALL       
-    0,                          // 08 BOULDER         
-    &AnimDogeCoin,              // 09 DOGE            
-    0,                          // 10 EXPLODE_SPACE_0 
-    0,                          // 11 EXPLODE_SPACE_1 
-    0,                          // 12 EXPLODE_SPACE_2 
-    0,                          // 13 EXPLODE_SPACE_3 
-    0,                          // 14 EXPLODE_SPACE_4 
-    0,                          // 15 EXPLODE_DOGE_0  
-    0,                          // 16 EXPLODE_DOGE_1  
-    0,                          // 17 EXPLODE_DOGE_2  
-    0,                          // 18 EXPLODE_DOGE_3  
-    0,                          // 19 EXPLODE_DOGE_4  
-    0,                          // 20 ROCKFORD_PRE    
-    &AnimRockford,              // 21 ROCKFORD        
-    0,                          // 22 AMOEBA          
-    &AnimDrip,                  // 23 DRIP            
-    &AnimDripSplash,            // 24 DRIP_SPLASH     
-    0,                          // 25 __NOTHING       
-    0,                          // 26 EXPLODE_THIS    
-    0,                          // 27 BLANK_THIS      
-    0,                          // 28 DIRT3           
-    0,                          // 29 DIRT2           
-    0,                          // 30 EXPLODE_BLANK_0 
-    0,                          // 31 EXPLODE_BLANK_1 
-    0,                          // 32 EXPLODE_BLANK_2 
-    0,                          // 33 EXPLODE_BLANK_3 
-    0,                          // 34 EXPLODE_BLANK_4 
-    0,                          // 35 DOGE_GRAB       
-    0,                          // 36 DIRT_GRAB       
-    0,                          // 37 DUST            
-    0,                          // 38 DUST2           
-    0,                          // 39 DUST3           
-    &AnimBoulderShake,          // 40 BOULDER_SHAKE   
-    0,                          // 41 DUST_LEFT       
-    0,                          // 42 DUST2_LEFT      
-    0,                          // 43 DUST3_LEFT      
-    0,                          // 44 DUST_RIGHT      
-    0,                          // 45 DUST2_RIGHT     
-    0,                          // 46 DUST3_RIGHT     
-    0,                          // 47 LAVA            
-    0,                          // 48 WATER           
-    &AnimEgg,                   // 49 EGG             
-    &AnimZzapUP,                // 50 ZZAP            
-    &AnimZzapDOWN,              // 51 ZZAP1           
-    0,                          // 52 ROCK            
-    &AnimDrill,                 // 53 DRILL
-    0,                          // 54 DRILLBODY           
-    &AnimBelt,                  // 55 BELT
-    &AnimBelt2,                 // 56 BELT2
-};
-
-
-
-
-void processAnimationCommand() {
-
-    while (playerAnimationCount == 0)
-        switch (*playerAnimation) {
-
-        case FRAME_FLIP:
-            rockfordDirection = -rockfordDirection;
-            playerAnimation++;
-            break;
-
-        case FRAME_LOOP:
-            if (playerAnimationLoop)
-                playerAnimation = playerAnimationLoop;
-            else {
-                playerAnimation++;            
-                playerAnimationLoop = 0;
-            }
-            break;
-
-        case FRAME_STOP:
-            playerAnimationID = -1;
-            setAnimation(ID_STAND);
-            break;
-
-        case FRAME_ADJUST: {
-            frameAdjustX = *++playerAnimation;
-            frameAdjustY = *++playerAnimation;
-            frameAdjustSmallX = *++playerAnimation;
-            frameAdjustSmallY = *++playerAnimation;
-            playerAnimation++;
-        }
-            break;
-
-        default:
-            playerAnimationCount = (*(playerAnimation+1)) * DEBUG_SLOWDOWN;
-            break;
-
-        }
-}
-
-
-void updateAnimation() {
-
-    if (playerAnimationCount)
-        playerAnimationCount--;
-    else {
-        playerAnimation += 2;
-        processAnimationCommand();
-        playerAnimationCount--;
-    }
-}
-
-void setAnimation(int animID) {
-
-    if (playerAnimationID != animID) {
-        playerAnimationID = animID;
-        playerAnimation = playerAnimationLoop = animIndex[animID];
-//        if (playerAnimationLoop < 0)
-//            playerAnimationLoop = 0;
-        playerAnimationCount = 0;
-
-        processAnimationCommand();
-
-        //frameAdjustX = 0;
-        //frameAdjustY = 0;
-    }
-}
 
 
 

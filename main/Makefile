@@ -1,2 +1,3 @@
 all:
+	clear
     (cd .. & make)

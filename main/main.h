@@ -4,7 +4,6 @@
     #include <stdbool.h>
 
 
-#define ENABLE_OVERLAY 0
 #define ENABLE_SOUND 1
 #define ENABLE_DRIP 0
 #define ENABLE_PARALLAX 1
@@ -67,7 +66,7 @@ extern bool rockfordDead;
 extern int scrollX;
 extern int scrollY;
 extern int doge;
-extern unsigned int sparkleTimer;
+
 
 enum DisplayMode {
     NORMAL,
@@ -79,23 +78,13 @@ extern enum DisplayMode displayMode;
 
 extern const unsigned char BitRev[];
 
-struct Animation {
-    int index;
-    int count;
-};
 
-extern const char (*Animate[])[];
-extern struct Animation AnimIdx[];
-
-void updateAnimation();
 void ProcessBoard();
 
-extern void setAnimation(int animID);
 
 extern void* DDR;
 
 
-extern void setFlash(int colour, int time);
 extern unsigned char ColourConvert(unsigned char color);
 
 #if ENABLE_SHAKE

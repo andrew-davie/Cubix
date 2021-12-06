@@ -102,7 +102,7 @@ const unsigned char sampleExxtra[] = {
 
 
 const unsigned char samplePush[] = {
-    8, 4, 2, 12, CMD_STOP,
+    8, 4, 1, 12, CMD_STOP,
 };
 
 
@@ -444,44 +444,6 @@ void playAudio() {
                     if (!best->index && best->delay == AudioSamples[best->id].sample[3] - 1)
                         amoebaF = (unsigned char)((getRandom32() & 0xF) | 8);
                     audF = amoebaF;
-                }
-                break;
-
-            case SFX_LAVA: {
-
-                    static unsigned char lavaF;
-                    static unsigned char lavaV;
-
-                    if (!best->index && best->delay == AudioSamples[best->id].sample[3] - 1) {
-                        if ((getRandom32() & 0xFF) < 20) {
-
-                        
-    extern void setFlash(int colour, int time);
-    extern int flashTime;
-
-
-
-                            lavaF = (unsigned char)((getRandom32() & 0x3)+ 12);
-                            lavaV = getRandom32() & 3;
-
-
-                            if (lavaV) {
-                                setFlash(0x20,1);
-                                flashTime += lavaV;
-#if ENABLE_SHAKE
-    extern int shakeTime;
-                                //shakeTime += 15; //(lavaV * 6);
-#endif
-                            }
-
-                        }
-
-                        else
-                            lavaV = 0;
-                    }
-
-                    audV = lavaV;
-                    audF = lavaF;
                 }
                 break;
 
