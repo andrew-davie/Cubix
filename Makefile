@@ -4,7 +4,7 @@
 # (C) Copyright 2017 - Chris Walton, Fred Quimby, Darrell Spice Jr
 #########∫######################################################################
 
-PROJECT=downUnder
+PROJECT=cubiks
 DASM_TO_C=defines_from_dasm_for_c.h
 
 # If desired, the following color values can be changed.   
@@ -46,8 +46,8 @@ VPATH += $(BASE):$(SRC)
 # Default ∫target
 default: armcode
 	#sleep 20
-	#open -a /Applications/Stella.app ./downUnder.bin
-	../Gopher2600/gopher2600_darwin_amd64 ./downUnder.bin &
+	#open -a /Applications/Stella.app ./cubiks.bin
+	../Gopher2600/gopher2600_darwin_amd64 ./cubiks.bin &
 	#@killall gopher2600_darwin_amd64 || true
 
 armcode_defines:
