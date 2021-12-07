@@ -166,7 +166,7 @@ unsigned char is_7800;  // 0 = 2600, non-zero = 7800
 
 //const unsigned char *arena_increments =(unsigned char *)_ARENA_INCREMENTS;
 
-unsigned char mm_tv_type = 1;  // 0 = NTSC, 1 = PAL, 2 = SECAM
+unsigned char mm_tv_type = 0;  // 0 = NTSC, 1 = PAL, 2 = SECAM
 
 enum Direction rockfordDirection = RIGHT;
 
@@ -283,8 +283,8 @@ const unsigned char NTSCtoPAL[16] =
 {
     // SeaGtGruff's conversion values from this post at AtariAge:
     // https://atariage.com/forums/topic/165424-modify-colour-palette/?do=findComment&comment=2043124
-    0x00, 0x20, 0x20, 0x40, 0x60, 0x80, 0xa0, 0xc0,
-    0xd0, 0xb0, 0x90, 0x70, 0x50, 0x30, 0x30, 0x20
+    0x00, 0x20, 0x20, 0x40, 0x40, 0x80, 0xa0, 0xc0,
+    0xb0, 0xb0, 0x90, 0x70, 0x50, 0x30, 0x30, 0x20
 };
 
 // const unsigned char NTSCtoSECAM[16] =
@@ -387,10 +387,10 @@ unsigned int getRandom32();
 
 unsigned char ColourConvert(unsigned char color) {
 
-    // if (mm_tv_type == PAL) {
-    //     return NTSCtoPAL[color>>4] +    // convert chroma value
-    //            (color & 0x0f);          // retain luma value
-    // }
+    if (mm_tv_type == PAL) {
+        return NTSCtoPAL[color>>4] +    // convert chroma value
+               (color & 0x0f);          // retain luma value
+    }
 
     // else if (mm_tv_type == SECAM) {
     //     return color < 2 ? 0 : NTSCtoSECAM[color>>4];
@@ -597,7 +597,7 @@ extern int rinc;
 
 
     for (int bgLine = 0; bgLine < 24; bgLine++)
-        bgPalette[bgLine] = caveList[cave].caveColour[0][3+ bgLine];
+        bgPalette[bgLine] = caveList[cave].caveColour[0][0]; //3+ bgLine];
 
 
     gameSchedule = SCHEDULE_UNPACK_CAVE;
@@ -1087,7 +1087,7 @@ void drawOverviewSoftwareSprites() {
         if (mobileFacetX[f] < mobileFacetEndX[f]) {
 
             int rspeed = mobileFacetEndX[f] - mobileFacetX[f];
-            rspeed >>= 2;
+            rspeed >>= 1;
             rspeed++;
             // if (rspeed > 2)
             //     rspeed = 2;
@@ -1115,7 +1115,7 @@ void drawOverviewSoftwareSprites() {
         if (mobileFacetX[f] > mobileFacetEndX[f]) {
 
             int rspeed = mobileFacetX[f] - mobileFacetEndX[f];
-            rspeed >>= 2;
+            rspeed >>= 1;
             rspeed++;
 //            mobileFacetX[f] += rspeed; //((mobileFacetEndX[f] - mobileFacetX[f]) >> 3) + 1;
             //     rspeed = 2;

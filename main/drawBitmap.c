@@ -283,62 +283,62 @@ const unsigned char right2Facets111[] = {
 
 
 
-const unsigned char highlighter[] = {
+// const unsigned char highlighter[] = {
 
-2,
-36,
-0,36,
+// 2,
+// 36,
+// 0,36,
 
 
-___XX___ ________ 
-___XX___ ________ 
-___XX___ ________ 
+// ___XX___ ________ 
+// ___XX___ ________ 
+// ___XX___ ________ 
 
-____XX__ ________ 
-____XX__ ________ 
-____XX__ ________ 
+// ____XX__ ________ 
+// ____XX__ ________ 
+// ____XX__ ________ 
 
-_____XX_ ________ 
-_____XX_ ________ 
-_____XX_ ________ 
+// _____XX_ ________ 
+// _____XX_ ________ 
+// _____XX_ ________ 
 
-______XX ________ 
-______XX ________ 
-______XX ________ 
+// ______XX ________ 
+// ______XX ________ 
+// ______XX ________ 
 
-_______X X_______ 
-_______X X_______ 
-_______X X_______ 
+// _______X X_______ 
+// _______X X_______ 
+// _______X X_______ 
 
-________ XX______ 
-________ XX______ 
-________ XX______ 
+// ________ XX______ 
+// ________ XX______ 
+// ________ XX______ 
 
-________ _XX_____ 
-________ _XX_____ 
-________ _XX_____ 
+// ________ _XX_____ 
+// ________ _XX_____ 
+// ________ _XX_____ 
 
-________ __XX____ 
-________ __XX____ 
-________ __XX____ 
+// ________ __XX____ 
+// ________ __XX____ 
+// ________ __XX____ 
 
-________ ___XX___ 
-________ ___XX___ 
-________ ___XX___ 
+// ________ ___XX___ 
+// ________ ___XX___ 
+// ________ ___XX___ 
 
-________ ____XX__ 
-________ ____XX__ 
-________ ____XX__ 
+// ________ ____XX__ 
+// ________ ____XX__ 
+// ________ ____XX__ 
 
-________ _____XX_ 
-________ _____XX_ 
-________ _____XX_ 
+// ________ _____XX_ 
+// ________ _____XX_ 
+// ________ _____XX_ 
 
-________ ______XX 
-________ ______XX 
-________ ______XX 
+// ________ ______XX 
+// ________ ______XX 
+// ________ ______XX 
 
-};
+// };
 
 
 /*
@@ -382,9 +382,10 @@ XX______ ________
 
 
 #define RIGHT3FACET(a,b,c) \
-a & ________ \
-b & ________ \
-c & ________ \
+    1,      /* width in BYTES (=8 pix/byte) (MAX =4) */\
+    39,     /* height in SCANLINES (pref multiples of 3 -- TRIPIXs) */\
+    3,3,    /* center point (PIXELS) from 0,0 top left */\
+\
 a & XX______ \
 b & XX______ \
 c & XX______ \
@@ -427,83 +428,34 @@ c & ___XX___ \
 
 
 const unsigned char right3Facets000[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,6,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHT3FACET(0,0,0)
 };
 
 const unsigned char right3Facets001[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,6,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHT3FACET(0xFF,0,0)
 };
 
 const unsigned char right3Facets010[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,6,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHT3FACET(0,0xFF,0)
 };
 
 const unsigned char right3Facets011[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,6,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHT3FACET(0xFF,0xFF,0)
 };
 
 const unsigned char right3Facets100[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,6,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHT3FACET(0,0,0xFF)
 };
 
-
 const unsigned char right3Facets101[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,6,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHT3FACET(0xFF,0,0xFF)
 };
 
 const unsigned char right3Facets110[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,6,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHT3FACET(0,0xFF,0xFF)
 };
 
 const unsigned char right3Facets111[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,6,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHT3FACET(0xFF,0xFF,0xFF)
 };
 
@@ -637,9 +589,6 @@ const unsigned char leftFacets111[] = {
 };
 
 #define LEFT2FACET(a,b,c) \
-a & ________ \
-b & ________ \
-c & ________ \
 a & _X______ \
 b & _X______ \
 c & _X______ \
@@ -679,16 +628,13 @@ c & __X_____ \
 a & __X_____ \
 b & __X_____ \
 c & __X_____ \
-a & ________ \
-b & ________ \
-c & ________ \
 
 
 const unsigned char left2Facets000[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,12,               // center point (PIXELS) from 0,0 top left
+    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    4,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT2FACET(0,0,0)
@@ -697,8 +643,8 @@ const unsigned char left2Facets000[] = {
 const unsigned char left2Facets001[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,12,               // center point (PIXELS) from 0,0 top left
+    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    4,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT2FACET(0xFF,0,0)
@@ -707,8 +653,8 @@ const unsigned char left2Facets001[] = {
 const unsigned char left2Facets010[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,12,               // center point (PIXELS) from 0,0 top left
+    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    4,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT2FACET(0,0xFF,0)
@@ -717,8 +663,8 @@ const unsigned char left2Facets010[] = {
 const unsigned char left2Facets011[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,12,               // center point (PIXELS) from 0,0 top left
+    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    4,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT2FACET(0xFF,0xFF,0)
@@ -727,8 +673,8 @@ const unsigned char left2Facets011[] = {
 const unsigned char left2Facets100[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,12,               // center point (PIXELS) from 0,0 top left
+    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    4,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT2FACET(0,0,0xFF)
@@ -738,8 +684,8 @@ const unsigned char left2Facets100[] = {
 const unsigned char left2Facets101[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,12,               // center point (PIXELS) from 0,0 top left
+    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    4,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT2FACET(0xFF,0,0xFF)
@@ -748,8 +694,8 @@ const unsigned char left2Facets101[] = {
 const unsigned char left2Facets110[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,12,               // center point (PIXELS) from 0,0 top left
+    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    4,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT2FACET(0,0xFF,0xFF)
@@ -758,8 +704,8 @@ const unsigned char left2Facets110[] = {
 const unsigned char left2Facets111[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,12,               // center point (PIXELS) from 0,0 top left
+    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    4,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT2FACET(0xFF,0xFF,0xFF)
@@ -767,12 +713,6 @@ const unsigned char left2Facets111[] = {
 
 
 #define LEFT3FACET(a,b,c) \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
 a & ______X_ \
 b & ______X_ \
 c & ______X_ \
@@ -815,16 +755,13 @@ c & _____X__ \
 a & _____X__ \
 b & _____X__ \
 c & _____X__ \
-a & ________ \
-b & ________ \
-c & ________ \
 
 
 const unsigned char left3Facets000[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,15,               // center point (PIXELS) from 0,0 top left
+    36,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT3FACET(0,0,0)
@@ -833,8 +770,8 @@ const unsigned char left3Facets000[] = {
 const unsigned char left3Facets001[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,15,               // center point (PIXELS) from 0,0 top left
+    36,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT3FACET(0xFF,0,0)
@@ -843,8 +780,8 @@ const unsigned char left3Facets001[] = {
 const unsigned char left3Facets010[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,15,               // center point (PIXELS) from 0,0 top left
+    36,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT3FACET(0,0xFF,0)
@@ -853,8 +790,8 @@ const unsigned char left3Facets010[] = {
 const unsigned char left3Facets011[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,15,               // center point (PIXELS) from 0,0 top left
+    36,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT3FACET(0xFF,0xFF,0)
@@ -863,8 +800,8 @@ const unsigned char left3Facets011[] = {
 const unsigned char left3Facets100[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,15,               // center point (PIXELS) from 0,0 top left
+    36,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT3FACET(0,0,0xFF)
@@ -874,8 +811,8 @@ const unsigned char left3Facets100[] = {
 const unsigned char left3Facets101[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,15,               // center point (PIXELS) from 0,0 top left
+    36,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT3FACET(0xFF,0,0xFF)
@@ -884,8 +821,8 @@ const unsigned char left3Facets101[] = {
 const unsigned char left3Facets110[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,15,               // center point (PIXELS) from 0,0 top left
+    36,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT3FACET(0,0xFF,0xFF)
@@ -894,8 +831,8 @@ const unsigned char left3Facets110[] = {
 const unsigned char left3Facets111[] = {
 
     1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    45,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,15,               // center point (PIXELS) from 0,0 top left
+    36,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
+    3,9,               // center point (PIXELS) from 0,0 top left
 
 
     LEFT3FACET(0xFF,0xFF,0xFF)
@@ -920,88 +857,46 @@ c & XXXXXX__ \
 a & XXXXXX__ \
 b & XXXXXX__ \
 c & XXXXXX__ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
-a & ________ \
-b & ________ \
-c & ________ \
 
 
 const unsigned char topFacet45_000[] = {
-    1, 60, 2,18,
+    1, 18, 2,18,
     TOPFACET45(0,0,0)
 };
 
 const unsigned char topFacet45_001[] = {
-    1, 60, 2,18,
+    1, 18, 2,18,
     TOPFACET45(0xFF,0,0)
 };
 
 const unsigned char topFacet45_010[] = {
-    1, 60, 2,18,
+    1, 18, 2,18,
     TOPFACET45(0,0xFF,0)
 };
 
 const unsigned char topFacet45_011[] = {
-    1, 60, 2,18,
+    1, 18, 2,18,
     TOPFACET45(0xFF,0xFF,0)
 };
 
 const unsigned char topFacet45_100[] = {
-    1, 60, 2,18,
+    1, 18, 2,18,
     TOPFACET45(0,0,0xFF)
 };
 
 
 const unsigned char topFacet45_101[] = {
-    1, 60, 2,18,
+    1, 18, 2,18,
     TOPFACET45(0xFF,0,0xFF)
 };
 
 const unsigned char topFacet45_110[] = {
-    1, 60, 2,18,
+    1, 18, 2,18,
     TOPFACET45(0,0xFF,0xFF)
 };
 
 const unsigned char topFacet45_111[] = {
-    1, 60, 2,18,
+    1, 18, 2,18,
     TOPFACET45(0xFF,0xFF,0xFF)
 };
 
@@ -1564,133 +1459,6 @@ const unsigned char cube1Boundary[] = {
 
 
 
-const unsigned char shipFuelTank[] = {
-
-    1, 24,
-    2, 12,
-
-_XXX____
-_XXX____
-________
-_XXX____
-_XXX____
-________
-___XX___
-XXXXX___
-________
-___XX___
-XXXXX___
-________
-____X___
-XXXXX___
-________
-________
-XXXXX___
-________
-________
-_XXX____
-________
-________
-_XXX____
-________
-
-
-// 1,9,
-// -3,-10,
-
-// ________
-// ________
-// ________
-// ________
-// XX______
-// ________
-// ________
-// XX______
-// ________
-
-
-};
-
-
-const unsigned char rocketShipFlame[] = {
-
-    // 1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    // 21,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    // 3,0,               // center point (PIXELS) from 0,0 top left
-
-    // ___X____ //__XXX___ 
-    // ________ //__XXX___ 
-    // __XXX___ //__XXX___ 
-    // ___X____ //__XXX___ 
-    // ________ //__XXX___ 
-    // __XXX___ //__XXX___ 
-    // ___X____ //__XXX___ 
-    // ________ //__XXX___ 
-    // __XXX___ //__XXX___ 
-    // ___X____ //__XXX___ 
-    // ________ //__XXX___ 
-    // __XXX___ //__XXX___ 
-    // ________ //___X____ 
-    // ________ //___X____ 
-    // ___X____ //___X____ 
-    // ________ //___X____ 
-    // ________ //___X____ 
-    // ___X____ //___X____ 
-    // ________ //___X____ 
-    // ________ //___X____ 
-    // ___X____ //___X____ 
-
-
-    1,6,
-    0,5,
-
-    X_______
-    X_______
-    X_______
-    X_______
-    X_______
-    X_______
-
-};
-
-
-
-const unsigned char flagUSA[] = {
-
-    // 1,12,0,0,
-
-    // _XX_____
-    // X_______
-    // X_______
-    // _XX_____
-    // X_______
-    // ________
-    // XXX_____
-    // ________
-    // ________
-    // XXX_____
-    // ________
-    // ________
-
-
-    1,3,0,0,
-
-    _X______
-    X_______
-    X_______
-    ________
-    ________
-    ________
-    ________
-    ________
-    ________
-    ________
-    ________
-    ________
-
-};
-
-
 
 /*
 
@@ -1824,12 +1592,7 @@ void drawBitmap(const unsigned char *bmp, int x, int y, bool relativeToScreen) {
 
     unsigned char pix[40];
     unsigned char pf[3][6];
-    unsigned char masker[6];
 
-    int screenStart = 0; //SCORE_SCANLINES; //relativeToScreen ? 0 : SCORE_SCANLINES;
-
-    //for (int i = 0; i < 40; i++)
-    //    pix[i] = 0;
     memset(pix, 0, 40);
 
 
@@ -1837,27 +1600,18 @@ void drawBitmap(const unsigned char *bmp, int x, int y, bool relativeToScreen) {
 
     int pixL = (x - scrollX - (bmp[BMP_CENTER_X] << 14)) & 0xFFFFC000;
     int pixR = pixL + (bmp[BMP_WIDTH] << (14 + 3));
-    if (pixR < 0 || pixL >= (40 << 14)) {
+    if (pixR < 0 || pixL >= (40 << 14))
         return;
-
-    }
-
-
-
-
-
 
     int pixT = (y - ((scrollY & 0xFFFF0000) * 3)) - (bmp[BMP_CENTER_Y] << 16);
     int pixB = pixT + (bmp[BMP_HEIGHT] << 16);
-    if (pixB < 0 || pixT >= (_ARENA_SCANLINES << 16)) {
+    if (pixB < 0 || pixT >= (_ARENA_SCANLINES << 16))
         return;
-    }
-
 
 
     for (int line = 0; line < bmp[BMP_HEIGHT]; line += 3) {
-        int scanline = line + screenStart - bmp[BMP_CENTER_Y] + ((y - ((scrollY & 0xFFFF0000) * 3)) >> 16);
-        if (scanline >= screenStart && scanline < _ARENA_SCANLINES-2) {
+        int scanline = line - bmp[BMP_CENTER_Y] + ((y - ((scrollY & 0xFFFF0000) * 3)) >> 16);
+        if (scanline >= 0 && scanline < _ARENA_SCANLINES-2) {
 
             for (int ssl = 0; ssl < 3; ssl++) {
 
@@ -1888,9 +1642,9 @@ void drawBitmap(const unsigned char *bmp, int x, int y, bool relativeToScreen) {
                            | (pix[ 8] << 3)
                            | (pix[ 9] << 2)
                            | (pix[10] << 1)
-                           | (pix[11] << 0);
+                           | (pix[11] /*<< 0*/);
 
-                pf[ssl][2] = (pix[12] << 0)          // mirrored
+                pf[ssl][2] = (pix[12] /*<< 0*/)          // mirrored
                            | (pix[13] << 1)
                            | (pix[14] << 2)
                            | (pix[15] << 3)
@@ -1911,9 +1665,9 @@ void drawBitmap(const unsigned char *bmp, int x, int y, bool relativeToScreen) {
                            | (pix[28] << 3)
                            | (pix[29] << 2)
                            | (pix[30] << 1)
-                           | (pix[31] << 0);
+                           | (pix[31] /*<< 0*/);
 
-                pf[ssl][5] = (pix[32] << 0)          // mirrored
+                pf[ssl][5] = (pix[32] /*<< 0*/)          // mirrored
                            | (pix[33] << 1)
                            | (pix[34] << 2)
                            | (pix[35] << 3)
@@ -1923,6 +1677,7 @@ void drawBitmap(const unsigned char *bmp, int x, int y, bool relativeToScreen) {
                            | (pix[39] << 7);
             }
 
+            unsigned char masker[6];
             masker[0] = ~(pf[0][0] | pf[1][0] | pf[2][0]);
             masker[1] = ~(pf[0][1] | pf[1][1] | pf[2][1]);
             masker[2] = ~(pf[0][2] | pf[1][2] | pf[2][2]);
@@ -1935,47 +1690,25 @@ void drawBitmap(const unsigned char *bmp, int x, int y, bool relativeToScreen) {
 
             unsigned char *screen = RAM + bufPtr[0][pfBuffer] + scanline;
 
-            unsigned char *ppf = pf[0];
-            *screen = ((*screen) & masker[0]) | *ppf++;
-            screen += _ARENA_SCANLINES;
-            *screen = ((*screen) & masker[1]) | *ppf++;
-            screen += _ARENA_SCANLINES;
-            *screen = ((*screen) & masker[2]) | *ppf++;
-            screen += _ARENA_SCANLINES;
-            *screen = ((*screen) & masker[3]) | *ppf++;
-            screen += _ARENA_SCANLINES;
-            *screen = ((*screen) & masker[4]) | *ppf++;
-            screen += _ARENA_SCANLINES;
-            *screen = ((*screen) & masker[5]) | *ppf;
-            screen -= 5 * _ARENA_SCANLINES - 1;
+#define DST(a, offset) \
+    *(screen + _ARENA_SCANLINES * a + offset)
 
-            ppf = pf[1];
-            *screen = ((*screen) & masker[0]) | *ppf++;
-            screen += _ARENA_SCANLINES;
-            *screen = ((*screen) & masker[1]) | *ppf++;
-            screen += _ARENA_SCANLINES;
-            *screen = ((*screen) & masker[2]) | *ppf++;
-            screen += _ARENA_SCANLINES;
-            *screen = ((*screen) & masker[3]) | *ppf++;
-            screen += _ARENA_SCANLINES;
-            *screen = ((*screen) & masker[4]) | *ppf++;
-            screen += _ARENA_SCANLINES;
-            *screen = ((*screen) & masker[5]) | *ppf;
-            screen -= 5 * _ARENA_SCANLINES - 1;
+#define SUB(a,b) \
+    DST(a, b) = ((DST(a, b)) & masker[a]) | *ppf++;
 
-            ppf = pf[2];
-            *screen = ((*screen) & masker[0]) | *ppf++;
-            screen += _ARENA_SCANLINES;
-            *screen = ((*screen) & masker[1]) | *ppf++;
-            screen += _ARENA_SCANLINES;
-            *screen = ((*screen) & masker[2]) | *ppf++;
-            screen += _ARENA_SCANLINES;
-            *screen = ((*screen) & masker[3]) | *ppf++;
-            screen += _ARENA_SCANLINES;
-            *screen = ((*screen) & masker[4]) | *ppf++;
-            screen += _ARENA_SCANLINES;
-            *screen = ((*screen) & masker[5]) | *ppf;
+#define SCR(offset) \
+    ppf = pf[offset]; \
+    SUB(0, offset) \
+    SUB(1, offset) \
+    SUB(2, offset) \
+    SUB(3, offset) \
+    SUB(4, offset) \
+    SUB(5, offset)
 
+            unsigned char *ppf;
+            SCR(0)
+            SCR(1)
+            SCR(2)
         }
     }
 
