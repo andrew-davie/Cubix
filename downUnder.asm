@@ -1,5 +1,5 @@
-; DownUnder
-; (c) 2021 Andrew Davie
+; Derived from CDFJ shell/demo by Darrel Spice Jr.
+; Cubicks code (c) 2021 Andrew Davie
 
 ; REMEMBER cannot use lda # as this is overloaded for datastream access!!
 ; use ldx # or ldy # instead
@@ -14,10 +14,8 @@
     sta {2}
     ENDM
 
-    MAC ldx
-    ENDM
 
-CDC = 11
+CDC = 12
 
 ; Symbols prefixed with _ are exported to 'main/defines_from_dasm_for_c.h'
 ; This is done via 'awk' in the makefile.
@@ -28,23 +26,9 @@ _FN_INIT        = 0 ; Initialize()
 _FN_GAME_OS     = 1 ; GameOverscan()
 _FN_GAME_VB     = 2 ; GameVerticalBlank()
 _FN_MENU_OS     = 3 ; MenuOverScan()
-_FN_MENU_VB     = 4 ; MenuVerticalBlank()
-_FN_SPLASH_OS   = 5 ; SplashOverScan()
-_FN_SPLASH_VB   = 6 ; SplashVerticalBlank()
-_FN_GAME_IDLE   = 7 ; idle loop
+_FN_GAME_IDLE   = 4 ; idle loop
 
-; datastream usage for Splash Screen
-_DS_SPLASH_P0L  = DS0DATA
-_DS_SPLASH_P1L  = DS1DATA
-_DS_SPLASH_P0R  = DS2DATA
-_DS_SPLASH_P1R  = DS3DATA
 
-; datastream usage for Menu
-;_DS_MENU_GRAPHICS    = DS0DATA
-;_DS_MENU_CONTROL     = DS1DATA
-;_DS_MENU_COLORS      = DS2DATA
-
-; datastream usage for Game Kernel
 _DS_PF0_LEFT    = DS4DATA
 _DS_PF1_LEFT    = DS5DATA
 _DS_PF2_LEFT    = DS6DATA
@@ -64,10 +48,6 @@ _DS_AUDF0       = DS16DATA
 
 _DS_GRP0a = DS11DATA
 _DS_GRP1a = DS12DATA
-;_DS_GRP0b = DS13DATA
-;_DS_GRP1b = DS14DATA
-;_DS_GRP0c = DS15DATA
-;_DS_GRP1c = DS16DATA
     
 ; timer values
 
@@ -75,33 +55,10 @@ _DS_GRP1a = DS12DATA
 VB_TIM64T = 56;46; //7; //7
 OS_TIM64T = 30; 41; //33 ;-3
 
-
 ; PAL...
 ; VB_TIM64T = 76;46; //7; //7
 ; OS_TIM64T = 53; 41; //33 ;-3
 
-; color values
-_BLACK           = $00
-_WHITE           = $0E
-_GREY            = $00
-_YELLOW          = $10
-_ORANGE          = $20
-_BROWN           = $30
-_RED             = $40
-_PURPLE          = $50
-_VIOLET          = $60
-_INDIGO          = $70
-_BLUE            = $80
-_BLUE2           = $90
-_TURQUOISE       = $A0
-_CYAN            = $B0
-_GREEN           = $C0
-_YELLOW_GREEN    = $D0
-_OCHRE_GREEN     = $E0
-_OCHRE           = $F0
-
-;_HAIR            = $F4
-;_FACE            = $4C
 
 ; controls spacing in main menu
 
