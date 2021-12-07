@@ -114,7 +114,7 @@ extern const unsigned char frontFacet45_110[];
 extern const unsigned char frontFacet45_111[];
 
 
-extern void drawBitmap(const unsigned char *bmp, int x, int y, bool relativeToScreen);
+extern void drawBitmap(const unsigned char *bmp, int x, int y);
 
 
 #endif

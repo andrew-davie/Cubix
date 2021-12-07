@@ -1118,8 +1118,7 @@ void drawOverviewSoftwareSprites() {
 
     drawBitmap(shapeSetFacet[col],
         ((mobileFacetX[f] << 14) & 0xFFFFC000) + 0x00004000,
-        ((100 + mobileFacetY[f]) << 16)   * 3,
-        true);
+        ((100 + mobileFacetY[f]) << 16)   * 3);
 
     if (++facetIndex >= FACETS) {
         facetIndex = 0;
@@ -2489,8 +2488,7 @@ void drawSoftwareSprites() {
     if (!f->topOnly || (fLayer == 2 && f->topOnly))
         drawBitmap(shape[theColour],
             ((f->x << 14) & 0xFFFFC000) + 0x00014000,
-            ((((118+2 - (fLayer * 13)) << 16) + (f->y)))  * 3,
-            true);
+            ((((118+2 - (fLayer * 13)) << 16) + (f->y)))  * 3);
 
     #if MARKER
     }

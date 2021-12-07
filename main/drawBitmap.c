@@ -3,6 +3,7 @@
 #include "main.h"
 #include "bitpatterns.h"
 #include "defines_from_dasm_for_c.h"
+#include <string.h>
 
 // duplicate from defines_cdfj.h
 // Raw queue pointers
@@ -1315,9 +1316,6 @@ const unsigned char top3Facets111[] = {
 };
 
 
-#define WHITE(B) \
-    B B B
-
 
 const unsigned char rollArrowRight[] = {
 
@@ -1588,7 +1586,7 @@ ROTATION
 
 
 
-void drawBitmap(const unsigned char *bmp, int x, int y, bool relativeToScreen) {
+void drawBitmap(const unsigned char *bmp, int x, int y) {
 
     unsigned char pix[40];
     unsigned char pf[3][6];
