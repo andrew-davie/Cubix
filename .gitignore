@@ -10,3 +10,5 @@ main/bin/armcode.map
 *.zip
 *.bin
 *.o
+.DS_Store
+
