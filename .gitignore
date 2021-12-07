@@ -1,7 +1,6 @@
-cdfdriver20190317.bin
-downUnder.bin
-downUnder.lst
-downUnder.sym
+cubiks.bin
+cubiks.lst
+cubiks.sym
 main/.DS_Store
 main/bin/armcode.bin
 main/bin/armcode.elf
@@ -11,5 +10,3 @@ main/bin/armcode.map
 *.bin
 *.o
 .DS_Store
-
-cubiks.lst
