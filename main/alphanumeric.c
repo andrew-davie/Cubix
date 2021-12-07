@@ -1,4 +1,0 @@
-
-    #include "bitpatterns.h"
-    
-

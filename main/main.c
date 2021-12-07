@@ -1,7 +1,6 @@
 //==============================================================================
-// CDFJChess by Andrew Davie
-// demo Chessboard Display
-// derived from  Collect3 ARM routines by Darrell Spice, Jr.
+// Cubicks - Rubick's Cube demo by Andrew Davie
+// basic CDFJ setup from  Collect3 ARM routines by Darrell Spice, Jr.
 //==============================================================================
 
 
@@ -25,16 +24,9 @@
 
 #include "main.h"
 #include "bitpatterns.h"
-
-#include "characterset.h"
-#include "logo.h"
-#include "bitshapes.h"
-#include "drawplayer.h"
-#include "overlay.h"
 #include "drawscreen.h"
 #include "cavedata.h"
 #include "sound.h"
-#include "movePlayer.h"
 #include "drawBitmap.h"
 
 
@@ -46,7 +38,6 @@ void resetMobileEndpoints();
 
 int pfBuffer;
 
-int parallax;
 bool finished = false;
 bool swap = false;
 
@@ -71,13 +62,6 @@ int shakeX, shakeY;
 int shakeTime;
 #endif
 
-#if ENABLE_PARALLAX
-#define CHAR_SIZE (PIECE_DEPTH + 9 + 9)
-
-unsigned char parallaxBlank[CHAR_SIZE];
-unsigned char charDust3[CHAR_SIZE];
-
-#endif
 
 
 
@@ -518,16 +502,6 @@ bool hasLeftFace[] = {
 
 
 void InitGameX() {
-
-
-#if ENABLE_PARALLAX
-
-    // setup RAM chars to contain correct overview-mode char defs
-    for (int i = 0; i < CHAR_SIZE; i++) {
-        parallaxBlank[i] = 0;
-    }
-
-#endif
 
 
 

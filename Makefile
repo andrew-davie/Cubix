@@ -89,10 +89,8 @@ CUSTOMBIN = $(BIN)/$(CUSTOMNAME).bin
 CUSTOMMAP = $(BIN)/$(CUSTOMNAME).map
 CUSTOMLST = $(BIN)/$(CUSTOMNAME).lst
 CUSTOMLINK = $(SRC)/custom.boot.lds
-CUSTOMOBJS = sound.o custom.o main.o alphanumeric.o \
-	attribute.o characterset.o cavedata.o drawplayer.o \
-	bitshapes.o drawscreen.o movePlayer.o charRuntime.o drawBitmap.o
-CUSTOMDEPENDS = sound.h main.h attribute.h movePlayer.h charRuntime.h characterset.h drawBitmap.h
+CUSTOMOBJS = sound.o custom.o main.o cavedata.o drawscreen.o drawBitmap.o
+CUSTOMDEPENDS = sound.h main.h drawBitmap.h
 
 CUSTOMTARGETS = $(CUSTOMELF) $(CUSTOMBIN)
 
