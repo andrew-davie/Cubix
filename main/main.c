@@ -47,33 +47,8 @@ unsigned char bgPalette[24];
 int tuneIndex;
 
 
-int doge;
 int time;
-int level;
 int terminalDelay;
-
-bool dripFree;
-bool lastDripFree;
-
-extern int caveFlags;
-
-#if ENABLE_SHAKE
-int shakeX, shakeY;
-int shakeTime;
-#endif
-
-
-
-
-const int initMapColour[] = {
-
-    1,2,3, 4,5,6, 7,1,2,
-    3,4,5, 6,7,1, 2,3,4,
-    5,6,7, 1,2,3, 4,5,6,
-    3,4,5, 6,7,1, 2,3,4,
-    5,6,7, 1,2,3, 4,5,6,
-    1,2,3, 4,5,6, 7,1,2,
-};
 
 
 
@@ -161,9 +136,7 @@ int frameAdjustSmallY;
 
 
 unsigned int frameCounter;
-unsigned int frameToggler;
 unsigned int gameSpeed;
-unsigned int toggler;
 
 
 // #define DISPLAY_NORMAL 0
@@ -171,11 +144,9 @@ unsigned int toggler;
 //#define DISPLAY_OVERVIEW 1
 #define DISPLAY_NONE 2
 
-unsigned char displayMode, lastDisplayMode;
 
 //unsigned char joy0FireBuffer = 0xFF;
 unsigned int triggerPressCounter = 0;
-unsigned int dogeCollected;
 
 //#define PUSH_DELAY 10
 // #define DELAY_AFTER_PUSH 3
@@ -186,15 +157,9 @@ unsigned int halt;
 // unsigned int uncoverCount;
 int rockfordX, rockfordY;
 bool rockfordDead;
-int lives;
 
 
-int diamondValue;
-int extraDogeCoinValue;
 
-int amoebaCounter = 0;
-int amoebaGrew = 1;
-int lastAmoebaGrew = 0;
 int cave = 0;
 unsigned char bufferedSWCHA = 0xFF;
 
@@ -450,14 +415,6 @@ void setColours() {
     unsigned char bgCol = 0;
 
     i = 0;
-    // if (displayMode == DISPLAY_NORMAL)
-    //     while (i < SCORE_SCANLINES) {
-    //         RAM[_BUF_COLUPF + i] = ColourConvert(scorecol);
-    //         RAM[_BUF_COLUBK + i] = bgCol;
-            
-    //         scorecol -= (i + (i>>1))>>4;
-    //         i++;
-    //     }
 
     unsigned char cno = 0;
     while (i < _ARENA_SCANLINES) {
@@ -507,27 +464,6 @@ void InitGameX() {
 
     drawMode = 1;
 
-
-    dripFree = true;
-
-#if ENABLE_SHAKE
-    shakeTime = 0;
-    shakeX = 0;
-    shakeY = 0;
-#endif
-
-extern int looneyIndex;
-extern int looneyY;
-
-    looneyIndex = 0;
-    looneyY = 0x400;
-
-extern int radius;
-extern int rinc;
-
-    radius = 0;
-    rinc = 100;
-
     rockfordX = 1;
     rockfordY = 19;
     tuneIndex = -1;
@@ -540,15 +476,10 @@ extern int rinc;
     halt = 0;
 
 
-    amoebaGrew = 1;
-    lastDisplayMode = DISPLAY_NONE;
-
 
     bufferedSWCHA = 0xFF;
 
 //    joy0FireBuffer = 0xFF;
-
-    dogeCollected = 0;
 
     scrollSpeed = 0;
     scrollYSpeed = 0;
@@ -609,9 +540,7 @@ void initFacets() {
             r = -r;
 
         mobileFacetY[facet] = 30 + r; // + (r * r < 0? -r : r);
-
         mobileDrawOrder[facet] = facet;
-        //mobileFacetColour[facet] = initMapColour[facet];
     }
 
 }
@@ -630,9 +559,6 @@ void Initialize() {
     for (int i = 0; i < 4096/4; i++)
         RAM_INT[i] = 0;
 
-    // for (int i = 0; i < 40; i++)
-    //     RAM[_SHAKE_FIX + i] = CH_STEEL;
-
     //myMemsetInt(RAM_INT, 0, 4096/4);
     
     // likewise the datastream increments will be random, so set them to 1.0
@@ -641,8 +567,6 @@ void Initialize() {
 
 
     cave = 0;
-    lives = 3;
-    level = 0;
 
 
     pfBuffer = 0;
@@ -663,7 +587,6 @@ void Initialize() {
 }
 
 
-void GameScheduleAnimate();
 void GameScheduleProcessBoardRow();
 
 
@@ -864,8 +787,6 @@ void redoDrawOrder() {
     }
 }
 
-char moving = 0;
-
 
 bool canMove() {
     for (int facet = 0; facet < FACETS; facet++)
@@ -1029,18 +950,6 @@ void setPalette(int start, int size, int step) {
 
 }
 
-
-
-
-void setOverviewPalette() {
-
-    setPalette(0, 9, 7);
-
-}
-
-void setDisplayPalette() {
-//    setPalette(0, PIECE_DEPTH, 3, 3);
-}
 
 
 const unsigned char *shapeSetFacet[];
@@ -2524,44 +2433,18 @@ void GameVerticalBlank() {
 
     HandleJoystick();
 
-    setDisplayPalette();
-
     frameCounter++;
-    frameToggler++;
 
     InitGameDatastreams();
 
 }
 
 
-
-
-#define ROW_MAXIMUM 23
-
-char boardRow;
-unsigned char boardCol;
-
-int changeAmoebaToBoulder;
-
 void SetupBoard() {
 
     if (frameCounter > gameSpeed) {
 
-        lastDripFree = dripFree;
-        dripFree = true;
-
         frameCounter = 0;
-        toggler++;
-
-        boardCol = -1;
-        boardRow = ROW_MAXIMUM;
-
-        changeAmoebaToBoulder = amoebaCounter;
-        amoebaCounter = 0;
-
-        lastAmoebaGrew = amoebaGrew;
-        amoebaGrew = 0;
-
         gameSchedule = SCHEDULE_PROCESSBOARD;
 
     }

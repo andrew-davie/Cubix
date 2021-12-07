@@ -5,8 +5,6 @@
 
 
 #define ENABLE_SOUND 1
-#define ENABLE_SHAKE 0
-
 #define DEBUG_SLOWDOWN 1
 #define GAMESPEED 11
 
@@ -41,20 +39,7 @@ extern int scrollY;
 
 
 
-enum DisplayMode {
-    NORMAL,
-    OVERVIEW,
-};
-
-extern enum DisplayMode displayMode;
-
-
 extern unsigned char ColourConvert(unsigned char color);
-
-#if ENABLE_SHAKE
-extern int shakeX;
-extern int shakeY;
-#endif
 
 
 #endif

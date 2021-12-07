@@ -12,3 +12,4 @@ main/bin/armcode.map
 *.o
 .DS_Store
 
+cubiks.lst
