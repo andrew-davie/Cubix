@@ -1,7 +1,6 @@
 
 #include "main.h"
 #include "cavedata.h"
-#include "charRuntime.h"
 
 
 const unsigned char cave1[]= {
