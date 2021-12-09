@@ -1,5 +1,4 @@
 cubiks.bin
-cubiks.lst
 cubiks.sym
 main/.DS_Store
 main/bin/armcode.bin
@@ -9,5 +8,5 @@ main/bin/armcode.map
 *.zip
 *.bin
 *.o
+*.lst
 .DS_Store
-cubiks.lst

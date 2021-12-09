@@ -1031,7 +1031,7 @@ void drawOverviewSoftwareSprites() {
         if (mobileFacetX[f] < mobileFacetEndX[f]) {
 
             int rspeed = mobileFacetEndX[f] - mobileFacetX[f];
-            rspeed >>= 1;
+            rspeed >>= 2;
             rspeed++;
             // if (rspeed > 2)
             //     rspeed = 2;
@@ -1045,7 +1045,7 @@ void drawOverviewSoftwareSprites() {
         if (mobileFacetY[f] < mobileFacetEndY[f]) {
 
             int rspeed = mobileFacetEndY[f] - mobileFacetY[f];
-            rspeed >>= 1;
+            rspeed >>= 2;
             rspeed++;
             // if (rspeed > 5)
             //     rspeed = 5;
@@ -1059,7 +1059,7 @@ void drawOverviewSoftwareSprites() {
         if (mobileFacetX[f] > mobileFacetEndX[f]) {
 
             int rspeed = mobileFacetX[f] - mobileFacetEndX[f];
-            rspeed >>= 1;
+            rspeed >>= 2;
             rspeed++;
 //            mobileFacetX[f] += rspeed; //((mobileFacetEndX[f] - mobileFacetX[f]) >> 3) + 1;
             //     rspeed = 2;
@@ -1073,7 +1073,7 @@ void drawOverviewSoftwareSprites() {
         if (mobileFacetY[f] > mobileFacetEndY[f]) {
 
             int rspeed = mobileFacetY[f] - mobileFacetEndY[f];
-            rspeed >>= 1;
+            rspeed >>= 2;
             rspeed++;
             // if (rspeed > 5)
             //     rspeed = 5;
@@ -1967,7 +1967,7 @@ void drawSoftwareSprites() {
 
     drawBitmap(whichShapeSet[f->shape][theColour],
         ((f->x << 14) & 0xFFFFC000) + 0x00014000,
-        ((((118+2 - (fLayer * 13)) << 16) + (f->y)))  * 3);
+        ((((118+2+1 - (fLayer * 14)) << 16) + (f->y)))  * 3);
   
 }
 
