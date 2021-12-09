@@ -714,6 +714,11 @@ const unsigned char left2Facets111[] = {
 
 
 #define LEFT3FACET(a,b,c) \
+\
+    1,      \
+    39,     \
+    3,9,    \
+\
 a & ______X_ \
 b & ______X_ \
 c & ______X_ \
@@ -747,9 +752,6 @@ c & _____XX_ \
 a & _____XX_ \
 b & _____XX_ \
 c & _____XX_ \
-a & _____X__ \
-b & _____X__ \
-c & _____X__ \
 a & _____X__ \
 b & _____X__ \
 c & _____X__ \
@@ -759,83 +761,35 @@ c & _____X__ \
 
 
 const unsigned char left3Facets000[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    36,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFT3FACET(0,0,0)
 };
 
 const unsigned char left3Facets001[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    36,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFT3FACET(0xFF,0,0)
 };
 
 const unsigned char left3Facets010[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    36,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFT3FACET(0,0xFF,0)
 };
 
 const unsigned char left3Facets011[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    36,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFT3FACET(0xFF,0xFF,0)
 };
 
 const unsigned char left3Facets100[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    36,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFT3FACET(0,0,0xFF)
 };
 
 
 const unsigned char left3Facets101[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    36,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFT3FACET(0xFF,0,0xFF)
 };
 
 const unsigned char left3Facets110[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    36,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFT3FACET(0,0xFF,0xFF)
 };
 
 const unsigned char left3Facets111[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    36,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFT3FACET(0xFF,0xFF,0xFF)
 };
 
@@ -1094,12 +1048,12 @@ const unsigned char topFacets111[] = {
 
 
 #define TOP2FACET(a,b,c) \
-a & _____X__ \
-b & _____X__ \
-c & _____X__ \
-a & ___XXX__ \
-b & ___XXX__ \
-c & ___XXX__ \
+a & ____XX__ \
+b & ____XX__ \
+c & ____XX__ \
+a & __XXXX__ \
+b & __XXXX__ \
+c & __XXXX__ \
 a & _XXXXXX_ \
 b & _XXXXXX_ \
 c & _XXXXXX_ \
@@ -1208,12 +1162,12 @@ const unsigned char top2Facets111[] = {
 
 
 #define TOP3FACET(a,b,c) \
-a & __X_____ \
-b & __X_____ \
-c & __X_____ \
-a & __XXX___ \
-b & __XXX___ \
-c & __XXX___ \
+a & __XX____ \
+b & __XX____ \
+c & __XX____ \
+a & __XXXX__ \
+b & __XXXX__ \
+c & __XXXX__ \
 a & _XXXXXX_ \
 b & _XXXXXX_ \
 c & _XXXXXX_ \
@@ -1527,35 +1481,6 @@ or vertical, and that determines our draw ordering
 
 
 
-each of the 3 visible faces indexes to 'theCube'
-orientation of faces is hardwired -- we move/swap contents when rotating
-
-            B/2
-           +--+--+--+
-           |15|16|17|
-           +--+--+--+
-           |12|13|14|
-           +--+--+--+
-           | 9|10|11|
-           +--+--+--+
- A/0        C/3        E/5        F/6
-+--+--+--+ +--+--+--+ +--+--+--+ +--+--+--+
-| 6| 7| 8| |24|25|26| |42|43|44| |51|52|53|
-+--+--+--+ +--+--+--+ +--+--+--+ +--+--+--+
-| 3| 4| 5| |21|22|23| |39|40|41| |48|49|50|
-+--+--+--+ +--+--+--+ +--+--+--+ +--+--+--+
-| 0| 1| 2| |18|19|20| |36|37|38| |45|46|47|
-+--+--+--+ +--+--+--+ +--+--+--+ +--+--+--+
-            D/4
-           +--+--+--+
-           |33|34|35|
-           +--+--+--+
-           |30|31|32|
-           +--+--+--+
-           |27|28|29|
-           +--+--+--+
-
-a change and let's look in the git tab...
 
 
 Rotations:

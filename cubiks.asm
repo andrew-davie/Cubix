@@ -598,7 +598,7 @@ GameVB:
 
     ;SLEEP 20
 
-Again1              jsr CallArmCode                 ; draws the chessboard!
+Again1              jsr CallArmCode                 ; draws OBJECTS!
     
     ;SLEEP 2
 

@@ -58,7 +58,13 @@ int initSpeed[3] = { 1,3,5};
 int direct[3] = {0,0,0};
 int fno = 0;
 int rotateTop[] = {0,0,0};
-int rotateSpeed[] = {1,1,1};
+int rotateSpeed[] = {0,0,0};
+
+// map from visible face to actual face on cube...
+unsigned char whichFace[] = {
+    0,1,2,3,4,5,
+};
+
 
 
 #define FACETS 54
@@ -512,36 +518,38 @@ void initFacets() {
     facetIndex = 0;
     resetMobileEndpoints();
 
-    for (int facet = 0; facet < FACETS; facet++) {
+    for (int face = 0; face < 6; face++)
+        for (int square = 0; square < 9; square++) {
  
- 
-        do
-        {
-            mobileCol[facet] = getRandom32() & 7;
-        } while (mobileCol[facet] == 0);
-        
- 
- 
-        int r = (((getRandom32() & 0xFF) * 160)) >> 8;
-        r *= r;
-        r >>= 11;
+            int facet = face * 9 + square;
 
-        if (getRandom32() & 1)
-            r = -r;
+            do
+            {
+                mobileCol[facet] = face + 1; /*//(square & 7); //*/getRandom32() & 7;
+            } while (mobileCol[facet] == 0);
+            
+    
+    
+            int r = (((getRandom32() & 0xFF) * 160)) >> 8;
+            r *= r;
+            r >>= 11;
+
+            if (getRandom32() & 1)
+                r = -r;
 
 
-        mobileFacetX[facet] = 18 + r;
+            mobileFacetX[facet] = 18 + r;
 
-        r = (((getRandom32() & 0xFF) * 220)) >> 8;
-        r *= r;
-        r >>= 11;
+            r = (((getRandom32() & 0xFF) * 220)) >> 8;
+            r *= r;
+            r >>= 11;
 
-        if (getRandom32() & 1)
-            r = -r;
+            if (getRandom32() & 1)
+                r = -r;
 
-        mobileFacetY[facet] = 30 + r; // + (r * r < 0? -r : r);
-        mobileDrawOrder[facet] = facet;
-    }
+            mobileFacetY[facet] = 30 + r; // + (r * r < 0? -r : r);
+            mobileDrawOrder[facet] = facet;
+        }
 
 }
 
@@ -672,82 +680,104 @@ void GameOverscan() {
 const int facetEndX[];
 const int facetEndY[];
 
-void rotateLeft(int face) {
+void rotateLeft(int layer, int face) {
 
     switch (face) {
 
     case 0:
         {                
-            mobileFacetEndX[0] = facetEndX[6];
-            mobileFacetEndY[0] = facetEndY[6];
-            mobileFacetEndX[1] = facetEndX[3];
-            mobileFacetEndY[1] = facetEndY[3];
-            mobileFacetEndX[2] = facetEndX[0];
-            mobileFacetEndY[2] = facetEndY[0];
-            mobileFacetEndX[3] = facetEndX[7];
-            mobileFacetEndY[3] = facetEndY[7];
-            mobileFacetEndX[5] = facetEndX[1];
-            mobileFacetEndY[5] = facetEndY[1];
-            mobileFacetEndX[6] = facetEndX[8];
-            mobileFacetEndY[6] = facetEndY[8];
-            mobileFacetEndX[7] = facetEndX[5];
-            mobileFacetEndY[7] = facetEndY[5];
-            mobileFacetEndX[8] = facetEndX[2];
-            mobileFacetEndY[8] = facetEndY[2];
+            // mobileFacetEndX[0] = facetEndX[6];
+            // mobileFacetEndY[0] = facetEndY[6];
+            // mobileFacetEndX[1] = facetEndX[3];
+            // mobileFacetEndY[1] = facetEndY[3];
+            // mobileFacetEndX[2] = facetEndX[0];
+            // mobileFacetEndY[2] = facetEndY[0];
+            // mobileFacetEndX[3] = facetEndX[7];
+            // mobileFacetEndY[3] = facetEndY[7];
+            // mobileFacetEndX[5] = facetEndX[1];
+            // mobileFacetEndY[5] = facetEndY[1];
+            // mobileFacetEndX[6] = facetEndX[8];
+            // mobileFacetEndY[6] = facetEndY[8];
+            // mobileFacetEndX[7] = facetEndX[5];
+            // mobileFacetEndY[7] = facetEndY[5];
+            // mobileFacetEndX[8] = facetEndX[2];
+            // mobileFacetEndY[8] = facetEndY[2];
 
 
-            mobileFacetEndX[9] = facetEndX[53];
-            mobileFacetEndY[9] = facetEndY[53];
-            mobileFacetEndX[12] = facetEndX[50];
-            mobileFacetEndY[12] = facetEndY[50];
-            mobileFacetEndX[15] = facetEndX[47];
-            mobileFacetEndY[15] = facetEndY[47];
+            // mobileFacetEndX[9] = facetEndX[53];
+            // mobileFacetEndY[9] = facetEndY[53];
+            // mobileFacetEndX[12] = facetEndX[50];
+            // mobileFacetEndY[12] = facetEndY[50];
+            // mobileFacetEndX[15] = facetEndX[47];
+            // mobileFacetEndY[15] = facetEndY[47];
 
-            mobileFacetEndX[47] = facetEndX[33];
-            mobileFacetEndY[47] = facetEndY[33];
-            mobileFacetEndX[50] = facetEndX[30];
-            mobileFacetEndY[50] = facetEndY[30];
-            mobileFacetEndX[53] = facetEndX[27];
-            mobileFacetEndY[53] = facetEndY[27];
+            // mobileFacetEndX[47] = facetEndX[33];
+            // mobileFacetEndY[47] = facetEndY[33];
+            // mobileFacetEndX[50] = facetEndX[30];
+            // mobileFacetEndY[50] = facetEndY[30];
+            // mobileFacetEndX[53] = facetEndX[27];
+            // mobileFacetEndY[53] = facetEndY[27];
 
-            mobileFacetEndX[27] = facetEndX[18];
-            mobileFacetEndY[27] = facetEndY[18];
-            mobileFacetEndX[30] = facetEndX[21];
-            mobileFacetEndY[30] = facetEndY[21];
-            mobileFacetEndX[33] = facetEndX[24];
-            mobileFacetEndY[33] = facetEndY[24];
+            // mobileFacetEndX[27] = facetEndX[18];
+            // mobileFacetEndY[27] = facetEndY[18];
+            // mobileFacetEndX[30] = facetEndX[21];
+            // mobileFacetEndY[30] = facetEndY[21];
+            // mobileFacetEndX[33] = facetEndX[24];
+            // mobileFacetEndY[33] = facetEndY[24];
 
-            mobileFacetEndX[18] = facetEndX[9];
-            mobileFacetEndY[18] = facetEndY[9];
-            mobileFacetEndX[21] = facetEndX[12];
-            mobileFacetEndY[21] = facetEndY[12];
-            mobileFacetEndX[24] = facetEndX[15];
-            mobileFacetEndY[24] = facetEndY[15];
-
-
+            // mobileFacetEndX[18] = facetEndX[9];
+            // mobileFacetEndY[18] = facetEndY[9];
+            // mobileFacetEndX[21] = facetEndX[12];
+            // mobileFacetEndY[21] = facetEndY[12];
+            // mobileFacetEndX[24] = facetEndX[15];
+            // mobileFacetEndY[24] = facetEndY[15];
 
 
-            mobileCol[0] |= PULSE;
-            mobileCol[1] |= PULSE;
-            mobileCol[2] |= PULSE;
-            mobileCol[3] |= PULSE;
-            mobileCol[5] |= PULSE;
-            mobileCol[6] |= PULSE;
-            mobileCol[7] |= PULSE;
-            mobileCol[8] |= PULSE;
-            mobileCol[9] |= PULSE;
-            mobileCol[12] |= PULSE;
-            mobileCol[15] |= PULSE;
-            mobileCol[47] |= PULSE;
-            mobileCol[50] |= PULSE;
-            mobileCol[53] |= PULSE;
-            mobileCol[27] |= PULSE;
-            mobileCol[30] |= PULSE;
-            mobileCol[33] |= PULSE;
-            mobileCol[18] |= PULSE;
-            mobileCol[21] |= PULSE;
-            mobileCol[24] |= PULSE;
+            int faceBase = whichFace[face] * 9;
+            
+// 6 7 8
+// 3 4 5
+// 0 1 2
 
+// 8 5 2
+// 7 4 1
+// 6 3 0
+
+            char temp;
+
+            if (layer == 2) {
+
+                // handle top face
+
+                temp = mobileCol[faceBase + 0];
+                mobileCol[faceBase + 0] = mobileCol[faceBase + 2];
+                mobileCol[faceBase + 2] = mobileCol[faceBase + 8];
+                mobileCol[faceBase + 8] = mobileCol[faceBase + 6];
+                mobileCol[faceBase + 6] = temp;
+
+                temp = mobileCol[faceBase + 1];
+                mobileCol[faceBase + 1] = mobileCol[faceBase + 5];
+                mobileCol[faceBase + 5] = mobileCol[faceBase + 7];
+                mobileCol[faceBase + 7] = mobileCol[faceBase + 3];
+                mobileCol[faceBase + 3] = temp;
+            }
+            
+
+            // handle side ring
+
+            int faceBase1 = whichFace[1] * 9;
+            int faceBase2 = whichFace[2] * 9;
+            int faceBase4 = whichFace[4] * 9;
+            int faceBase5 = whichFace[5] * 9;
+
+            int layerBase = layer * 3;
+            for (int i = layerBase; i < layerBase + 3; i++) {
+                temp = mobileCol[faceBase1 + i];
+                mobileCol[faceBase1 + i] = mobileCol[faceBase2 + i];
+                mobileCol[faceBase2 + i] = mobileCol[faceBase4 + i];
+                mobileCol[faceBase4 + i] = mobileCol[faceBase5 + i];
+                mobileCol[faceBase5 + i] = temp;
+            }
 
         }
         break;
@@ -764,9 +794,13 @@ const int facetEndY[];
 
 void resetMobileEndpoints() {
 
-    for (int facet = 0; facet < FACETS; facet++) {
-        mobileFacetEndX[facet] = facetEndX[facet];
-        mobileFacetEndY[facet] = facetEndY[facet];
+    for (int side = 0; side < 6; side++) {
+        for (int square = 0; square < 9; square++) {
+            int destFacet = side * 9 + square;
+            int facet = side * 9 + square; // whichFace[side] * 9 + square;
+            mobileFacetEndX[destFacet] = facetEndX[facet];
+            mobileFacetEndY[destFacet] = facetEndY[facet];
+        }
     }
 }
 
@@ -807,16 +841,19 @@ void HandleJoystick() {
         if (JOY0_LEFT) {
 
             if (facetIndex == 0 && canMove()) {
-                rotateLeft(0);
+//                rotateLeft(controlledLayer, 0);
                 redoDrawOrder();
             }
         }
 
         else if (JOY0_RIGHT && canMove()) {
             if (facetIndex == 0) {
-                rotateLeft(0);
-                rotateLeft(0);
-                rotateLeft(0);
+
+                for (int layer = 0; layer < 3; layer++) {
+                    // rotateLeft(layer, 0);
+                    // rotateLeft(layer, 0);
+                    // rotateLeft(layer, 0);
+                }
                 redoDrawOrder();
             }
         }
@@ -865,6 +902,7 @@ void HandleJoystick() {
                     }
 
 
+                rotateSpeed[controlledLayer] = 1;
                 direct[controlledLayer] = 1;
 
     //            AddAudio(SFX_PUSH);
@@ -882,6 +920,7 @@ void HandleJoystick() {
                     }
 
 
+                rotateSpeed[controlledLayer] = 1;
                 direct[controlledLayer] = -1;
     //            AddAudio(SFX_PUSH);
             }
@@ -889,9 +928,31 @@ void HandleJoystick() {
             else if (!swap && (!JOY0_FIRE && lastJOY0_FIRE)) {
                 swap = true;
 
-                initFacets();
+
+                for (int face = 0; face < 6; face++)
+                    for (int square = 0; square < 9; square++) {
+            
+                        int facet = face * 9 + square;
+                
+                        int r = (((getRandom32() & 0xFF) * 160)) >> 8;
+                        r *= r;
+                        r >>= 11;
+
+                        if (getRandom32() & 1)
+                            r = -r;
 
 
+                        mobileFacetX[facet] = 18 + r;
+
+                        r = (((getRandom32() & 0xFF) * 220)) >> 8;
+                        r *= r;
+                        r >>= 11;
+
+                        if (getRandom32() & 1)
+                            r = -r;
+
+                        mobileFacetY[facet] = 30 + r; // + (r * r < 0? -r : r);
+                    }
 
             }
 
@@ -958,7 +1019,7 @@ const unsigned char *shapeSetFacet[];
 void drawOverviewSoftwareSprites() {
 
 
-    int f = mobileDrawOrder[facetIndex];
+    int f = facetIndex; //mobileDrawOrder[facetIndex];
 
     int col = mobileCol[f];
     if (col & PULSE ) {
@@ -1037,14 +1098,15 @@ void drawOverviewSoftwareSprites() {
 
 
 #define AXES 1
-#define ROTATE 16
+#define ROTATE 4
 
 
 struct facet {
-    int face;
+    int shape;
     int colour;
     int x;
     int y;
+    int face;
     int square;
     bool topOnly;
 };
@@ -1052,160 +1114,283 @@ struct facet {
 
 #define MARKER 0
 
+               // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
 
-struct facet shapeDef[AXES][ROTATE][25] = {
+            // multiple facets, each...
+            // face, colour, x, y, side, face# (to get colour), topOnly
+
+    // FACE     INTERPRETATION
+    // 0        TOP
+    // 1        LEFT
+    // 2        RIGHT
+    // 3        BOTTOM
+    // 4        BACK LEFT
+    // 5        BACK RIGHT
+
+
+
+
+            // topOnly:
+            // true             a part of the 3x3 "top" of the layer
+            // false            always drawn
+
+
+
+// FACET NUMBERING on a face
+
+// 6 7 8
+// 3 4 5
+// 0 1 2
+
+// face orientation...
+
+
+//      6
+//    3   7
+//  0   4   8
+// \  1   5  / 
+// 6 \  2  / 8
+//   7 \ / 7 
+// 3   8|6   5
+//   4  |  4
+// 0   5|3   2
+//   1  |  1
+//     210  
+
+
+// each of the 3 visible faces indexes to an array telling us which face is actually there
+// orientation of faces is hardwired -- we move/swap contents when rotating
+
+//             B/2
+//            +--+--+--+
+//            |15|16|17|
+//            +--+--+--+
+//            |12|13|14|
+//            +--+--+--+
+//            | 9|10|11|
+//            +--+--+--+
+//  A/0        C/3        E/5        F/6
+// +--+--+--+ +--+--+--+ +--+--+--+ +--+--+--+
+// | 6| 7| 8| |24|25|26| |42|43|44| |51|52|53|
+// +--+--+--+ +--+--+--+ +--+--+--+ +--+--+--+
+// | 3| 4| 5| |21|22|23| |39|40|41| |48|49|50|
+// +--+--+--+ +--+--+--+ +--+--+--+ +--+--+--+
+// | 0| 1| 2| |18|19|20| |36|37|38| |45|46|47|
+// +--+--+--+ +--+--+--+ +--+--+--+ +--+--+--+
+//             D/4
+//            +--+--+--+
+//            |33|34|35|
+//            +--+--+--+
+//            |30|31|32|
+//            +--+--+--+
+//            |27|28|29|
+//            +--+--+--+
+
+
+
+struct facet shapeDef[AXES][ROTATE][3][25] = {
 
     {
 
-        // 0  ISO
-         
-        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
+        // ROTATION 0  ISO
 
-            // multiple facets, each...
-            // visibleShape, colour, x, y, face# (to get colour), topOnly
+        {
 
-            // visibleShape:
-            // 0                TOP
-            // 1                LEFT
-            // 2                RIGHT
-            // 3    ... more rotations to be added
+            // LAYER 0
+            {
+                // left facets
 
+                {   1, 6,   4, 0x140000,   1, 0,    false,   },       // L0
+                {   1, 1,   9, 0x190000,   1, 1,    false,   },       // L1
+                {   1, 3,  14, 0x1E0000,   1, 2,    false,   },       // L2 (@CENTER)
 
-            // topOnly:
-            // true             a part of the 3x3 "top" of the layer
-            // false            always drawn
+                // right facets
 
+                {   2, 6,  14, 0x1E0000,   2, 0,    false,   },
+                {   2, 1,  19, 0x190000,   2, 1,    false,   },
+                {   2, 3,  24, 0x140000,   2, 2,    false,   },
 
-            // left facets
+                {   -1,  -1, 0,0,0,0,     false,   },
 
-            {   1, 6,   4, 0x140000,   6,    false,   },       // L0
-            {   1, 1,   9, 0x190000,   7,    false,   },       // L1
-            {   1, 3,  14, 0x1E0000,   8,    false,   },       // L2 (@CENTER)
+            },
+            
+            // LAYER 1
+            {
+                // left facets
 
-            // right facets
+                {   1, 6,   4, 0x140000,   1, 3,    false,   },       // L0
+                {   1, 1,   9, 0x190000,   1, 4,    false,   },       // L1
+                {   1, 3,  14, 0x1E0000,   1, 5,    false,   },       // L2 (@CENTER)
 
-            {   2, 3,  24, 0x140000,   6,    false,   },
-            {   2, 1,  19, 0x190000,   7,    false,   },
-            {   2, 6,  14, 0x1E0000,   8,    false,   },
+                // right facets
 
-            // top facets
+                {   2, 6,  14, 0x1E0000,   2, 3,    false,   },
+                {   2, 1,  19, 0x190000,   2, 4,    false,   },
+                {   2, 3,  24, 0x140000,   2, 5,    false,   },
 
-            {   0, 2,  14, 0x0A0000,   0,    true,    },
-            {   0, 1,   9, 0x0F0000,   1,    true,    },
-            {   0, 2,  19, 0x0F0000,   2,    true,    },
-            {   0, 3,   4, 0x140000,   3,    true,    },
-            {   0, 4,  14, 0x140000,   4,    true,    },
-            {   0, 5,  24, 0x140000,   5,    true,    },
-            {   0, 6,   9, 0x190000,   6,    true,    },
-            {   0, 7,  19, 0x190000,   7,    true,    },
-            {   0, 1,  14, 0x1E0000,   8,    true,    },
+                {   -1,  -1, 0,0,0,0,     false,   },
 
+            },
 
+            // LAYER 2
+            {
+                // left facets
 
+                {   1, 6,   4, 0x140000,   1, 6,    false,   },       // L0
+                {   1, 1,   9, 0x190000,   1, 7,    false,   },       // L1
+                {   1, 3,  14, 0x1E0000,   1, 8,    false,   },       // L2 (@CENTER)
 
-            {   -1,  -1, 0,0,0,    false,   },
+                // right facets
+
+                {   2, 6,  14, 0x1E0000,   2, 6,    false,   },
+                {   2, 1,  19, 0x190000,   2, 7,    false,   },
+                {   2, 3,  24, 0x140000,   2, 8,    false,   },
+
+                // top facets
+
+                {   0, 3,   4, 0x140000,   0, 0,    true,    }, //?ordering here needs fixing
+                {   0, 6,   9, 0x190000,   0, 1,    true,    },
+                {   0, 1,  14, 0x1E0000,   0, 2,    true,    },
+    //
+                {   0, 1,   9, 0x0F0000,   0, 3,    true,    },
+                {   0, 4,  14, 0x140000,   0, 4,    true,    },
+                {   0, 7,  19, 0x190000,   0, 5,    true,    },
+    //
+                {   0, 2,  14, 0x0A0000,   0, 6,    true,    },
+                {   0, 2,  19, 0x0F0000,   0, 7,    true,    },
+                {   0, 5,  24, 0x140000,   0, 8,    true,    },
+
+                {   -1,  -1, 0,0,0,0,     false,   },
+            },
         },
- 
+    
 
         // 1 tilt
 
-        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
-
-            // multiple facets, each...
-            // visibleShape, x, y, face# (to get colour), topOnly
-
-            // visibleShape:
-            // 0                TOP
-            // 1                LEFT
-            // 2                RIGHT
-            // 3    ... more rotations to be added
-
-
-            // topOnly:
-            // true             a part of the 3x3 "top" of the layer
-            // false            always drawn
-
-
-            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
-            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
-
+        {
 
 #define AX1 1
 #define AY1 -0x20000
 
+            // LAYER 0
+            {
+                // left facets
+
+                {   6, 6,   4+AX1, 0x120000+AY1,   1, 0,    false,   },       // L0
+                {   6, 1,   7+AX1, 0x190000+AY1,   1, 1,    false,   },       // L1
+                {   6, 3,  10+AX1, 0x200000+AY1,   1, 2,    false,   },       // L2 (@CENTER)
+
+                // right facets
+
+                {   5, 6,  10+AX1, 0x200000+AY1,   2, 0,    false,   },
+                {   5, 1,  16+AX1, 0x1D0000+AY1,   2, 1,    false,   },
+                {   5, 3,  22+AX1, 0x1A0000+AY1,   2, 2,    false,   },
+
+                {   -1,  -1, 0,0,0,0,     false,   },
+            },
+            
+            // LAYER 1
+            {
+            // left facets
+
+                {   6, 6,   4+AX1, 0x120000+AY1,   1, 3,    false,   },       // L0
+                {   6, 1,   7+AX1, 0x190000+AY1,   1, 4,    false,   },       // L1
+                {   6, 3,  10+AX1, 0x200000+AY1,   1, 5,    false,   },       // L2 (@CENTER)
+
+                // right facets
+
+                {   5, 6,  10+AX1, 0x200000+AY1,   2, 3,    false,   },
+                {   5, 1,  16+AX1, 0x1D0000+AY1,   2, 4,    false,   },
+                {   5, 3,  22+AX1, 0x1A0000+AY1,   2, 5,    false,   },
+
+                {   -1,  -1, 0,0,0,0,     false,   },
+
+            },
+
+            // LAYER 2
+            {
+
+
 
             // left facets
 
-            {   6, 6,   4+AX1, 0x120000+AY1,   6,    false,   },       // L0
-            {   6, 1,   7+AX1, 0x190000+AY1,   7,    false,   },       // L1
-            {   6, 3,  10+AX1, 0x200000+AY1,   8,    false,   },       // L2 (@CENTER)
+                {   6, 6,   4+AX1, 0x120000+AY1,   1, 6,    false,   },       // L0
+                {   6, 1,   7+AX1, 0x190000+AY1,   1, 7,    false,   },       // L1
+                {   6, 3,  10+AX1, 0x200000+AY1,   1, 8,    false,   },       // L2 (@CENTER)
 
-            // right facets
+                // right facets
 
-            {   5, 3,  22+AX1, 0x1A0000+AY1,   6,    false,   },
-            {   5, 1,  16+AX1, 0x1D0000+AY1,   7,    false,   },
-            {   5, 6,  10+AX1, 0x200000+AY1,   8,    false,   },
+                {   5, 6,  10+AX1, 0x200000+AY1,   2, 6,    false,   },
+                {   5, 1,  16+AX1, 0x1D0000+AY1,   2, 7,    false,   },
+                {   5, 3,  22+AX1, 0x1A0000+AY1,   2, 8,    false,   },
 
-            // top facets
+                // top facets
 
-            {   7, 2,  16+AX1, 0x0C0000+AY1,   0,    true,    },
-            {   7, 1,  10+AX1, 0x0f0000+AY1,   1,    true,    },
-            {   7, 2,  19+AX1, 0x130000+AY1,   2,    true,    },
-            {   7, 3,   4+AX1, 0x120000+AY1,   3,    true,    },
-            {   7, 4,  13+AX1, 0x160000+AY1,   4,    true,    },
-            {   7, 5,  22+AX1, 0x1A0000+AY1,   5,    true,    },
-            {   7, 6,   7+AX1, 0x190000+AY1,   6,    true,    },
-            {   7, 7,  16+AX1, 0x1D0000+AY1,   7,    true,    },
-            {   7, 1,  10+AX1, 0x200000+AY1,   8,    true,    },
+                {   7, 3,   4+AX1, 0x120000+AY1,   0, 0,    true,    },
+                {   7, 6,   7+AX1, 0x190000+AY1,   0, 1,    true,    },
+                {   7, 1,  10+AX1, 0x200000+AY1,   0, 2,    true,    },
+                {   7, 1,  10+AX1, 0x0f0000+AY1,   0, 3,    true,    },
+                {   7, 4,  13+AX1, 0x160000+AY1,   0, 4,    true,    },
+                {   7, 7,  16+AX1, 0x1D0000+AY1,   0, 5,    true,    },
+                {   7, 2,  16+AX1, 0x0C0000+AY1,   0, 6,    true,    },     // TODO: ordering
+                {   7, 2,  19+AX1, 0x130000+AY1,   0, 7,    true,    },
+                {   7, 5,  22+AX1, 0x1A0000+AY1,   0, 8,    true,    },
 
-            {   -1,  -1, 0,0,0,    false,   },
+                {   -1,  -1, 0,0,0,0,     false,   },
+            },
         },
 
         // 2 flat
 
         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
 
-            // multiple facets, each...
-            // visibleShape, x, y, face# (to get colour), topOnly
-
-            // visibleShape:
-            // 0                TOP
-            // 1                LEFT
-            // 2                RIGHT
-            // 3    ... more rotations to be added
-
-
-            // topOnly:
-            // true             a part of the 3x3 "top" of the layer
-            // false            always drawn
-
 #define AX2 -1
 #define AY2 -0x20000
 
+            // LAYER 0
+            {
+                // right facets (now face-on)
 
-            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
-            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
+                {   4, 6,   8+AX2, 0x1D0000+AY2,   2, 0,    false,   },       // L0
+                {   4, 1,  15+AX2, 0x1D0000+AY2,   2, 1,    false,   },       // L1
+                {   4, 3,  22+AX2, 0x1D0000+AY2,   2, 2,    false,   },       // L2 (@CENTER)
+                {   -1,  -1, 0,0,0,0,     false,   },
 
-            // top facets
+            },
+            
+            // LAYER 1
+            {
+                // right facets (now face-on)
 
-            {   3, 3,  8+AX2, 0x0F0000+AY2,   0,    true,    },
-            {   3, 1, 15+AX2, 0x0F0000+AY2,   1,    true,    },
-            {   3, 2, 22+AX2, 0x0F0000+AY2,   2,    true,    },
-            {   3, 6,  8+AX2, 0x160000+AY2,   3,    true,    },
-            {   3, 4, 15+AX2, 0x160000+AY2,   4,    true,    },
-            {   3, 2, 22+AX2, 0x160000+AY2,   5,    true,    },
-            {   3, 1,  8+AX2, 0x1D0000+AY2,   6,    true,    },
-            {   3, 7, 15+AX2, 0x1D0000+AY2,   7,    true,    },
-            {   3, 5, 22+AX2, 0x1D0000+AY2,   8,    true,    },
+                {   4, 6,   8+AX2, 0x1D0000+AY2,   2, 3,    false,   },       // L0
+                {   4, 1,  15+AX2, 0x1D0000+AY2,   2, 4,    false,   },       // L1
+                {   4, 3,  22+AX2, 0x1D0000+AY2,   2, 5,    false,   },       // L2 (@CENTER)
+                {   -1,  -1, 0,0,0,0,     false,   },
+            },
 
-            // right facets (now face-on)
+            // LAYER 2
+            {
+                // top facets
 
-            {   4, 6,   8+AX2, 0x1D0000+AY2,   6,    false,   },       // L0
-            {   4, 1,  15+AX2, 0x1D0000+AY2,   7,    false,   },       // L1
-            {   4, 3,  22+AX2, 0x1D0000+AY2,   8,    false,   },       // L2 (@CENTER)
+                {   3, 3,  8+AX2, 0x0F0000+AY2,   0, 0,    true,    }, // TODO fix ordering
+                {   3, 1, 15+AX2, 0x0F0000+AY2,   0, 3,    true,    },
+                {   3, 2, 22+AX2, 0x0F0000+AY2,   0, 6,    true,    },
+                {   3, 6,  8+AX2, 0x160000+AY2,   0, 1,    true,    },
+                {   3, 4, 15+AX2, 0x160000+AY2,   0, 4,    true,    },
+                {   3, 2, 22+AX2, 0x160000+AY2,   0, 7,    true,    },
+                {   3, 1,  8+AX2, 0x1D0000+AY2,   0, 2,    true,    },
+                {   3, 7, 15+AX2, 0x1D0000+AY2,   0, 5,    true,    },
+                {   3, 5, 22+AX2, 0x1D0000+AY2,   0, 8,    true,    },
 
+                // right facets (now face-on)
 
-            {   -1,  -1, 0,0,0,    false,   },
+                {   4, 6,   8+AX2, 0x1D0000+AY2,   2, 6,    false,   },       // L0
+                {   4, 1,  15+AX2, 0x1D0000+AY2,   2, 7,    false,   },       // L1
+                {   4, 3,  22+AX2, 0x1D0000+AY2,   2, 8,    false,   },       // L2 (@CENTER)
+
+                {   -1,  -1, 0,0,0,0,     false,   },
+            },
+
         },
  
  
@@ -1233,625 +1418,71 @@ struct facet shapeDef[AXES][ROTATE][25] = {
             // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
 
 
-            // top facets
+            // LAYER 0
+            {
+                // right facets
 
-            {   9, 3,  12+AX3, 0x0C0000+AY3,   0,    true,    },
-            {   9, 1,  18+AX3, 0x0F0000+AY3,   1,    true,    },
-            {   9, 6,   9+AX3, 0x130000+AY3,   2,    true,    },
-            {   9, 2,  24+AX3, 0x120000+AY3,   3,    true,    },
-            {   9, 4,  15+AX3, 0x160000+AY3,   4,    true,    },
-            {   9, 2,  21+AX3, 0x190000+AY3,   6,    true,    },
-            {   9, 1,   6+AX3, 0x1A0000+AY3,   5,    true,    },
-            {   9, 7,  12+AX3, 0x1D0000+AY3,   7,    true,    },
-            {   9, 5,  18+AX3, 0x200000+AY3,   8,    true,    },
+                {   10, 4,  18+AX3, 0x200000+AY3,   4, 0,    false,   },       // L2 (@CENTER)
+                {   10, 4,  21+AX3, 0x190000+AY3,   4, 1,    false,   },       // L1
+                {   10, 6,  24+AX3, 0x120000+AY3,   4, 2,    false,   },       // L0
 
-            // right facets
+                // left facets
 
-            {   10, 6,  24+AX3, 0x120000+AY3,   6,    false,   },       // L0
-            {   10, 4,  21+AX3, 0x190000+AY3,   7,    false,   },       // L1
-            {   10, 4,  18+AX3, 0x200000+AY3,   8,    false,   },       // L2 (@CENTER)
+                {   11, 6,   6+AX3, 0x1A0000+AY3,   2, 0,    false,   },
+                {   11, 1,  12+AX3, 0x1D0000+AY3,   2, 1,    false,   },
+                {   11, 3,  18+AX3, 0x200000+AY3,   2, 2,    false,   },
 
-            // left facets
+                {   -1,  -1, 0,0,0,0,     false,   },
 
-            {   11, 6,   6+AX3, 0x1A0000+AY3,   6,    false,   },
-            {   11, 1,  12+AX3, 0x1D0000+AY3,   7,    false,   },
-            {   11, 3,  18+AX3, 0x200000+AY3,   8,    false,   },
+            },
+            
+            // LAYER 1
+            {
+                // right facets
 
-            {   -1,  -1, 0,0,0,    false,   },
+                {   10, 4,  18+AX3, 0x200000+AY3,   4, 3,    false,   },       // L2 (@CENTER)
+                {   10, 4,  21+AX3, 0x190000+AY3,   4, 4,    false,   },       // L1
+                {   10, 6,  24+AX3, 0x120000+AY3,   4, 5,    false,   },       // L0
+
+                // left facets
+
+                {   11, 6,   6+AX3, 0x1A0000+AY3,   2, 3,    false,   },
+                {   11, 1,  12+AX3, 0x1D0000+AY3,   2, 4,    false,   },
+                {   11, 3,  18+AX3, 0x200000+AY3,   2, 5,    false,   },
+
+                {   -1,  -1, 0,0,0,0,     false,   },
+
+            },
+
+            // LAYER 2
+            {
+                // top facets
+
+                {   9, 1,   6+AX3, 0x1A0000+AY3,   0, 2,    true,    },
+                {   9, 6,   9+AX3, 0x130000+AY3,   0, 1,    true,    },
+                {   9, 3,  12+AX3, 0x0C0000+AY3,   0, 0,    true,    },    // TODO fix ordering
+                {   9, 7,  12+AX3, 0x1D0000+AY3,   0, 5,    true,    },
+                {   9, 4,  15+AX3, 0x160000+AY3,   0, 4,    true,    },
+                {   9, 1,  18+AX3, 0x0F0000+AY3,   0, 3,    true,    },
+                {   9, 5,  18+AX3, 0x200000+AY3,   0, 8,    true,    },
+                {   9, 2,  21+AX3, 0x190000+AY3,   0, 7,    true,    },
+                {   9, 2,  24+AX3, 0x120000+AY3,   0, 6,    true,    },
+
+                // right facets
+
+                {   10, 4,  18+AX3, 0x200000+AY3,   4, 6,    false,   },       // L2 (@CENTER)
+                {   10, 4,  21+AX3, 0x190000+AY3,   4, 7,    false,   },       // L1
+                {   10, 6,  24+AX3, 0x120000+AY3,   4, 8,    false,   },       // L0
+
+                // left facets
+
+                {   11, 6,   6+AX3, 0x1A0000+AY3,   2, 6,    false,   },
+                {   11, 1,  12+AX3, 0x1D0000+AY3,   2, 7,    false,   },
+                {   11, 3,  18+AX3, 0x200000+AY3,   2, 8,    false,   },
+
+                {   -1,  -1, 0,0,0,0,     false,   },
+            },
         },
-
-        // 4 ISO
-
-        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
-
-            // multiple facets, each...
-            // visibleShape, x, y, face# (to get colour), topOnly
-
-            // visibleShape:
-            // 0                TOP
-            // 1                LEFT
-            // 2                RIGHT
-            // 3    ... more rotations to be added
-
-#define AX4 0
-#define AY4 0x00000
-
-            // topOnly:
-            // true             a part of the 3x3 "top" of the layer
-            // false            always drawn
-
-            // top facets
-
-            {   0, 3,  14+AX4, 0x0A0000+AY4,   0,    true,    },
-            {   0, 6,   9+AX4, 0x0F0000+AY4,   1,    true,    },
-            {   0, 1,  19+AX4, 0x0F0000+AY4,   2,    true,    },
-            {   0, 1,   4+AX4, 0x140000+AY4,   3,    true,    },
-            {   0, 4,  14+AX4, 0x140000+AY4,   4,    true,    },
-            {   0, 2,  24+AX4, 0x140000+AY4,   5,    true,    },
-            {   0, 7,   9+AX4, 0x190000+AY4,   6,    true,    },
-            {   0, 2,  19+AX4, 0x190000+AY4,   7,    true,    },
-            {   0, 5,  14+AX4, 0x1E0000+AY4,   8,    true,    },
-
-            // left facets
-
-            {   1, 6,   4+AX4, 0x140000+AY4,   6,    false,   },       // L0
-            {   1, 1,   9+AX4, 0x190000+AY4,   7,    false,   },       // L1
-            {   1, 3,  14+AX4, 0x1E0000+AY4,   8,    false,   },       // L2 (@CENTER)
-
-            // right facets
-
-            {   2, 6,  24+AX4, 0x140000+AY4,   6,    false,   },
-            {   2, 4,  19+AX4, 0x190000+AY4,   7,    false,   },
-            {   2, 4,  14+AX4, 0x1E0000+AY4,   8,    false,   },
-
-            {   -1,  -1, 0,0,0,    false,   },
-        },
-
-
-        // 5 TILT
-
-        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
-
-            // multiple facets, each...
-            // visibleShape, x, y, face# (to get colour), topOnly
-
-            // visibleShape:
-            // 0                TOP
-            // 1                LEFT
-            // 2                RIGHT
-            // 3    ... more rotations to be added
-
-#define AX5 1
-#define AY5 -0x20000
-
-            // topOnly:
-            // true             a part of the 3x3 "top" of the layer
-            // false            always drawn
-
-
-            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
-            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
-
-
-            // top facets
-
-            {   7, 3,  16+AX5, 0x0C0000+AY5,   0,    true,    },
-            {   7, 6,  10+AX5, 0x0F0000+AY5,   1,    true,    },
-            {   7, 1,  19+AX5, 0x130000+AY5,   2,    true,    },
-            {   7, 1,   4+AX5, 0x120000+AY5,   3,    true,    },
-            {   7, 4,  13+AX5, 0x160000+AY5,   4,    true,    },
-            {   7, 2,  22+AX5, 0x1A0000+AY5,   5,    true,    },
-            {   7, 7,   7+AX5, 0x190000+AY5,   6,    true,    },
-            {   7, 2,  16+AX5, 0x1D0000+AY5,   7,    true,    },
-            {   7, 5,  10+AX5, 0x200000+AY5,   8,    true,    },
-
-            // left facets
-
-            {   6, 6,   4+AX5, 0x120000+AY5,   6,    false,   },       // L0
-            {   6, 1,   7+AX5, 0x190000+AY5,   7,    false,   },       // L1
-            {   6, 3,  10+AX5, 0x200000+AY5,   8,    false,   },       // L2 (@CENTER)
-
-            // right facets
-
-            {   5, 6,  22+AX5, 0x1A0000+AY5,   6,    false,   },
-            {   5, 4,  16+AX5, 0x1D0000+AY5,   7,    false,   },
-            {   5, 4,  10+AX5, 0x200000+AY5,   8,    false,   },
-
-            {   -1,  -1, 0,0,0,    false,   },
-        },
-
-
-        // 6 FLAT
-        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
-
-            // multiple facets, each...
-            // visibleShape, x, y, face# (to get colour), topOnly
-
-            // visibleShape:
-            // 0                TOP
-            // 1                LEFT
-            // 2                RIGHT
-            // 3    ... more rotations to be added
-
-
-#define AX6 -1
-#define AY6 -0x20000
-
-            // topOnly:
-            // true             a part of the 3x3 "top" of the layer
-            // false            always drawn
-
-            // top facets
-
-            {   3, 1,  8+AX6, 0x0F0000+AY6,   0,    true,    },
-            {   3, 6, 15+AX6, 0x0F0000+AY6,   1,    true,    },
-            {   3, 3, 22+AX6, 0x0F0000+AY6,   2,    true,    },
-            {   3, 7,  8+AX6, 0x160000+AY6,   3,    true,    },
-            {   3, 4, 15+AX6, 0x160000+AY6,   4,    true,    },
-            {   3, 1, 22+AX6, 0x160000+AY6,   5,    true,    },
-            {   3, 5,  8+AX6, 0x1D0000+AY6,   6,    true,    },
-            {   3, 2, 15+AX6, 0x1D0000+AY6,   7,    true,    },
-            {   3, 2, 22+AX6, 0x1D0000+AY6,   8,    true,    },
-
-            // right facets (now face-on)
-
-            {   4, 4,   8+AX6, 0x1D0000+AY6,   6,    false,   },       // L0
-            {   4, 4,  15+AX6, 0x1D0000+AY6,   7,    false,   },       // L1
-            {   4, 6,  22+AX6, 0x1D0000+AY6,   8,    false,   },       // L2 (@CENTER)
-
-            {   -1,  -1, 0,0,0,    false,   },
-        },
- 
-
-        // 7 TILT2
-         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
-
-            // multiple facets, each...
-            // visibleShape, x, y, face# (to get colour), topOnly
-
-            // visibleShape:
-            // 0                TOP
-            // 1                LEFT
-            // 2                RIGHT
-            // 3    ... more rotations to be added
-
-
-            // topOnly:
-            // true             a part of the 3x3 "top" of the layer
-            // false            always drawn
-
-#define AX7 0
-#define AY7 -0x20000
-
-            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
-            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
-
-
-            // top facets
-
-            {   9, 1,  11+AX7, 0x0C0000+AY7,   0,    true,    },
-            {   9, 6,  17+AX7, 0x0F0000+AY7,   1,    true,    },
-            {   9, 7,   8+AX7, 0x130000+AY7,   2,    true,    },
-            {   9, 3,  23+AX7, 0x120000+AY7,   3,    true,    },
-            {   9, 4,  14+AX7, 0x160000+AY7,   4,    true,    },
-            {   9, 1,  20+AX7, 0x190000+AY7,   6,    true,    },
-            {   9, 5,   5+AX7, 0x1A0000+AY7,   5,    true,    },
-            {   9, 2,  11+AX7, 0x1D0000+AY7,   7,    true,    },
-            {   9, 2,  17+AX7, 0x200000+AY7,   8,    true,    },
-
-            // right facets
-
-            {   10, 5, 23+AX7, 0x120000+AY7,   6,    false,   },       // L0
-            {   10, 5, 20+AX7, 0x190000+AY7,   7,    false,   },       // L1
-            {   10, 3, 17+AX7, 0x200000+AY7,   8,    false,   },       // L2 (@CENTER)
-
-            // left facets
-
-            {   11, 4,  5+AX7, 0x1A0000+AY7,   6,    false,   },
-            {   11, 4, 11+AX7, 0x1D0000+AY7,   7,    false,   },
-            {   11, 6, 17+AX7, 0x200000+AY7,   8,    false,   },
-
-
-            {   -1,  -1, 0,0,0,    false,   },
-        },
-
-
-        // 8 ISO
-         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
-
-            // multiple facets, each...
-            // visibleShape, x, y, face# (to get colour), topOnly
-
-            // visibleShape:
-            // 0                TOP
-            // 1                LEFT
-            // 2                RIGHT
-            // 3    ... more rotations to be added
-
-
-#define AX8 0
-#define AY8 0x00000
-
-            // topOnly:
-            // true             a part of the 3x3 "top" of the layer
-            // false            always drawn
-
-            // top facets
-
-            {   0, 1,  14+AX8, 0x0A0000+AY8,   0,    true,    },
-            {   0, 7,   9+AX8, 0x0F0000+AY8,   1,    true,    },
-            {   0, 6,  19+AX8, 0x0F0000+AY8,   2,    true,    },
-            {   0, 5,   4+AX8, 0x140000+AY8,   3,    true,    },
-            {   0, 4,  14+AX8, 0x140000+AY8,   4,    true,    },
-            {   0, 3,  24+AX8, 0x140000+AY8,   5,    true,    },
-            {   0, 2,   9+AX8, 0x190000+AY8,   6,    true,    },
-            {   0, 1,  19+AX8, 0x190000+AY8,   7,    true,    },
-            {   0, 2,  14+AX8, 0x1E0000+AY8,   8,    true,    },
-
-            // left facets
-
-            {   1, 4,   4+AX8, 0x140000+AY8,   6,    false,   },       // L0
-            {   1, 4,   9+AX8, 0x190000+AY8,   7,    false,   },       // L1
-            {   1, 6,  14+AX8, 0x1E0000+AY8,   8,    false,   },       // L2 (@CENTER)
-
-            // right facets
-
-            {   2, 5,  24+AX8, 0x140000+AY8,   6,    false,   },
-            {   2, 5,  19+AX8, 0x190000+AY8,   7,    false,   },
-            {   2, 3,  14+AX8, 0x1E0000+AY8,   8,    false,   },
-
-            {   -1,  -1, 0,0,0,    false,   },
-        },
-
- 
-        // 9 TILT
-        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
-
-            // multiple facets, each...
-            // visibleShape, x, y, face# (to get colour), topOnly
-
-            // visibleShape:
-            // 0                TOP
-            // 1                LEFT
-            // 2                RIGHT
-            // 3    ... more rotations to be added
-
-
-            // topOnly:
-            // true             a part of the 3x3 "top" of the layer
-            // false            always drawn
-
-#define AX9 1
-#define AY9 -0x20000
-
-
-            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
-            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
-
-
-
-            // left facets
-
-            {   6, 4,   4+AX9, 0x120000+AY9,   6,    false,   },       // L0
-            {   6, 4,   7+AX9, 0x190000+AY9,   7,    false,   },       // L1
-            {   6, 6,  10+AX9, 0x200000+AY9,   8,    false,   },       // L2 (@CENTER)
-
-            // right facets
-
-            {   5, 5,  22+AX9, 0x1A0000+AY9,   6,    false,   },
-            {   5, 5,  16+AX9, 0x1D0000+AY9,   7,    false,   },
-            {   5, 3,  10+AX9, 0x200000+AY9,   8,    false,   },
-
-            // top facets
-
-            {   7, 1,  16+AX9, 0x0C0000+AY9,   0,    true,    },
-            {   7, 7,  10+AX9, 0x0F0000+AY9,   1,    true,    },
-            {   7, 6,  19+AX9, 0x130000+AY9,   2,    true,    },
-            {   7, 5,   4+AX9, 0x120000+AY9,   3,    true,    },
-            {   7, 4,  13+AX9, 0x160000+AY9,   4,    true,    },
-            {   7, 3,  22+AX9, 0x1A0000+AY9,   5,    true,    },
-            {   7, 2,   7+AX9, 0x190000+AY9,   6,    true,    },
-            {   7, 1,  16+AX9, 0x1D0000+AY9,   7,    true,    },
-            {   7, 2,  10+AX9, 0x200000+AY9,   8,    true,    },
-
-            {   -1,  -1, 0,0,0,    false,   },
-        },
-
-
-        // 10 ISO
-        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
-
-            // multiple facets, each...
-            // visibleShape, x, y, face# (to get colour), topOnly
-
-            // visibleShape:
-            // 0                TOP
-            // 1                LEFT
-            // 2                RIGHT
-            // 3    ... more rotations to be added
-
-
-            // topOnly:
-            // true             a part of the 3x3 "top" of the layer
-            // false            always drawn
-
-#define AX10 -1
-#define AY10 -0x20000
-
-            // top facets
-
-            {   3, 5,  8+AX10, 0x0F0000+AY10,   0,    true,    },
-            {   3, 7, 15+AX10, 0x0F0000+AY10,   1,    true,    },
-            {   3, 1, 22+AX10, 0x0F0000+AY10,   2,    true,    },
-            {   3, 2,  8+AX10, 0x160000+AY10,   3,    true,    },
-            {   3, 4, 15+AX10, 0x160000+AY10,   4,    true,    },
-            {   3, 6, 22+AX10, 0x160000+AY10,   5,    true,    },
-            {   3, 2,  8+AX10, 0x1D0000+AY10,   6,    true,    },
-            {   3, 1, 15+AX10, 0x1D0000+AY10,   7,    true,    },
-            {   3, 3, 22+AX10, 0x1D0000+AY10,   8,    true,    },
-
-            // right facets (now face-on)
-
-            {   4, 3,   8+AX10, 0x1D0000+AY10,   6,    false,   },       // L0
-            {   4, 5,  15+AX10, 0x1D0000+AY10,   7,    false,   },       // L1
-            {   4, 5,  22+AX10, 0x1D0000+AY10,   8,    false,   },       // L2 (@CENTER)
-
-            {   -1,  -1, 0,0,0,    false,   },
-        },
- 
- 
-
-        // 11 tilt2 +(6,0x3000)
-         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
-
-            // multiple facets, each...
-            // visibleShape, x, y, face# (to get colour), topOnly
-
-            // visibleShape:
-            // 0                TOP
-            // 1                LEFT
-            // 2                RIGHT
-            // 3    ... more rotations to be added
-
-
-            // topOnly:
-            // true             a part of the 3x3 "top" of the layer
-            // false            always drawn
-
-
-            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
-            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
-
-#define AX11 0
-#define AY11 -0x20000
-
-
-            // top facets
-
-            {   9, 5,  11+AX11,  0x0C0000+AY11,   0,    true,    },
-            {   9, 7,  17+AX11,  0x0F0000+AY11,   1,    true,    },
-            {   9, 1,  23+AX11,  0x120000+AY11,   3,    true,    },
-            {   9, 2,   8+AX11,  0x130000+AY11,   2,    true,    },
-            {   9, 4,  14+AX11,  0x160000+AY11,   4,    true,    },
-            {   9, 6,  20+AX11,  0x190000+AY11,   6,    true,    },
-            {   9, 2,   5+AX11,  0x1A0000+AY11,   5,    true,    },
-            {   9, 1,  11+AX11,  0x1D0000+AY11,   7,    true,    },
-            {   9, 3,  17+AX11,  0x200000+AY11,   8,    true,    },
-
-            // right facets
-
-            {   10, 3, 23+AX11,  0x120000+AY11,   6,    false,   },       // L0
-            {   10, 1, 20+AX11,  0x190000+AY11,   7,    false,   },       // L1
-            {   10, 6, 17+AX11,  0x200000+AY11,   8,    false,   },       // L2 (@CENTER)
-
-            // left facets
-
-            {   11, 3,   5+AX11,  0x1A0000+AY11,   6,    false,   },
-            {   11, 5,  11+AX11, 0x1D0000+AY11,   7,    false,   },
-            {   11, 5,  17+AX11, 0x200000+AY11,   8,    false,   },
-
-            {   -1,  -1, 0,0,0,    false,   },
-        },
-
-
-        // 12
-
-         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
-
-            // multiple facets, each...
-            // visibleShape, x, y, face# (to get colour), topOnly
-
-            // visibleShape:
-            // 0                TOP
-            // 1                LEFT
-            // 2                RIGHT
-            // 3    ... more rotations to be added
-
-#define AX12 0
-#define AY12 0x00000
-
-            // topOnly:
-            // true             a part of the 3x3 "top" of the layer
-            // false            always drawn
-
-            // top facets
-
-            {   0, 5,  14+AX12, 0x0A0000+AY12,   0,    true,    },
-            {   0, 2,   9+AX12, 0x0F0000+AY12,   1,    true,    },
-            {   0, 7,  19+AX12, 0x0F0000+AY12,   2,    true,    },
-            {   0, 2,   4+AX12, 0x140000+AY12,   3,    true,    },
-            {   0, 4,  14+AX12, 0x140000+AY12,   4,    true,    },
-            {   0, 1,  24+AX12, 0x140000+AY12,   5,    true,    },
-            {   0, 1,   9+AX12, 0x190000+AY12,   6,    true,    },
-            {   0, 6,  19+AX12, 0x190000+AY12,   7,    true,    },
-            {   0, 3,  14+AX12, 0x1E0000+AY12,   8,    true,    },
-
-            // left facets
-
-            {   1, 3,   4+AX12, 0x140000+AY12,   6,    false,   },       // L0
-            {   1, 5,   9+AX12, 0x190000+AY12,   7,    false,   },       // L1
-            {   1, 5,  14+AX12, 0x1E0000+AY12,   8,    false,   },       // L2 (@CENTER)
-
-            // right facets
-
-            {   2, 3,  24+AX12, 0x140000+AY12,   6,    false,   },
-            {   2, 1,  19+AX12, 0x190000+AY12,   7,    false,   },
-            {   2, 6,  14+AX12, 0x1E0000+AY12,   8,    false,   },
-
-            {   -1,  -1, 0,0,0,    false,   },
-        },
-
-
-        // 13 TILT
-
-        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
-
-            // multiple facets, each...
-            // visibleShape, x, y, face# (to get colour), topOnly
-
-            // visibleShape:
-            // 0                TOP
-            // 1                LEFT
-            // 2                RIGHT
-            // 3    ... more rotations to be added
-
-
-            // topOnly:
-            // true             a part of the 3x3 "top" of the layer
-            // false            always drawn
-
-#define AX13 1
-#define AY13 -0x20000
-
-            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
-            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
-
-
-            // left facets
-
-            {   6, 3,   4+AX13, 0x120000+AY13,   6,    false,   },       // L0
-            {   6, 5,   7+AX13, 0x190000+AY13,   7,    false,   },       // L1
-            {   6, 5,  10+AX13, 0x200000+AY13,   8,    false,   },       // L2 (@CENTER)
-
-            // right facets
-
-            {   5, 3,  22+AX13, 0x1A0000+AY13,   6,    false,   },
-            {   5, 1,  16+AX13, 0x1D0000+AY13,   7,    false,   },
-            {   5, 6,  10+AX13, 0x200000+AY13,   8,    false,   },
-
-            // top facets
-
-            {   7, 5,  16+AX13, 0x0C0000+AY13,   0,    true,    },
-            {   7, 2,  10+AX13, 0x0F0000+AY13,   1,    true,    },
-            {   7, 7,  19+AX13, 0x130000+AY13,   2,    true,    },
-            {   7, 2,   4+AX13, 0x120000+AY13,   3,    true,    },
-            {   7, 4,  13+AX13, 0x160000+AY13,   4,    true,    },
-            {   7, 1,  22+AX13, 0x1A0000+AY13,   5,    true,    },
-            {   7, 1,   7+AX13, 0x190000+AY13,   6,    true,    },
-            {   7, 6,  16+AX13, 0x1D0000+AY13,   7,    true,    },
-            {   7, 3,  10+AX13, 0x200000+AY13,   8,    true,    },
-
-            {   -1,  -1, 0,0,0,    false,   },
-        },
-
-
-
-        // 14
-        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
-
-            // multiple facets, each...
-            // visibleShape, x, y, face# (to get colour), topOnly
-
-            // visibleShape:
-            // 0                TOP
-            // 1                LEFT
-            // 2                RIGHT
-            // 3    ... more rotations to be added
-
-#define AX14 -1
-#define AY14 -0x20000
-
-            // topOnly:
-            // true             a part of the 3x3 "top" of the layer
-            // false            always drawn
-
-            // top facets
-
-            {   3, 2,  8+AX14, 0x0F0000+AY14,   0,    true,    },
-            {   3, 2, 15+AX14, 0x0F0000+AY14,   1,    true,    },
-            {   3, 5, 22+AX14, 0x0F0000+AY14,   2,    true,    },
-            {   3, 1,  8+AX14, 0x160000+AY14,   3,    true,    },
-            {   3, 4, 15+AX14, 0x160000+AY14,   4,    true,    },
-            {   3, 7, 22+AX14, 0x160000+AY14,   5,    true,    },
-            {   3, 3,  8+AX14, 0x1D0000+AY14,   6,    true,    },
-            {   3, 6, 15+AX14, 0x1D0000+AY14,   7,    true,    },
-            {   3, 1, 22+AX14, 0x1D0000+AY14,   8,    true,    },
-
-            // right facets (now face-on)
-
-            {   4, 6,   8+AX14, 0x1D0000+AY14,   6,    false,   },       // L0
-            {   4, 1,  15+AX14, 0x1D0000+AY14,   7,    false,   },       // L1
-            {   4, 3,  22+AX14, 0x1D0000+AY14,   8,    false,   },       // L2 (@CENTER)
-
-
-            {   -1,  -1, 0,0,0,    false,   },
-        },
- 
- 
-        // 15 tilt2  +(6,0x30000)
-         {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
-
-            // multiple facets, each...
-            // visibleShape, x, y, face# (to get colour), topOnly
-
-            // visibleShape:
-            // 0                TOP
-            // 1                LEFT
-            // 2                RIGHT
-            // 3    ... more rotations to be added
-
-
-            // topOnly:
-            // true             a part of the 3x3 "top" of the layer
-            // false            always drawn
-
-#define AX15 0
-#define AY15 -0x20000
-
-            // {   8, 0,  4, 0x150000,   0,    false,    },       // cube boundary
-            // {   8, 1, 14, 0x1E0000,   0,    false,    },       // cube boundary
-
-
-
-            // // right facets
-
-            {   10, 3,  23+AX15, 0x120000+AY15,   6,    false,   },       // L0
-            {   10, 1,  20+AX15, 0x190000+AY15,   7,    false,   },       // L1
-            {   10, 6,  17+AX15, 0x200000+AY15,   8,    false,   },       // L2 (@CENTER)
-
-            // left facets
-
-            {   11, 6,   5+AX15, 0x1A0000+AY15,   6,    false,   },
-            {   11, 1,  11+AX15, 0x1D0000+AY15,   7,    false,   },
-            {   11, 3,  17+AX15, 0x200000+AY15,   8,    false,   },
-
-            // top facets
-
-            {   9, 2,  11+AX15, 0x0C0000+AY15,   0,    true,    },
-            {   9, 2,  17+AX15, 0x0F0000+AY15,   1,    true,    },
-            {   9, 1,   8+AX15, 0x130000+AY15,   2,    true,    },
-            {   9, 5,  23+AX15, 0x120000+AY15,   3,    true,    },
-            {   9, 4,  14+AX15, 0x160000+AY15,   4,    true,    },
-            {   9, 7,  20+AX15, 0x190000+AY15,   6,    true,    },
-            {   9, 3,   5+AX15, 0x1A0000+AY15,   5,    true,    },
-            {   9, 6,  11+AX15, 0x1D0000+AY15,   7,    true,    },
-            {   9, 1,  17+AX15, 0x200000+AY15,   8,    true,    },
-
-            {   -1,  -1, 0,0,0,    false,   },
-        },
-
-
-
 
     },
 };
@@ -2045,29 +1676,27 @@ const unsigned char *shapeBoundary[] = {
 
 
 /*
-               +---+---+---+  
-               |   |   |   |
-               +---+---+---+  
-               |   |tOP|   |
-               +---+---+---+  
-               |   |   |   |
-               +---+---+---+  
-
-+---+---+---+  +---+---+---+  +---+---+---+  +---+---+---+  
-|  0|  1|  2|  |   |   |   |  |   |   |   |  |   |   |   |  
-+---+---+---+  +---+---+---+  +---+---+---+  +---+---+---+  
-|   | BL|   |  |   | FL|   |  |   |FR |   |  |   | BR|   |  
-+---+---+---+  +---+---+---+  +---+---+---+  +---+---+---+  
-|   |   |   |  |   |   |   |  |   |   |   |  |   |   |   |  
-+---+---+---+  +---+---+---+  +---+---+---+  +---+---+---+  
-
-               +---+---+---+  
-               |   |   |   |
-               +---+---+---+  
-               |   |BOT|   |
-               +---+---+---+  
-               |   |   |   |
-               +---+---+---+
+              +---+---+---+  
+              |   |   |   |
+              +---+---+---+  
+              |   |   |   |
+              +---+---+---+  
+              |   |   |   |
+              +---+---+---+  
++---+---+---+ +---+---+---+ +---+---+---+ +---+---+---+  
+|   |   |   | |   |   |   | |   |   |   | |   |   |   |  
++---+---+---+ +---+---+---+ +---+---+---+ +---+---+---+  
+|   |   |   | |   |   |   | |   |   |   | |   |   |   |  
++---+---+---+ +---+---+---+ +---+---+---+ +---+---+---+  
+|   |   |   | |   |   |   | |   |   |   | |   |   |   |  
++---+---+---+ +---+---+---+ +---+---+---+ +---+---+---+  
+              +---+---+---+  
+              |   |   |   |
+              +---+---+---+  
+              |   |   |   |
+              +---+---+---+  
+              |   |   |   |
+              +---+---+---+
 */
 
 #define FACETX 3               
@@ -2099,71 +1728,10 @@ const unsigned char *shapeBoundary[] = {
 #define FACETYFROFFSET 12
 #define FACETYBROFFSET 12
 
-const int facetX[] = {
-
-    // BL
-    0*FACETX2 + FACETXBLOFFSET, 1*FACETX2 + FACETXBLOFFSET, 2*FACETX2 + FACETXBLOFFSET,
-    0*FACETX2 + FACETXBLOFFSET, 1*FACETX2 + FACETXBLOFFSET, 2*FACETX2 + FACETXBLOFFSET,
-    0*FACETX2 + FACETXBLOFFSET, 1*FACETX2 + FACETXBLOFFSET, 2*FACETX2 + FACETXBLOFFSET,
-
-    //TOP
-    0*FACETX2 + FACETXTOPOFFSET, 1*FACETX2 + FACETXTOPOFFSET, 2*FACETX2 + FACETXTOPOFFSET,
-    0*FACETX2 + FACETXTOPOFFSET, 1*FACETX2 + FACETXTOPOFFSET, 2*FACETX2 + FACETXTOPOFFSET,
-    0*FACETX2 + FACETXTOPOFFSET, 1*FACETX2 + FACETXTOPOFFSET, 2*FACETX2 + FACETXTOPOFFSET,
-
-    //FL
-    0*FACETX2 + FACETXFLOFFSET ,1*FACETX2 + FACETXFLOFFSET, 2*FACETX2 + FACETXFLOFFSET,
-    0*FACETX2 + FACETXFLOFFSET ,1*FACETX2 + FACETXFLOFFSET, 2*FACETX2 + FACETXFLOFFSET,
-    0*FACETX2 + FACETXFLOFFSET ,1*FACETX2 + FACETXFLOFFSET, 2*FACETX2 + FACETXFLOFFSET,
-
-    //BOT
-    0*FACETX2 + FACETXBOTOFFSET, 1*FACETX2 + FACETXBOTOFFSET, 2*FACETX2 + FACETXBOTOFFSET,
-    0*FACETX2 + FACETXBOTOFFSET, 1*FACETX2 + FACETXBOTOFFSET, 2*FACETX2 + FACETXBOTOFFSET,
-    0*FACETX2 + FACETXBOTOFFSET, 1*FACETX2 + FACETXBOTOFFSET, 2*FACETX2 + FACETXBOTOFFSET,
-
-    //FR
-    0*FACETX2 + FACETXFROFFSET, 1*FACETX2 + FACETXFROFFSET, 2*FACETX2 + FACETXFROFFSET,
-    0*FACETX2 + FACETXFROFFSET, 1*FACETX2 + FACETXFROFFSET, 2*FACETX2 + FACETXFROFFSET,
-    0*FACETX2 + FACETXFROFFSET, 1*FACETX2 + FACETXFROFFSET, 2*FACETX2 + FACETXFROFFSET,
-
-    // BR
-    0*FACETX2 + FACETXBROFFSET, 1*FACETX2 + FACETXBROFFSET, 2*FACETX2 + FACETXBROFFSET,
-    0*FACETX2 + FACETXBROFFSET, 1*FACETX2 + FACETXBROFFSET, 2*FACETX2 + FACETXBROFFSET,
-    0*FACETX2 + FACETXBROFFSET, 1*FACETX2 + FACETXBROFFSET, 2*FACETX2 + FACETXBROFFSET,
-
-    -1,
-};
-
-const int facetY[] = {
-
-    0 * FACETY2 + FACETYBLOFFSET,  0 * FACETY2 + FACETYBLOFFSET, 0 * FACETY2 + FACETYBLOFFSET,
-    1 * FACETY2 + FACETYBLOFFSET,  1 * FACETY2 + FACETYBLOFFSET, 1 * FACETY2 + FACETYBLOFFSET,
-    2 * FACETY2 + FACETYBLOFFSET,  2 * FACETY2 + FACETYBLOFFSET, 2 * FACETY2 + FACETYBLOFFSET,
-    0 * FACETY2 + FACETYTOPOFFSET,  0 * FACETY2 + FACETYTOPOFFSET,  0 * FACETY2 + FACETYTOPOFFSET,
-    1 * FACETY2 + FACETYTOPOFFSET,  1 * FACETY2 + FACETYTOPOFFSET,  1 * FACETY2 + FACETYTOPOFFSET,
-    2 * FACETY2 + FACETYTOPOFFSET,  2 * FACETY2 + FACETYTOPOFFSET,  2 * FACETY2 + FACETYTOPOFFSET,
-    0 * FACETY2 + FACETYFLOFFSET,  0 * FACETY2 + FACETYFLOFFSET, 0 * FACETY2 + FACETYFLOFFSET,
-    1 * FACETY2 + FACETYFLOFFSET,  1 * FACETY2 + FACETYFLOFFSET, 1 * FACETY2 + FACETYFLOFFSET,
-    2 * FACETY2 + FACETYFLOFFSET,  2 * FACETY2 + FACETYFLOFFSET, 2 * FACETY2 + FACETYFLOFFSET,
-    0 * FACETY2 + FACETYBOTOFFSET, 0 * FACETY2 + FACETYBOTOFFSET, 0 * FACETY2 + FACETYBOTOFFSET,
-    1 * FACETY2 + FACETYBOTOFFSET, 1 * FACETY2 + FACETYBOTOFFSET, 1 * FACETY2 + FACETYBOTOFFSET,
-    2 * FACETY2 + FACETYBOTOFFSET, 2 * FACETY2 + FACETYBOTOFFSET, 2 * FACETY2 + FACETYBOTOFFSET,
-    0 * FACETY2 + FACETYFROFFSET,  0 * FACETY2 + FACETYFROFFSET, 0 * FACETY2 + FACETYFROFFSET,
-    1 * FACETY2 + FACETYFROFFSET,  1 * FACETY2 + FACETYFROFFSET, 1 * FACETY2 + FACETYFROFFSET,
-    2 * FACETY2 + FACETYFROFFSET,  2 * FACETY2 + FACETYFROFFSET, 2 * FACETY2 + FACETYFROFFSET,
-    0 * FACETY2 + FACETYBROFFSET,  0 * FACETY2 + FACETYBROFFSET, 0 * FACETY2 + FACETYBROFFSET,
-    1 * FACETY2 + FACETYBROFFSET,  1 * FACETY2 + FACETYBROFFSET, 1 * FACETY2 + FACETYBROFFSET,
-    2 * FACETY2 + FACETYBROFFSET,  2 * FACETY2 + FACETYBROFFSET, 2 * FACETY2 + FACETYBROFFSET,
-};
 
 
 const int facetEndX[] = {
 
-    // BL
-    0*FACETX  + FACETXOFFSET, 1*FACETX  + FACETXOFFSET, 2*FACETX  + FACETXOFFSET,
-    0*FACETX  + FACETXOFFSET, 1*FACETX  + FACETXOFFSET, 2*FACETX  + FACETXOFFSET,
-    0*FACETX  + FACETXOFFSET, 1*FACETX  + FACETXOFFSET, 2*FACETX  + FACETXOFFSET,
-
     //TOP
     0*FACETX  + FACETXOFFSET2, 1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
     0*FACETX  + FACETXOFFSET2, 1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
@@ -2174,49 +1742,56 @@ const int facetEndX[] = {
     0*FACETX  + FACETXOFFSET2 ,1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
     0*FACETX  + FACETXOFFSET2 ,1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
 
-    //BOT
-    0*FACETX  + FACETXOFFSET2, 1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
-    0*FACETX  + FACETXOFFSET2, 1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
-    0*FACETX  + FACETXOFFSET2, 1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
-
     //FR
-    0*FACETX  + FACETXOFFSET3, 1*FACETX  + FACETXOFFSET3, 2*FACETX  + FACETXOFFSET3,
-    0*FACETX  + FACETXOFFSET3, 1*FACETX  + FACETXOFFSET3, 2*FACETX  + FACETXOFFSET3,
-    0*FACETX  + FACETXOFFSET3, 1*FACETX  + FACETXOFFSET3, 2*FACETX  + FACETXOFFSET3,
+    2*FACETX  + FACETXOFFSET3, 2*FACETX  + FACETXOFFSET3, 2*FACETX  + FACETXOFFSET3,
+    1*FACETX  + FACETXOFFSET3, 1*FACETX  + FACETXOFFSET3, 1*FACETX  + FACETXOFFSET3,
+    0*FACETX  + FACETXOFFSET3, 0*FACETX  + FACETXOFFSET3, 0*FACETX  + FACETXOFFSET3,
+
+
+    // BOT?!
+    0*FACETX  + FACETXOFFSET4, 1*FACETX  + FACETXOFFSET4, 2*FACETX  + FACETXOFFSET4,
+    0*FACETX  + FACETXOFFSET4, 1*FACETX  + FACETXOFFSET4, 2*FACETX  + FACETXOFFSET4,
+    0*FACETX  + FACETXOFFSET4, 1*FACETX  + FACETXOFFSET4, 2*FACETX  + FACETXOFFSET4,
+
 
     // BR
-    0*FACETX  + FACETXOFFSET4, 1*FACETX  + FACETXOFFSET4, 2*FACETX  + FACETXOFFSET4,
-    0*FACETX  + FACETXOFFSET4, 1*FACETX  + FACETXOFFSET4, 2*FACETX  + FACETXOFFSET4,
-    0*FACETX  + FACETXOFFSET4, 1*FACETX  + FACETXOFFSET4, 2*FACETX  + FACETXOFFSET4,
+    0*FACETX  + FACETXOFFSET2, 1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
+    0*FACETX  + FACETXOFFSET2, 1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
+    0*FACETX  + FACETXOFFSET2, 1*FACETX  + FACETXOFFSET2, 2*FACETX  + FACETXOFFSET2,
 
+    // BL
+    0*FACETX  + FACETXOFFSET, 0*FACETX  + FACETXOFFSET, 0*FACETX  + FACETXOFFSET,
+    1*FACETX  + FACETXOFFSET, 1*FACETX  + FACETXOFFSET, 1*FACETX  + FACETXOFFSET,
+    2*FACETX  + FACETXOFFSET, 2*FACETX  + FACETXOFFSET, 2*FACETX  + FACETXOFFSET,
     -1,
 };
 
 const int facetEndY[] = {
 
-    0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2,
-    1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2,
     2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2,
+    1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2,
+    0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2,
+
+    2 * FACETY  + FACETYOFFSET3, 2 * FACETY  + FACETYOFFSET3, 2 * FACETY  + FACETYOFFSET3,
+    1 * FACETY  + FACETYOFFSET3, 1 * FACETY  + FACETYOFFSET3, 1 * FACETY  + FACETYOFFSET3,
+    0 * FACETY  + FACETYOFFSET3, 0 * FACETY  + FACETYOFFSET3, 0 * FACETY  + FACETYOFFSET3,
+
+    2 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2,
+    2 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2,
+    2 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2,
+
+    2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2,
+    1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2,
+    0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2,
+
 
     0 * FACETY  + FACETYOFFSET, 0 * FACETY  + FACETYOFFSET, 0 * FACETY  + FACETYOFFSET,
     1 * FACETY  + FACETYOFFSET, 1 * FACETY  + FACETYOFFSET, 1 * FACETY  + FACETYOFFSET,
     2 * FACETY  + FACETYOFFSET, 2 * FACETY  + FACETYOFFSET, 2 * FACETY  + FACETYOFFSET,
 
-    0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2,
-    1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2,
-    2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2,
-
-    0 * FACETY  + FACETYOFFSET3, 0 * FACETY  + FACETYOFFSET3, 0 * FACETY  + FACETYOFFSET3,
-    1 * FACETY  + FACETYOFFSET3, 1 * FACETY  + FACETYOFFSET3, 1 * FACETY  + FACETYOFFSET3,
-    2 * FACETY  + FACETYOFFSET3, 2 * FACETY  + FACETYOFFSET3, 2 * FACETY  + FACETYOFFSET3,
-
-    0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2,
-    1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2,
-    2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2,
-
-    0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2, 0 * FACETY  + FACETYOFFSET2,
-    1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2,
-    2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2,
+    0 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2,
+    0 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2,
+    0 * FACETY  + FACETYOFFSET2, 1 * FACETY  + FACETYOFFSET2, 2 * FACETY  + FACETYOFFSET2,
 };
 
 
@@ -2286,23 +1861,24 @@ void drawSoftwareSprites() {
 
 
     if (drawMode == 0) {
+    // if (facetIndex < 54) {
         drawOverviewSoftwareSprites();
         return;
     }
 
 
 
-    rr = rotateTop[fLayer];
+    rr = rotateTop[fLayer] & 3;
 //    if (JOY0_FIRE || fLayer == 2)
 //        rr = rotateTop[0];
 
     // rr = 14;
 
 
-    struct facet *f = &shapeDef[0][rr][fno++];
+    struct facet *f = &shapeDef[0][rr][fLayer][fno++];
 
     // no more facets --> finished drawing
-    if (f->face < 0) {
+    if (f->shape < 0) {
 
         fno = 0;
 
@@ -2310,7 +1886,6 @@ void drawSoftwareSprites() {
         if (++fLayer > 2) {
             fLayer = 0;
             finished = true;
-
 
             if (highlightLayer) {
                 highlightLayer--;
@@ -2326,19 +1901,40 @@ void drawSoftwareSprites() {
 
             for (int l = 0; l < 3; l++) {
 
-                if (rotateSpeed[l])
+                if (rotateSpeed[l]) {
                     rotateSpeed[l]--;
+                }
+
     
-                if (!rotateSpeed[l]) {
+                if (direct[l] && !rotateSpeed[l]) {
 
                     rotateSpeed[l] = 1;
                     rotateTop[l]+= direct[l];
                     rotateTop[l] &= 15;
 
-                    if (!(rotateTop[l] & 3))
-                        direct[l] = 0;
-                }
+                    if (direct[l] > 0 && !(rotateTop[l] & 3)) {
 
+                        //if (l == controlledLayer)
+                            rotateLeft(l, 0);
+                        direct[l] = 0;
+                    }
+
+
+                    if (direct[l] < 0 && (rotateTop[l] & 3) == 3) {
+
+                        //if (l == controlledLayer) {
+                            rotateLeft(l, 0);
+                            rotateLeft(l, 0);
+                            rotateLeft(l, 0);
+                        //}
+                        //direct[l] = 0;
+                    }
+
+                    if (direct[l] < 0 && !(rotateTop[l] & 3))
+                        direct[l] = 0;
+
+
+                }
             }
         }
 
@@ -2347,65 +1943,31 @@ void drawSoftwareSprites() {
 
     }
 
-
-    const unsigned char **shape = shapeSetTop;
-    switch (f->face) {
-    case 0: shape = shapeSetTop;
-        break;
-    case 1: shape = shapeSetLeft;
-        break;
-    case 2: shape = shapeSetRight;
-        break;
-    case 3: shape = shapeSetTop45;
-        break;
-    case 4: shape = shapeSetFront45;
-        break;
-    case 5: shape = shapeSetRight2;
-        break;
-    case 6: shape = shapeSetLeft2;
-        break;
-    case 7: shape = shapeSetTop2;
-        break;
-    case 8: shape = shapeBoundary;
-        break;
-    case 9: shape = shapeSetTop3;
-        break;
-    case 10: shape = shapeSetLeft3;
-        break;
-    case 11: shape = shapeSetRight3;
-        break;
-    case 12: shape = shapeMarker;
-        break;
-    }
-
-    #if MARKER
-
-    for (int m = 0; m < 2; m++) {
-
-        if (m)
-            shape = shapeMarker;
-    #endif
+    static const unsigned char **whichShapeSet[] = {
+        shapeSetTop,
+        shapeSetLeft,        
+        shapeSetRight,
+        shapeSetTop45,
+        shapeSetFront45,
+        shapeSetRight2,
+        shapeSetLeft2,
+        shapeSetTop2,
+        shapeBoundary,
+        shapeSetTop3,
+        shapeSetLeft3,
+        shapeSetRight3,
+        shapeMarker,
+    };
 
 
-    int theColour = f->colour;
-    if (showHighlight && fLayer == controlledLayer ) //&& !(highlightLayer & 1))
-        if (!(highlightLayer & 1))
-            theColour = 0;
-        // else   
-        //      theColour = 0;
+    int theColour = mobileCol[whichFace[f->face] * 9 + f->square];
 
-    if (!f->topOnly || (fLayer == 2 && f->topOnly))
-        drawBitmap(shape[theColour],
-            ((f->x << 14) & 0xFFFFC000) + 0x00014000,
-            ((((118+2 - (fLayer * 13)) << 16) + (f->y)))  * 3);
+    if ((showHighlight && fLayer == controlledLayer ) && !(highlightLayer & 1))
+        theColour = 0;
 
-    #if MARKER
-    }
-    #endif
-
-
-
-
+    drawBitmap(whichShapeSet[f->shape][theColour],
+        ((f->x << 14) & 0xFFFFC000) + 0x00014000,
+        ((((118+2 - (fLayer * 13)) << 16) + (f->y)))  * 3);
   
 }
 
