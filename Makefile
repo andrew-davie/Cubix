@@ -43,7 +43,7 @@ CFLAGS += -Wl,--build-id=none -flto -mno-thumb-interwork
 # Search path
 VPATH += $(BASE):$(SRC)
 
-# Default ∫target
+# Default target
 default: armcode
 	#sleep 20
 	#open -a /Applications/Stella.app ./cubiks.bin
@@ -75,8 +75,22 @@ armcode_list:
 	@echo -e $(OPTION_COLOR)
 	../dasm/bin/dasm $(PROJECT).asm -f3 -v0 -o$(PROJECT).bin -l$(PROJECT).lst -s$(PROJECT).sym
 	@echo -e $(DEFAULT_COLOR)
+
+
+
+LPC:
+	cp ARM/LPC/custom*.* main/custom/
+	cp ARM/LPC/defines_cdfj.h main/
+
+STM:
+	cp ARM/STM/custom*.* main/custom/
+	cp ARM/STM/defines_cdfj.h main/
 	
+
+
 armcode: armcode_defines armcode_arm armcode_list
+
+armcode2: armcode_defines2 armcode_arm2 armcode_list2
 
 flash:
 	lpc21isp -bin -wipe -verify -control -controlswap $(PROJECT).bin /dev/ttyUSB0 38400 10000
