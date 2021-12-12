@@ -13,24 +13,32 @@ Description: CDF bankswitching utilities
 // Start of Atari banks in FLASH(uncomment to use)
 // unsigned char * const _BANK0=(unsigned char*)0x1000;
 
+#if 0
+#define RAM_BASE 0x40000000
+#define ROM_BASE 0x00000000
+#else
+#define RAM_BASE 0x10000000
+#define ROM_BASE 0x20000000
+#endif
+
 // Raw queue pointers
-void* DDR = (void*)0x40000800;
+void* DDR = (void*)RAM_BASE + 0x0800;
 #define RAM ((unsigned char*)DDR)
 #define RAM_INT ((unsigned int*)DDR)
 #define RAM_SINT ((unsigned short int*)DDR)
 
-#define ROM ((unsigned char*)0)
-#define ROM_INT ((unsigned int*)0)
-#define ROM_SINT ((unsigned short int*)0)
+#define ROM ((unsigned char*)ROM_BASE)
+#define ROM_INT ((unsigned int*)ROM_BASE)
+#define ROM_SINT ((unsigned short int*)ROM_BASE)
 
 // Queue variables
-unsigned int* const _QPTR=(unsigned int*)0x40000098;
-unsigned int* const _QINC=(unsigned int*)0x40000124;
-unsigned int* const _WAVEFORM=(unsigned int*)0x400001B0;
+unsigned int* const _QPTR=(unsigned int*)(RAM_BASE + 0x0098);
+unsigned int* const _QINC=(unsigned int*)(RAM_BASE + 0x0124);
+unsigned int* const _WAVEFORM=(unsigned int*)(RAM_BASE + 0x01B0);
 
 // Set fetcher pointer (offset from start of display data)
 inline void setPointer(int fetcher, unsigned int offset) {
-  _QPTR[fetcher] = offset << 20;
+  _QPTR[fetcher] = (offset << 20);
 }
 
 // Set fetcher pointer and fraction
@@ -49,7 +57,7 @@ inline void setIncrement2(int fetcher, short increment) {
 
 // Set waveform (32-byte offset in ROM)
 inline void setWaveform(int wave, unsigned char offset) {
-  _WAVEFORM[wave] = 0x40000800 + (offset << 5);
+  _WAVEFORM[wave] = RAM_BASE + 0x0800 + (offset << 5);
 }
 
 // Set DA sample address
@@ -59,7 +67,7 @@ inline void setSamplePtr(unsigned int address) {
 
 // Set note frequency
 void setNote(int note, unsigned int freq) {
-  unsigned int setNoteFn = 0x00000751;
+  unsigned int setNoteFn = ROM_BASE + 0x00000751;
   asm volatile(
     "mov r2, %0\n\t"
     "mov r3, %1\n\t"
@@ -72,7 +80,7 @@ void setNote(int note, unsigned int freq) {
 
 // Reset waveform
 void resetWave(int wave) {
-  unsigned int resetWaveFn = 0x00000755;
+  unsigned int resetWaveFn = ROM_BASE + 0x00000755;
   asm volatile(
     "mov r2, %0\n\t"
     "mov r4, %1\n\t"
@@ -84,7 +92,7 @@ void resetWave(int wave) {
 
 // Get waveform pointer
 unsigned int getWavePtr(int wave) {
-  unsigned int getWavePtrFn = 0x00000759;
+  unsigned int getWavePtrFn = ROM_BASE + 0x00000759;
   unsigned int ptr;
   asm volatile(
     "mov r2, %1\n\t"
@@ -111,7 +119,7 @@ unsigned int getWavePtr(int wave) {
 // 30 = 4 bytes
 // 31 = 2 bytes
 void setWaveSize(int wave, unsigned int size) {
-  unsigned int setWaveSizeFn = 0x0000075d;
+  unsigned int setWaveSizeFn = ROM_BASE + 0x0000075d;
   if (size < 20 || size > 31) return;
   asm volatile(
     "mov r2, %0\n\t"

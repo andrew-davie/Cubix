@@ -4,11 +4,6 @@ Description: Harmony Custom C Code Booter
 (C) Copyright 2016 - Chris Walton, Fred Quimby, Darrell Spice Jr
 ******************************************************************************/
 
-
-/*RAM_START = 0x40000000*/
-RAM_START = 0x10000000
-
-
 /* Start in ARM mode */
 .arm
 
@@ -26,10 +21,9 @@ Custom:
 .thumb
 
   /* Fetch value from CU header */
-  ldr     r0, =(RAM_START + 0x0024)
-
+  ldr     r0, =0x40000024
   ldr     r2, [r0]
-
+  
   /* Skip if data already copied */
   cmp     r2, #0
   bmi     SkipCopy
@@ -65,7 +59,7 @@ SkipCopy:
 
   /* Push return addess on stack */
   push    {lr}
-
+  
   /* Put ReturnToBUS address in LR */
   ldr     r0, =ReturnToBUS+1
   mov     lr, r0
