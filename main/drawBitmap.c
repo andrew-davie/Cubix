@@ -31,8 +31,11 @@ const unsigned char marker[] = {
 
 
 
-
+// FRAME 0 RIGHT
 #define RIGHTFACET(a,b,c) \
+    1, \
+    45, \
+    3,9, \
 a & _______X \
 b & _______X \
 c & _______X \
@@ -42,6 +45,9 @@ c & ______XX \
 a & _____XXX \
 b & _____XXX \
 c & _____XXX \
+a & ____XXXX \
+b & ____XXXX \
+c & ____XXXX \
 a & ____XXXX \
 b & ____XXXX \
 c & ____XXXX \
@@ -78,94 +84,53 @@ c & ____X___ \
 
 
 const unsigned char rightFacets000[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHTFACET(0,0,0)
 };
 
 const unsigned char rightFacets001[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHTFACET(0xFF,0,0)
 };
 
 const unsigned char rightFacets010[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHTFACET(0,0xFF,0)
 };
 
 const unsigned char rightFacets011[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHTFACET(0xFF,0xFF,0)
 };
 
 const unsigned char rightFacets100[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHTFACET(0,0,0xFF)
 };
 
-
 const unsigned char rightFacets101[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHTFACET(0xFF,0,0xFF)
 };
 
 const unsigned char rightFacets110[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHTFACET(0,0xFF,0xFF)
 };
 
 const unsigned char rightFacets111[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHTFACET(0xFF,0xFF,0xFF)
 };
 
 
+// FRAME 1, RIGHT FACE
+// GOOD
 #define RIGHT2FACET(a,b,c) \
-a & ______XX \
-b & ______XX \
-c & ______XX \
-a & ____XXXX \
-b & ____XXXX \
-c & ____XXXX \
+    1, \
+    42, \
+    4,6, \
+a & _______X \
+b & _______X \
+c & _______X \
+a & _____XXX \
+b & _____XXX \
+c & _____XXX \
+a & ___XXXXX \
+b & ___XXXXX \
+c & ___XXXXX \
 a & ___XXXXX \
 b & ___XXXXX \
 c & ___XXXXX \
@@ -202,197 +167,54 @@ c & ___XX___ \
 
 
 const unsigned char right2Facets000[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,9,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHT2FACET(0,0,0)
 };
 
 const unsigned char right2Facets001[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,9,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHT2FACET(0xFF,0,0)
 };
 
 const unsigned char right2Facets010[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,9,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHT2FACET(0,0xFF,0)
 };
 
 const unsigned char right2Facets011[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,9,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHT2FACET(0xFF,0xFF,0)
 };
 
 const unsigned char right2Facets100[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,9,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHT2FACET(0,0,0xFF)
 };
 
 
 const unsigned char right2Facets101[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,9,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHT2FACET(0xFF,0,0xFF)
 };
 
 const unsigned char right2Facets110[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,9,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHT2FACET(0,0xFF,0xFF)
 };
 
 const unsigned char right2Facets111[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,9,               // center point (PIXELS) from 0,0 top left
-
-
     RIGHT2FACET(0xFF,0xFF,0xFF)
 };
 
 
-
-// const unsigned char highlighter[] = {
-
-// 2,
-// 36,
-// 0,36,
-
-
-// ___XX___ ________ 
-// ___XX___ ________ 
-// ___XX___ ________ 
-
-// ____XX__ ________ 
-// ____XX__ ________ 
-// ____XX__ ________ 
-
-// _____XX_ ________ 
-// _____XX_ ________ 
-// _____XX_ ________ 
-
-// ______XX ________ 
-// ______XX ________ 
-// ______XX ________ 
-
-// _______X X_______ 
-// _______X X_______ 
-// _______X X_______ 
-
-// ________ XX______ 
-// ________ XX______ 
-// ________ XX______ 
-
-// ________ _XX_____ 
-// ________ _XX_____ 
-// ________ _XX_____ 
-
-// ________ __XX____ 
-// ________ __XX____ 
-// ________ __XX____ 
-
-// ________ ___XX___ 
-// ________ ___XX___ 
-// ________ ___XX___ 
-
-// ________ ____XX__ 
-// ________ ____XX__ 
-// ________ ____XX__ 
-
-// ________ _____XX_ 
-// ________ _____XX_ 
-// ________ _____XX_ 
-
-// ________ ______XX 
-// ________ ______XX 
-// ________ ______XX 
-
-// };
-
-
-/*
-________ ___XX___
-________ ___XX___
-________ ___XX___
-________ __XX____
-________ __XX____
-________ __XX____
-________ _XX_____
-________ _XX_____
-________ _XX_____
-________ XX______
-________ XX______
-________ XX______
-_______X X_______
-_______X X_______
-_______X X_______
-______XX ________
-______XX ________
-______XX ________
-_____XX_ ________
-_____XX_ ________
-_____XX_ ________
-____XX__ ________
-____XX__ ________
-____XX__ ________
-___XX___ ________
-___XX___ ________
-___XX___ ________
-__XX____ ________
-__XX____ ________
-__XX____ ________
-_XX_____ ________
-_XX_____ ________
-_XX_____ ________
-XX______ ________
-XX______ ________
-XX______ ________
-*/
-
-
+// FRAME 3, LEFT FACE
 #define RIGHT3FACET(a,b,c) \
     1,      /* width in BYTES (=8 pix/byte) (MAX =4) */\
-    39,     /* height in SCANLINES (pref multiples of 3 -- TRIPIXs) */\
+    42,     /* height in SCANLINES (pref multiples of 3 -- TRIPIXs) */\
     3,3,    /* center point (PIXELS) from 0,0 top left */\
 \
-a & XX______ \
-b & XX______ \
-c & XX______ \
-a & XXXX____ \
-b & XXXX____ \
-c & XXXX____ \
+a & X_______ \
+b & X_______ \
+c & X_______ \
+a & XXX_____ \
+b & XXX_____ \
+c & XXX_____ \
+a & XXXXX___ \
+b & XXXXX___ \
+c & XXXXX___ \
 a & XXXXX___ \
 b & XXXXX___ \
 c & XXXXX___ \
@@ -464,6 +286,10 @@ const unsigned char right3Facets111[] = {
 
 
 #define LEFTFACET(a,b,c) \
+    1, \
+    45, \
+    3,9, \
+\
 a & X_______ \
 b & X_______ \
 c & X_______ \
@@ -473,6 +299,9 @@ c & XX______ \
 a & XXX_____ \
 b & XXX_____ \
 c & XXX_____ \
+a & XXXX____ \
+b & XXXX____ \
+c & XXXX____ \
 a & XXXX____ \
 b & XXXX____ \
 c & XXXX____ \
@@ -509,87 +338,44 @@ c & ___X____ \
 
 
 const unsigned char leftFacets000[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFTFACET(0,0,0)
 };
 
 const unsigned char leftFacets001[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFTFACET(0xFF,0,0)
 };
 
 const unsigned char leftFacets010[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFTFACET(0,0xFF,0)
 };
 
 const unsigned char leftFacets011[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFTFACET(0xFF,0xFF,0)
 };
 
 const unsigned char leftFacets100[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFTFACET(0,0,0xFF)
 };
 
 
 const unsigned char leftFacets101[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFTFACET(0xFF,0,0xFF)
 };
 
 const unsigned char leftFacets110[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFTFACET(0,0xFF,0xFF)
 };
 
 const unsigned char leftFacets111[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    42,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFTFACET(0xFF,0xFF,0xFF)
 };
 
+// FRAME 1, LEFT FACE
+
 #define LEFT2FACET(a,b,c) \
+    1, \
+    45, \
+    4,9, \
 a & _X______ \
 b & _X______ \
 c & _X______ \
@@ -602,121 +388,81 @@ c & _XX_____ \
 a & _XX_____ \
 b & _XX_____ \
 c & _XX_____ \
-a & _XX_____ \
-b & _XX_____ \
-c & _XX_____ \
-a & _XX_____ \
-b & _XX_____ \
-c & _XX_____ \
-a & _XX_____ \
-b & _XX_____ \
-c & _XX_____ \
-a & _XX_____ \
-b & _XX_____ \
-c & _XX_____ \
-a & _XX_____ \
-b & _XX_____ \
-c & _XX_____ \
-a & _XX_____ \
-b & _XX_____ \
-c & _XX_____ \
-a & _XX_____ \
-b & _XX_____ \
-c & _XX_____ \
-a & __X_____ \
-b & __X_____ \
-c & __X_____ \
-a & __X_____ \
-b & __X_____ \
-c & __X_____ \
+a & _XXX____ \
+b & _XXX____ \
+c & _XXX____ \
+a & _XXX____ \
+b & _XXX____ \
+c & _XXX____ \
+a & _XXX____ \
+b & _XXX____ \
+c & _XXX____ \
+a & _XXX____ \
+b & _XXX____ \
+c & _XXX____ \
+a & _XXX____ \
+b & _XXX____ \
+c & _XXX____ \
+a & _XXX____ \
+b & _XXX____ \
+c & _XXX____ \
+a & _XXX____ \
+b & _XXX____ \
+c & _XXX____ \
+a & __XX____ \
+b & __XX____ \
+c & __XX____ \
+a & __XX____ \
+b & __XX____ \
+c & __XX____ \
+a & ___X____ \
+b & ___X____ \
+c & ___X____ \
+a & ___X____ \
+b & ___X____ \
+c & ___X____ \
 
 
 const unsigned char left2Facets000[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFT2FACET(0,0,0)
 };
 
 const unsigned char left2Facets001[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFT2FACET(0xFF,0,0)
 };
 
 const unsigned char left2Facets010[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFT2FACET(0,0xFF,0)
 };
 
 const unsigned char left2Facets011[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFT2FACET(0xFF,0xFF,0)
 };
 
 const unsigned char left2Facets100[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFT2FACET(0,0,0xFF)
 };
 
 
 const unsigned char left2Facets101[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFT2FACET(0xFF,0,0xFF)
 };
 
 const unsigned char left2Facets110[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFT2FACET(0,0xFF,0xFF)
 };
 
 const unsigned char left2Facets111[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    39,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,9,               // center point (PIXELS) from 0,0 top left
-
-
     LEFT2FACET(0xFF,0xFF,0xFF)
 };
 
 
+
+// FRAME 3 RIGHT FACE
 #define LEFT3FACET(a,b,c) \
 \
     1,      \
-    39,     \
+    48,     \
     3,9,    \
 \
 a & ______X_ \
@@ -731,33 +477,42 @@ c & _____XX_ \
 a & _____XX_ \
 b & _____XX_ \
 c & _____XX_ \
-a & _____XX_ \
-b & _____XX_ \
-c & _____XX_ \
-a & _____XX_ \
-b & _____XX_ \
-c & _____XX_ \
-a & _____XX_ \
-b & _____XX_ \
-c & _____XX_ \
-a & _____XX_ \
-b & _____XX_ \
-c & _____XX_ \
-a & _____XX_ \
-b & _____XX_ \
-c & _____XX_ \
-a & _____XX_ \
-b & _____XX_ \
-c & _____XX_ \
-a & _____XX_ \
-b & _____XX_ \
-c & _____XX_ \
-a & _____X__ \
-b & _____X__ \
-c & _____X__ \
-a & _____X__ \
-b & _____X__ \
-c & _____X__ \
+a & ____XXX_ \
+b & ____XXX_ \
+c & ____XXX_ \
+a & ____XXX_ \
+b & ____XXX_ \
+c & ____XXX_ \
+a & ____XXX_ \
+b & ____XXX_ \
+c & ____XXX_ \
+a & ____XXX_ \
+b & ____XXX_ \
+c & ____XXX_ \
+a & ____XXX_ \
+b & ____XXX_ \
+c & ____XXX_ \
+a & ____XXX_ \
+b & ____XXX_ \
+c & ____XXX_ \
+a & ____XXX_ \
+b & ____XXX_ \
+c & ____XXX_ \
+a & ____XXX_ \
+b & ____XXX_ \
+c & ____XXX_ \
+a & ____XX__ \
+b & ____XX__ \
+c & ____XX__ \
+a & ____XX__ \
+b & ____XX__ \
+c & ____XX__ \
+a & ____X___ \
+b & ____X___ \
+c & ____X___ \
+a & ____X___ \
+b & ____X___ \
+c & ____X___ \
 
 
 const unsigned char left3Facets000[] = {
@@ -892,46 +647,49 @@ c & XXXXXX__ \
 a & XXXXXX__ \
 b & XXXXXX__ \
 c & XXXXXX__ \
+a & XXXXXX__ \
+b & XXXXXX__ \
+c & XXXXXX__ \
 
 
 const unsigned char frontFacet45_000[] = {
-    1, 33, 2,0,
+    1, 36, 2,0,
     FRONTFACET45(0,0,0)
 };
 
 const unsigned char frontFacet45_001[] = {
-    1, 33, 2,0,
+    1, 36, 2,0,
     FRONTFACET45(0xFF,0,0)
 };
 
 const unsigned char frontFacet45_010[] = {
-    1, 33, 2,0,
+    1, 36, 2,0,
     FRONTFACET45(0,0xFF,0)
 };
 
 const unsigned char frontFacet45_011[] = {
-    1, 33, 2,0,
+    1, 36, 2,0,
     FRONTFACET45(0xFF,0xFF,0)
 };
 
 const unsigned char frontFacet45_100[] = {
-    1, 33, 2,0,
+    1, 36, 2,0,
     FRONTFACET45(0,0,0xFF)
 };
 
 
 const unsigned char frontFacet45_101[] = {
-    1, 33, 2,0,
+    1, 36, 2,0,
     FRONTFACET45(0xFF,0,0xFF)
 };
 
 const unsigned char frontFacet45_110[] = {
-    1, 33, 2,0,
+    1, 36, 2,0,
     FRONTFACET45(0,0xFF,0xFF)
 };
 
 const unsigned char frontFacet45_111[] = {
-    1, 33, 2,3,
+    1, 36, 2,3,
     FRONTFACET45(0xFF,0xFF,0xFF)
 };
 
@@ -1046,112 +804,67 @@ const unsigned char topFacets111[] = {
 };
 
 
-
+// FRAME 1, TOP FACE
 #define TOP2FACET(a,b,c) \
-a & ____XX__ \
-b & ____XX__ \
-c & ____XX__ \
-a & __XXXX__ \
-b & __XXXX__ \
-c & __XXXX__ \
+\
+    1, \
+    21, \
+    3,18, \
+\
+a & ___XXX__ \
+b & ___XXX__ \
+c & ___XXX__ \
+a & _XXXXX__ \
+b & _XXXXX__ \
+c & _XXXXX__ \
+a & XXXXXXX_ \
+b & XXXXXXX_ \
+c & XXXXXXX_ \
 a & _XXXXXX_ \
 b & _XXXXXX_ \
 c & _XXXXXX_ \
-a & _XXXXXX_ \
-b & _XXXXXX_ \
-c & _XXXXXX_ \
-a & __XXXXXX \
-b & __XXXXXX \
-c & __XXXXXX \
-a & __XXXXXX \
-b & __XXXXXX \
-c & __XXXXXX \
-a & ___XXXX_ \
-b & ___XXXX_ \
-c & ___XXXX_ \
-a & ___XX___ \
-b & ___XX___ \
-c & ___XX___ \
+a & _XXXXXXX \
+b & _XXXXXXX \
+c & _XXXXXXX \
+a & __XXXXX_ \
+b & __XXXXX_ \
+c & __XXXXX_ \
+a & __XXX___ \
+b & __XXX___ \
+c & __XXX___ \
 
 
 const unsigned char top2Facets000[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,21,               // center point (PIXELS) from 0,0 top left
-
 
     TOP2FACET(0,0,0)
 };
 
 const unsigned char top2Facets001[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,21,               // center point (PIXELS) from 0,0 top left
-
-
     TOP2FACET(0xFF,0,0)
 };
 
 const unsigned char top2Facets010[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,21,               // center point (PIXELS) from 0,0 top left
-
-
     TOP2FACET(0,0xFF,0)
 };
 
 const unsigned char top2Facets011[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,21,               // center point (PIXELS) from 0,0 top left
-
-
     TOP2FACET(0xFF,0xFF,0)
 };
 
 const unsigned char top2Facets100[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,21,               // center point (PIXELS) from 0,0 top left
-
-
     TOP2FACET(0,0,0xFF)
 };
 
 
 const unsigned char top2Facets101[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,21,               // center point (PIXELS) from 0,0 top left
-
-
     TOP2FACET(0xFF,0,0xFF)
 };
 
 const unsigned char top2Facets110[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,21,               // center point (PIXELS) from 0,0 top left
-
-
     TOP2FACET(0,0xFF,0xFF)
 };
 
 const unsigned char top2Facets111[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    4,21,               // center point (PIXELS) from 0,0 top left
-
-
     TOP2FACET(0xFF,0xFF,0xFF)
 };
 
@@ -1160,114 +873,362 @@ const unsigned char top2Facets111[] = {
 
 
 
-
+// TOP FRAME 3
 #define TOP3FACET(a,b,c) \
-a & __XX____ \
-b & __XX____ \
-c & __XX____ \
-a & __XXXX__ \
-b & __XXXX__ \
-c & __XXXX__ \
+\
+    1, \
+    21, \
+    3,18,\
+\
+a & __XXX___ \
+b & __XXX___ \
+c & __XXX___ \
+a & __XXXXX_ \
+b & __XXXXX_ \
+c & __XXXXX_ \
+a & _XXXXXXX \
+b & _XXXXXXX \
+c & _XXXXXXX \
 a & _XXXXXX_ \
 b & _XXXXXX_ \
 c & _XXXXXX_ \
-a & _XXXXXX_ \
-b & _XXXXXX_ \
-c & _XXXXXX_ \
-a & XXXXXX__ \
-b & XXXXXX__ \
-c & XXXXXX__ \
-a & XXXXXX__ \
-b & XXXXXX__ \
-c & XXXXXX__ \
-a & _XXXX___ \
-b & _XXXX___ \
-c & _XXXX___ \
-a & ___XX___ \
-b & ___XX___ \
-c & ___XX___ \
+a & XXXXXXX_ \
+b & XXXXXXX_ \
+c & XXXXXXX_ \
+a & _XXXXX__ \
+b & _XXXXX__ \
+c & _XXXXX__ \
+a & ___XXX__ \
+b & ___XXX__ \
+c & ___XXX__ \
 
 
 const unsigned char top3Facets000[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,21,               // center point (PIXELS) from 0,0 top left
-
-
     TOP3FACET(0,0,0)
 };
 
 const unsigned char top3Facets001[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,21,               // center point (PIXELS) from 0,0 top left
-
-
     TOP3FACET(0xFF,0,0)
 };
 
 const unsigned char top3Facets010[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,21,               // center point (PIXELS) from 0,0 top left
-
-
     TOP3FACET(0,0xFF,0)
 };
 
 const unsigned char top3Facets011[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,21,               // center point (PIXELS) from 0,0 top left
-
-
     TOP3FACET(0xFF,0xFF,0)
 };
 
 const unsigned char top3Facets100[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,21,               // center point (PIXELS) from 0,0 top left
-
-
     TOP3FACET(0,0,0xFF)
 };
 
 
 const unsigned char top3Facets101[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,21,               // center point (PIXELS) from 0,0 top left
-
-
     TOP3FACET(0xFF,0,0xFF)
 };
 
 const unsigned char top3Facets110[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,21,               // center point (PIXELS) from 0,0 top left
-
-
     TOP3FACET(0,0xFF,0xFF)
 };
 
 const unsigned char top3Facets111[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    24,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    3,21,               // center point (PIXELS) from 0,0 top left
-
-
     TOP3FACET(0xFF,0xFF,0xFF)
 };
+
+
+
+
+
+#define AXIS1FRAME1SIDE(a,b,c) \
+\
+    1, \
+    24, \
+    3,15,\
+\
+a & ________ \
+b & ________ \
+c & ________ \
+a & _X______ \
+b & _X______ \
+c & _X______ \
+a & __X_____ \
+b & __X_____ \
+c & __X_____ \
+a & ___X____ \
+b & ___X____ \
+c & ___X____ \
+a & ___XX___ \
+b & ___XX___ \
+c & ___XX___ \
+a & ____XX__ \
+b & ____XX__ \
+c & ____XX__ \
+a & _____X__ \
+b & _____X__ \
+c & _____X__ \
+a & ______X_ \
+b & ______X_ \
+c & ______X_ \
+
+
+const unsigned char axis1Frame1Side000[] = {
+    AXIS1FRAME1SIDE(0,0,0)
+};
+
+const unsigned char axis1Frame1Side001[] = {
+    AXIS1FRAME1SIDE(0xFF,0,0)
+};
+
+const unsigned char axis1Frame1Side010[] = {
+    AXIS1FRAME1SIDE(0,0xFF,0)
+};
+
+const unsigned char axis1Frame1Side011[] = {
+    AXIS1FRAME1SIDE(0xFF,0xFF,0)
+};
+
+const unsigned char axis1Frame1Side100[] = {
+    AXIS1FRAME1SIDE(0,0,0xFF)
+};
+
+const unsigned char axis1Frame1Side101[] = {
+    AXIS1FRAME1SIDE(0xFF,0,0xFF)
+};
+
+const unsigned char axis1Frame1Side110[] = {
+    AXIS1FRAME1SIDE(0,0xFF,0xFF)
+};
+
+const unsigned char axis1Frame1Side111[] = {
+    AXIS1FRAME1SIDE(0xFF,0xFF,0xFF)
+};
+
+
+
+#define AXIS1FRAME1TOP(a,b,c) \
+\
+    1, \
+    42, \
+    3,24,\
+\
+a & ____XX__ \
+b & ____XX__ \
+c & ____XX__ \
+a & ____XXX_ \
+b & ____XXX_ \
+c & ____XXX_ \
+a & ____XXXX \
+b & ____XXXX \
+c & ____XXXX \
+a & ___XXXXX \
+b & ___XXXXX \
+c & ___XXXXX \
+a & ___XXXXX \
+b & ___XXXXX \
+c & ___XXXXX \
+a & ___XXXX_ \
+b & ___XXXX_ \
+c & ___XXXX_ \
+a & __XXXXX_ \
+b & __XXXXX_ \
+c & __XXXXX_ \
+a & __XXXXX_ \
+b & __XXXXX_ \
+c & __XXXXX_ \
+a & __XXXX__ \
+b & __XXXX__ \
+c & __XXXX__ \
+a & _XXXXX__ \
+b & _XXXXX__ \
+c & _XXXXX__ \
+a & _XXXXX__ \
+b & _XXXXX__ \
+c & _XXXXX__ \
+a & __XXX___ \
+b & __XXX___ \
+c & __XXX___ \
+a & ___XX___ \
+b & ___XX___ \
+c & ___XX___ \
+a & ____X___ \
+b & ____X___ \
+c & ____X___ \
+
+
+const unsigned char axis1Frame1Top000[] = {
+    AXIS1FRAME1TOP(0,0,0)
+};
+
+const unsigned char axis1Frame1Top001[] = {
+    AXIS1FRAME1TOP(0xFF,0,0)
+};
+
+const unsigned char axis1Frame1Top010[] = {
+    AXIS1FRAME1TOP(0,0xFF,0)
+};
+
+const unsigned char axis1Frame1Top011[] = {
+    AXIS1FRAME1TOP(0xFF,0xFF,0)
+};
+
+const unsigned char axis1Frame1Top100[] = {
+    AXIS1FRAME1TOP(0,0,0xFF)
+};
+
+const unsigned char axis1Frame1Top101[] = {
+    AXIS1FRAME1TOP(0xFF,0,0xFF)
+};
+
+const unsigned char axis1Frame1Top110[] = {
+    AXIS1FRAME1TOP(0,0xFF,0xFF)
+};
+
+const unsigned char axis1Frame1Top111[] = {
+    AXIS1FRAME1TOP(0xFF,0xFF,0xFF)
+};
+
+
+
+// a & ____X___ a & ________ \
+// b & ____X___ b & ________ \
+// c & ____X___ c & ________ \
+// a & ____X___ a & ________ \
+// b & ____X___ b & ________ \
+// c & ____X___ c & ________ \
+// a & ___XXX__ a & ________ \
+// b & ___XXX__ b & ________ \
+// c & ___XXX__ c & ________ \
+// a & ___XXX__ a & ________ \
+// b & ___XXX__ b & ________ \
+// c & ___XXX__ c & ________ \
+// a & ___XXXX_ a & ________ \
+// b & ___XXXX_ b & ________ \
+// c & ___XXXX_ c & ________ \
+// a & __XXXXX_ a & ________ \
+// b & __XXXXX_ b & ________ \
+// c & __XXXXX_ c & ________ \
+// a & __XXXXXX a & ________ \
+// b & __XXXXXX b & ________ \
+// c & __XXXXXX c & ________ \
+// a & __XXXXXX a & ________ \
+// b & __XXXXXX b & ________ \
+// c & __XXXXXX c & ________ \
+// a & _XXXXXX_ a & ________ \
+// b & _XXXXXX_ b & ________ \
+// c & _XXXXXX_ c & ________ \
+// a & _XXXXXX_ a & ________ \
+// b & _XXXXXX_ b & ________ \
+// c & _XXXXXX_ c & ________ \
+// a & __XXXXX_ a & ________ \
+// b & __XXXXX_ b & ________ \
+// c & __XXXXX_ c & ________ \
+// a & __XXXX__ a & ________ \
+// b & __XXXX__ b & ________ \
+// c & __XXXX__ c & ________ \
+// a & ___XXX__ a & ________ \
+// b & ___XXX__ b & ________ \
+// c & ___XXX__ c & ________ \
+// a & ___XXX__ a & ________ \
+// b & ___XXX__ b & ________ \
+// c & ___XXX__ c & ________ \
+// a & ____X___ a & ________ \
+// b & ____X___ b & ________ \
+// c & ____X___ c & ________ \
+// a & ____X___ a & ________ \
+// b & ____X___ b & ________ \
+// c & ____X___ c & ________ \
+
+
+
+#define AXIS1FRAME2R(a,b,c) \
+\
+    1, \
+    46, \
+    2,51,\
+\
+a & ____X___ \
+b & ____X___ \
+c & ____X___ \
+a & ____XX__ \
+b & ____XX__ \
+c & ____XX__ \
+a & ___XXXX_ \
+b & ___XXXX_ \
+c & ___XXXX_ \
+a & ___XXXX_ \
+b & ___XXXX_ \
+c & ___XXXX_ \
+a & ___XXXXX \
+b & ___XXXXX \
+c & ___XXXXX \
+a & __XXXXXX \
+b & __XXXXXX \
+c & __XXXXXX \
+a & __XXXXXX \
+b & __XXXXXX \
+c & __XXXXXX \
+a & __XXXXX_ \
+b & __XXXXX_ \
+c & __XXXXX_ \
+a & _XXXXXX_ \
+b & _XXXXXX_ \
+c & _XXXXXX_ \
+a & _XXXXXX_ \
+b & _XXXXXX_ \
+c & _XXXXXX_ \
+a & _XXXXX__ \
+b & _XXXXX__ \
+c & _XXXXX__ \
+a & _XXXXX__ \
+b & _XXXXX__ \
+c & _XXXXX__ \
+a & __XXXX__ \
+b & __XXXX__ \
+c & __XXXX__ \
+a & ___XX___ \
+b & ___XX___ \
+c & ___XX___ \
+a & ___XX___ \
+b & ___XX___ \
+c & ___XX___ \
+a & ____X___ \
+b & ____X___ \
+c & ____X___ \
+
+
+const unsigned char axis1Frame2R000[] = {
+    AXIS1FRAME2R(0,0,0)
+};
+
+const unsigned char axis1Frame2R001[] = {
+    AXIS1FRAME2R(0xFF,0,0)
+};
+
+const unsigned char axis1Frame2R010[] = {
+    AXIS1FRAME2R(0,0xFF,0)
+};
+
+const unsigned char axis1Frame2R011[] = {
+    AXIS1FRAME2R(0xFF,0xFF,0)
+};
+
+const unsigned char axis1Frame2R100[] = {
+    AXIS1FRAME2R(0,0,0xFF)
+};
+
+const unsigned char axis1Frame2R101[] = {
+    AXIS1FRAME2R(0xFF,0,0xFF)
+};
+
+const unsigned char axis1Frame2R110[] = {
+    AXIS1FRAME2R(0,0xFF,0xFF)
+};
+
+const unsigned char axis1Frame2R111[] = {
+    AXIS1FRAME2R(0xFF,0xFF,0xFF)
+};
+
 
 
 

@@ -1,5 +1,3 @@
-cubiks.bin
-cubiks.sym
 main/.DS_Store
 main/bin/armcode.bin
 main/bin/armcode.elf
@@ -10,3 +8,5 @@ main/bin/armcode.map
 *.o
 *.lst
 .DS_Store
+*.sym
+*.lst

@@ -15,7 +15,7 @@
     ENDM
 
 
-CDC = 12
+CDC = 20
 
 ; Symbols prefixed with _ are exported to 'main/defines_from_dasm_for_c.h'
 ; This is done via 'awk' in the makefile.
@@ -53,7 +53,7 @@ _DS_GRP1a = DS12DATA
 
 ; NTSC...
 VB_TIM64T = 56;46; //7; //7
-OS_TIM64T = 30; 41; //33 ;-3
+OS_TIM64T = 27; 41; //33 ;-3
 
 ; PAL...
 ; VB_TIM64T = 76;46; //7; //7
@@ -62,8 +62,8 @@ OS_TIM64T = 30; 41; //33 ;-3
 
 ; controls spacing in main menu
 
-_ARENA_SCANLINES    = 198   ; number of scanlines for the arena
-ARENA_BUFFER_SIZE   = 198    ; PF buffer size for largest arena
+_ARENA_SCANLINES    = 201   ; number of scanlines for the arena
+ARENA_BUFFER_SIZE   = 201    ; PF buffer size for largest arena
 
 ;===============================================================================
 ; Define custom Macros

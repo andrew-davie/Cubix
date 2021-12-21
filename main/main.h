@@ -39,7 +39,7 @@ extern int scrollY;
 
 
 
-extern unsigned char ColourConvert(unsigned char color);
+extern unsigned char ColourConvert(unsigned char color); 
 
 
 #endif

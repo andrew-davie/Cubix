@@ -114,6 +114,35 @@ extern const unsigned char frontFacet45_110[];
 extern const unsigned char frontFacet45_111[];
 
 
+
+extern const unsigned char axis1Frame1Side000[];
+extern const unsigned char axis1Frame1Side001[];
+extern const unsigned char axis1Frame1Side010[];
+extern const unsigned char axis1Frame1Side011[];
+extern const unsigned char axis1Frame1Side100[];
+extern const unsigned char axis1Frame1Side101[];
+extern const unsigned char axis1Frame1Side110[];
+extern const unsigned char axis1Frame1Side111[];
+
+extern const unsigned char axis1Frame1Top000[];
+extern const unsigned char axis1Frame1Top001[];
+extern const unsigned char axis1Frame1Top010[];
+extern const unsigned char axis1Frame1Top011[];
+extern const unsigned char axis1Frame1Top100[];
+extern const unsigned char axis1Frame1Top101[];
+extern const unsigned char axis1Frame1Top110[];
+extern const unsigned char axis1Frame1Top111[];
+
+extern const unsigned char axis1Frame2R000[];
+extern const unsigned char axis1Frame2R001[];
+extern const unsigned char axis1Frame2R010[];
+extern const unsigned char axis1Frame2R011[];
+extern const unsigned char axis1Frame2R100[];
+extern const unsigned char axis1Frame2R101[];
+extern const unsigned char axis1Frame2R110[];
+extern const unsigned char axis1Frame2R111[];
+
+
 extern void drawBitmap(const unsigned char *bmp, int x, int y);
 
 
