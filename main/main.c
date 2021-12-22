@@ -1156,130 +1156,48 @@ const unsigned char *shapeMarker[] = {
 
 
 const unsigned char *shapeSetTop[] = {
-    // rotation 0
     &topFacets000[0],
-    &topFacets001[0],
-    &topFacets010[0],
-    &topFacets011[0],
-    &topFacets100[0],
-    &topFacets101[0],
-    &topFacets110[0],
-    &topFacets111[0],
 };
 
 const unsigned char *shapeSetTop2[] = {
-    // rotation 0
     &top2Facets000[0],
-    &top2Facets001[0],
-    &top2Facets010[0],
-    &top2Facets011[0],
-    &top2Facets100[0],
-    &top2Facets101[0],
-    &top2Facets110[0],
-    &top2Facets111[0],
 };
 
 const unsigned char *shapeSetTop3[] = {
-    // rotation 0
     &top3Facets000[0],
-    &top3Facets001[0],
-    &top3Facets010[0],
-    &top3Facets011[0],
-    &top3Facets100[0],
-    &top3Facets101[0],
-    &top3Facets110[0],
-    &top3Facets111[0],
 };
 
 const unsigned char *shapeSetTop45[] = {
-    // rotation 0
     &topFacet45_000[0],
-    &topFacet45_001[0],
-    &topFacet45_010[0],
-    &topFacet45_011[0],
-    &topFacet45_100[0],
-    &topFacet45_101[0],
-    &topFacet45_110[0],
-    &topFacet45_111[0],
 };
 
 const unsigned char *shapeSetFront45[] = {
-    // rotation 0
     &frontFacet45_000[0],
-    &frontFacet45_001[0],
-    &frontFacet45_010[0],
-    &frontFacet45_011[0],
-    &frontFacet45_100[0],
-    &frontFacet45_101[0],
-    &frontFacet45_110[0],
-    &frontFacet45_111[0],
 };
 
 
 const unsigned char *shapeSetRight[] = {
     &rightFacets000[0],
-    &rightFacets001[0],
-    &rightFacets010[0],
-    &rightFacets011[0],
-    &rightFacets100[0],
-    &rightFacets101[0],
-    &rightFacets110[0],
-    &rightFacets111[0],
 };
 
 const unsigned char *shapeSetRight2[] = {
     &right2Facets000[0],
-    &right2Facets001[0],
-    &right2Facets010[0],
-    &right2Facets011[0],
-    &right2Facets100[0],
-    &right2Facets101[0],
-    &right2Facets110[0],
-    &right2Facets111[0],
 };
 
 const unsigned char *shapeSetRight3[] = {
     &right3Facets000[0],
-    &right3Facets001[0],
-    &right3Facets010[0],
-    &right3Facets011[0],
-    &right3Facets100[0],
-    &right3Facets101[0],
-    &right3Facets110[0],
-    &right3Facets111[0],
 };
 
 const unsigned char *shapeSetLeft[] = {
     &leftFacets000[0],
-    &leftFacets001[0],
-    &leftFacets010[0],
-    &leftFacets011[0],
-    &leftFacets100[0],
-    &leftFacets101[0],
-    &leftFacets110[0],
-    &leftFacets111[0],
 };
 
 const unsigned char *shapeSetLeft2[] = {
     &left2Facets000[0],
-    &left2Facets001[0],
-    &left2Facets010[0],
-    &left2Facets011[0],
-    &left2Facets100[0],
-    &left2Facets101[0],
-    &left2Facets110[0],
-    &left2Facets111[0],
 };
 
 const unsigned char *shapeSetLeft3[] = {
     &left3Facets000[0],
-    &left3Facets001[0],
-    &left3Facets010[0],
-    &left3Facets011[0],
-    &left3Facets100[0],
-    &left3Facets101[0],
-    &left3Facets110[0],
-    &left3Facets111[0],
 };
 
 const unsigned char *shapeBoundary[] = {
@@ -1295,35 +1213,14 @@ const unsigned char *shapeBoundary[] = {
 
 const unsigned char *shapeSetAxis1Frame1Side[] = {
     &axis1Frame1Side000[0],
-    &axis1Frame1Side001[0],
-    &axis1Frame1Side010[0],
-    &axis1Frame1Side011[0],
-    &axis1Frame1Side100[0],
-    &axis1Frame1Side101[0],
-    &axis1Frame1Side110[0],
-    &axis1Frame1Side111[0],
 };
 
 const unsigned char *shapeSetAxis1Frame1Top[] = {
     &axis1Frame1Top000[0],
-    &axis1Frame1Top001[0],
-    &axis1Frame1Top010[0],
-    &axis1Frame1Top011[0],
-    &axis1Frame1Top100[0],
-    &axis1Frame1Top101[0],
-    &axis1Frame1Top110[0],
-    &axis1Frame1Top111[0],
 };
 
 const unsigned char *shapeSetAxis1Frame2R[] = {
     &axis1Frame2R000[0],
-    &axis1Frame2R001[0],
-    &axis1Frame2R010[0],
-    &axis1Frame2R011[0],
-    &axis1Frame2R100[0],
-    &axis1Frame2R101[0],
-    &axis1Frame2R110[0],
-    &axis1Frame2R111[0],
 };
 
 
@@ -1399,7 +1296,7 @@ void drawOverviewSoftwareSprites() {
     }
 
 
-    drawBitmap(shapeSetFacet[col],
+    drawBitmap(shapeSetFacet[0], col,
         ((mobileFacetX[f] << 14) & 0xFFFFC000) + 0x00004000,
         ((97 + mobileFacetY[f]) << 16)   * 3);
 
@@ -2239,65 +2136,24 @@ const int facetEndY[] = {
 };
 
 
-#define SMALLFACET(a,b,c) \
-1,21,0,0, \
-a & XXX_____ \
-b & XXX_____ \
-c & XXX_____ \
-a & XXX_____ \
-b & XXX_____ \
-c & XXX_____ \
-a & XXX_____ \
-b & XXX_____ \
-c & XXX_____ \
-a & XXX_____ \
-b & XXX_____ \
-c & XXX_____ \
-a & XXX_____ \
-b & XXX_____ \
-c & XXX_____ \
-a & XXX_____ \
-b & XXX_____ \
-c & XXX_____ \
-a & XXX_____ \
-b & XXX_____ \
-c & XXX_____
 
 const unsigned char facetColour0[] = {
-    SMALLFACET(0,0,0)
-};
-const unsigned char facetColour1[] = {
-    SMALLFACET(0xFF,0,0)
-};
-const unsigned char facetColour2[] = {
-    SMALLFACET(0,0xFF,0)
-};
-const unsigned char facetColour3[] = {
-    SMALLFACET(0xFF,0xFF,0)
-};
-const unsigned char facetColour4[] = {
-    SMALLFACET(0,0,0xFF)
-};
-const unsigned char facetColour5[] = {
-    SMALLFACET(0xFF,0,0xFF)
-};
-const unsigned char facetColour6[] = {
-    SMALLFACET(0,0xFF,0xFF)
-};
-const unsigned char facetColour7[] = {
-    SMALLFACET(0xFF,0xFF,0xFF)
+
+    1,21,
+    0,0,
+
+    XXX_____
+    XXX_____
+    XXX_____
+    XXX_____
+    XXX_____
+    XXX_____
+    XXX_____
 };
 
 
-const unsigned char *shapeSetFacet[8] = {
+const unsigned char *shapeSetFacet[] = {
     facetColour0,
-    facetColour1,
-    facetColour2,
-    facetColour3,
-    facetColour4,
-    facetColour5,
-    facetColour6,
-    facetColour7,
 };
 
 
@@ -2410,7 +2266,7 @@ void drawSoftwareSprites() {
     if ((showHighlight && fLayer == controlledLayer ) && !(highlightLayer & 1))
         theColour = 0;
 
-    drawBitmap(whichShapeSet[f->shape][theColour],
+    drawBitmap(whichShapeSet[f->shape][0],theColour,
         ((f->x << 14) & 0xFFFFC000) + 0x00014000,
         f->y * 3);
   

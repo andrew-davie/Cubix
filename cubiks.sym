@@ -9,33 +9,33 @@
 3.CYCLES                 0002              (R )
 4.CYCLES                 0002              (R )
 _ARENA_COLOR             000d                  
-_ARENA_SCANLINES         00c6              (R )
+_ARENA_SCANLINES         00c9              (R )
 _BALL_X                  0008                  
-_BUF_A_PF0_LEFT          04b6                  
-_BUF_A_PF0_RIGHT         0708                  
-_BUF_A_PF1_LEFT          057c                  
-_BUF_A_PF1_RIGHT         07ce                  
-_BUF_A_PF2_LEFT          0642                  
-_BUF_A_PF2_RIGHT         0894                  
-_BUF_AUDC                0f8c                  
-_BUF_AUDF                0f8e                  
-_BUF_AUDV                0f8a                  
-_BUF_B_PF0_LEFT          095a                  
-_BUF_B_PF0_RIGHT         0bac                  
-_BUF_B_PF1_LEFT          0a20                  
-_BUF_B_PF1_RIGHT         0c72                  
-_BUF_B_PF2_LEFT          0ae6                  
-_BUF_B_PF2_RIGHT         0d38                  
-_BUF_COLUBK              03f0                  
-_BUF_COLUP0              019e                  
-_BUF_COLUP1              0264                  
-_BUF_COLUPF              032a                  
-_BUF_GRP0A               0dfe                  
-_BUF_GRP1A               0ec4                  
+_BUF_A_PF0_LEFT          04c8                  
+_BUF_A_PF0_RIGHT         0723                  
+_BUF_A_PF1_LEFT          0591                  
+_BUF_A_PF1_RIGHT         07ec                  
+_BUF_A_PF2_LEFT          065a                  
+_BUF_A_PF2_RIGHT         08b5                  
+_BUF_AUDC                0fc8                  
+_BUF_AUDF                0fca                  
+_BUF_AUDV                0fc6                  
+_BUF_B_PF0_LEFT          097e                  
+_BUF_B_PF0_RIGHT         0bd9                  
+_BUF_B_PF1_LEFT          0a47                  
+_BUF_B_PF1_RIGHT         0ca2                  
+_BUF_B_PF2_LEFT          0b10                  
+_BUF_B_PF2_RIGHT         0d6b                  
+_BUF_COLUBK              03ff                  
+_BUF_COLUP0              01a4                  
+_BUF_COLUP1              026d                  
+_BUF_COLUPF              0336                  
+_BUF_GRP0A               0e34                  
+_BUF_GRP1A               0efd                  
 _BUF_JUMP1               0010                  
-_BUF_JUMP1_EXIT          019c                  
-_BUFFER_BLOCK_SIZE       0dec                  
-_BUFFERS                 019e              (R )
+_BUF_JUMP1_EXIT          01a2                  
+_BUFFER_BLOCK_SIZE       0e22                  
+_BUFFERS                 01a4              (R )
 _DS_AUDC0                000f              (R )
 _DS_AUDF0                0010              (R )
 _DS_AUDV0                000e              (R )
@@ -54,7 +54,7 @@ _DS_PF2_LEFT             0006              (R )
 _DS_PF2_RIGHT            0009              (R )
 _DS_TO_ARM               0000              (R )
 _EVERY_FRAME_ZERO_COUNT  0000                  
-_EVERY_FRAME_ZERO_START  0f90              (R )
+_EVERY_FRAME_ZERO_START  0fcc              (R )
 _EXIT_KERNEL             f17f                  
 _FN_GAME_IDLE            0004              (R )
 _FN_GAME_OS              0001              (R )
@@ -77,7 +77,7 @@ _VB_TIME                 0005
 Again1                   f128              (R )
 Again2                   f0be              (R )
 AMPLITUDE                0023                  
-ARENA_BUFFER_SIZE        00c6              (R )
+ARENA_BUFFER_SIZE        00c9              (R )
 AUDC0                    0015              (R )
 AUDC1                    0016              (R )
 AUDF0                    0017              (R )
@@ -89,7 +89,7 @@ AUDV1                    001a              (R )
 BUFN                     0012                  
 CallArmCode              f019              (R )
 CALLFN                   1ff3              (R )
-CDC                      000c              (R )
+CDC                      0014              (R )
 CDF_BASE_ADDRESS         1ff0              (R )
 CLEAR_ZP                 f087              (R )
 COLUBK                   0009              (R )
@@ -176,8 +176,8 @@ Mode                     0080              (R )
 NO_ILLEGAL_OPCODES       0000 ????         (R )
 NUSIZ0                   0004                  
 NUSIZ1                   0005                  
-OS_TIM64T                001e              (R )
-OverlapDisplayDataRam    0f90              (R )
+OS_TIM64T                001b              (R )
+OverlapDisplayDataRam    0fcc              (R )
 OverScan                 f0b1              (R )
 PF0                      000d              (R )
 PF1                      000e              (R )
