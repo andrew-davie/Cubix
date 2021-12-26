@@ -14,10 +14,10 @@ extern const unsigned char innerFacets[];
 
 extern const unsigned char rightFacets000[];
 extern const unsigned char right2Facets000[];
-extern const unsigned char right3Facets000[];
+extern const unsigned char layer0Left01Frame3[];
 extern const unsigned char leftFacets000[];
 extern const unsigned char left2Facets000[];
-extern const unsigned char left3Facets000[];
+extern const unsigned char layer0Right01Frame3[];
 extern const unsigned char topFacets000[];
 extern const unsigned char top2Facets000[];
 extern const unsigned char top3Facets000[];

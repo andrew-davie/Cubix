@@ -154,7 +154,7 @@
 #define X__XX__X 153,
 #define X__XX_X_ 154,
 #define X__XX_XX 155,
-#define X__XXX__ 156,∫
+#define X__XXX__ 156,
 #define X__XXX_X 157,
 #define X__XXXX_ 158,
 #define X__XXXXX 159,
@@ -162,7 +162,7 @@
 #define X_X____X 161,
 #define X_X___X_ 162,
 #define X_X___XX 163,
-#define X_X__X__ 164∫,
+#define X_X__X__ 164,
 #define X_X__X_X 165,
 #define X_X__XX_ 166,
 #define X_X__XXX 167,

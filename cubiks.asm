@@ -15,7 +15,7 @@
     ENDM
 
 
-CDC = 20
+CDC = 15
 
 ; Symbols prefixed with _ are exported to 'main/defines_from_dasm_for_c.h'
 ; This is done via 'awk' in the makefile.
@@ -53,7 +53,7 @@ _DS_GRP1a = DS12DATA
 
 ; NTSC...
 VB_TIM64T = 56;46; //7; //7
-OS_TIM64T = 27; 41; //33 ;-3
+OS_TIM64T = 28; 41; //33 ;-3
 
 ; PAL...
 ; VB_TIM64T = 76;46; //7; //7
@@ -751,7 +751,7 @@ _ARENA_COLOR:   ds 1
 
     align 4
 
-_BUF_JUMP1:         ds _ARENA_SCANLINES * 2         ; long-word align!!
+_BUF_JUMP1:         ds (_ARENA_SCANLINES - 1)* 2         ; long-word align!!
 _BUF_JUMP1_EXIT:    ds 2
 
 ; DO NOT CHANGE ORDER

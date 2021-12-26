@@ -289,12 +289,12 @@ void drawScreen(){
 
     unsigned char *p0 = RAM + bufPtr[0][pfBuffer];
     for (int sl = 0; sl < _ARENA_SCANLINES; sl++) {
-        *(p0 + 0 * _ARENA_SCANLINES) = 0;
-        *(p0 + 1 * _ARENA_SCANLINES) = 0;
-        *(p0 + 2 * _ARENA_SCANLINES) = 0;
-        *(p0 + 3 * _ARENA_SCANLINES) = 0;
-        *(p0 + 4 * _ARENA_SCANLINES) = 0;
-        *(p0 + 5 * _ARENA_SCANLINES) = 0;
+        *(p0 + 0 * _ARENA_SCANLINES) = 0xFF; //getRandom32() & 0xFF;
+        *(p0 + 1 * _ARENA_SCANLINES) = 0xFF; //getRandom32() & 0xFF;
+        *(p0 + 2 * _ARENA_SCANLINES) = 0xFF; //getRandom32() & 0xFF;
+        *(p0 + 3 * _ARENA_SCANLINES) = 0xFF; //getRandom32() & 0xFF;
+        *(p0 + 4 * _ARENA_SCANLINES) = 0xFF; //getRandom32() & 0xFF;
+        *(p0 + 5 * _ARENA_SCANLINES) = 0xFF; //getRandom32() & 0xFF;
         p0++;
     }
 

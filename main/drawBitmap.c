@@ -3,6 +3,8 @@
 #include "main.h"
 #include "bitpatterns.h"
 #include "defines_from_dasm_for_c.h"
+#include "shapes.h"
+
 #include <string.h>
 
 // duplicate from defines_cdfj.h
@@ -18,450 +20,6 @@ extern void* DDR;
 #define BMP_HEADER_BYTES 4
 
 
-
-
-const unsigned char marker[] = {
-    1,3,0,1+10,
-
-    X_______
-
-};
-
-
-
-//   █████  ██████    █████    ███  ███   █████   ████
-//   ██     ██   ██  ██   ██  ██ ████ ██  ██     ██  ██
-//   ██     ██   ██  ██   ██  ██  ██  ██  ██     ██   
-//   ████   █████    ███████  ██  ██  ██  ████    ████ 
-//   ██     ██  ██   ██   ██  ██  ██  ██  ██         ██
-//   ██     ██   ██  ██   ██  ██  ██  ██  ██     ██  ██
-//   ██     ██   ██  ██   ██  ██  ██  ██  █████   ████
-
-
-
-// FRAME 0 RIGHT
-
-const unsigned char rightFacets000[] = {
-
-    1,
-    45,
-    3,9,
-
-    _______X
-    ______XX
-    _____XXX
-    ____XXXX
-    ____XXXX
-    ____XXXX
-    ____XXXX
-    ____XXXX
-    ____XXXX
-    ____XXXX
-    ____XXXX
-    ____XXXX
-    ____XXX_
-    ____XX__
-    ____X___
-};
-
-
-// FRAME 1, RIGHT FACE
-
-const unsigned char right2Facets000[] = {
-
-    1,
-    42,
-    4,6,
-
-    _______X
-    _____XXX
-    ___XXXXX
-    ___XXXXX
-    ___XXXXX
-    ___XXXXX
-    ___XXXXX
-    ___XXXXX
-    ___XXXXX
-    ___XXXXX
-    ___XXXXX
-    ___XXXXX
-    ___XXXX_
-    ___XX___
-};
-
-
-// FRAME 3, LEFT FACE
-
-const unsigned char right3Facets000[] = {
-
-    1,
-    42,
-    3,3,
-
-    X_______
-    XXX_____
-    XXXXX___
-    XXXXX___
-    XXXXX___
-    XXXXX___
-    XXXXX___
-    XXXXX___
-    XXXXX___
-    XXXXX___
-    XXXXX___
-    XXXXX___
-    _XXXX___
-    ___XX___
-};
-
-
-const unsigned char leftFacets000[] = {
-
-    1,
-    45,
-    3,9,
-
-    X_______
-    XX______
-    XXX_____
-    XXXX____
-    XXXX____
-    XXXX____
-    XXXX____
-    XXXX____
-    XXXX____
-    XXXX____
-    XXXX____
-    XXXX____
-    _XXX____
-    __XX____
-    ___X____
-};
-
-
-// FRAME 1, LEFT FACE
-
-const unsigned char left2Facets000[] = {
-
-    1,
-    45,
-    4,9,
-
-    _X______
-    _X______
-    _XX_____
-    _XX_____
-    _XXX____
-    _XXX____
-    _XXX____
-    _XXX____
-    _XXX____
-    _XXX____
-    _XXX____
-    __XX____
-    __XX____
-    ___X____
-    ___X____
-};
-
-
-
-// FRAME 3 RIGHT FACE
-
-
-
-const unsigned char left3Facets000[] = {
-
-    1,
-    48,
-    3,9,
-
-    ______X_
-    ______X_
-    _____XX_
-    _____XX_
-    ____XXX_
-    ____XXX_
-    ____XXX_
-    ____XXX_
-    ____XXX_
-    ____XXX_
-    ____XXX_
-    ____XXX_
-    ____XX__
-    ____XX__
-    ____X___
-    ____X___
-};
-
-
-const unsigned char topFacet45_000[] = {
-
-    1, 18, 2,18,
-
-    XXXXXX__
-    XXXXXX__
-    XXXXXX__
-    XXXXXX__
-    XXXXXX__
-    XXXXXX__
-};
-
-
-const unsigned char frontFacet45_000[] = {
-
-    1, 36, 2,0,
-
-    XXXXXX__
-    XXXXXX__
-    XXXXXX__
-    XXXXXX__
-    XXXXXX__
-    XXXXXX__
-    XXXXXX__
-    XXXXXX__
-    XXXXXX__
-    XXXXXX__
-    XXXXXX__
-    XXXXXX__
-};
-
-
-const unsigned char topFacets000[] = {
-
-    1,
-    21,
-    3,21,
-
-    ___XX___
-    __XXXX__
-    _XXXXXX_
-    XXXXXXXX
-    _XXXXXX_
-    __XXXX__
-    ___XX___
-};
-
-
-const unsigned char top2Facets000[] = {
-
-    1,
-    21,
-    3,18,
-
-    ___XXX__
-    _XXXXX__
-    XXXXXXX_
-    _XXXXXX_
-    _XXXXXXX
-    __XXXXX_
-    __XXX___
-};
-
-
-// TOP FRAME 3
-
-
-const unsigned char top3Facets000[] = {
-
-    1,
-    21,
-    3,18,
-
-    __XXX___
-    __XXXXX_
-    _XXXXXXX
-    _XXXXXX_
-    XXXXXXX_
-    _XXXXX__
-    ___XXX__
-};
-
-
-const unsigned char axis1Frame1Side000[] = {
-
-    1,
-    24,
-    3,15,
-
-    ________
-    _X______
-    __X_____
-    ___X____
-    ___XX___
-    ____XX__
-    _____X__
-    ______X_
-};
-
-
-const unsigned char axis1Frame1Top000[] = {
-
-    1,
-    42,
-    3,24,
-
-    ____XX__
-    ____XXX_
-    ____XXXX
-    ___XXXXX
-    ___XXXXX
-    ___XXXX_
-    __XXXXX_
-    __XXXXX_
-    __XXXX__
-    _XXXXX__
-    _XXXXX__
-    __XXX___
-    ___XX___
-    ____X___
-};
-
-
-
-
-const unsigned char axis1Frame2R000[] = {
-
-    1,
-    46,
-    2,51,
-
-    ____X___
-    ____XX__
-    ___XXXX_
-    ___XXXX_
-    ___XXXXX
-    __XXXXXX
-    __XXXXXX
-    __XXXXX_
-    _XXXXXX_
-    _XXXXXX_
-    _XXXXX__
-    _XXXXX__
-    __XXXX__
-    ___XX___
-    ___XX___
-    ____X___
-};
-
-
-const unsigned char rollArrowRight[] = {
-
-    2,48,0,0,
-
-    ________ ________ 
-    ________ ________ 
-    _______X ________ 
-    _______X ________ 
-    ______XX X_______ 
-    ______XX X_______ 
-    ______XX X_______ 
-    ______XX X_______ 
-    ______XX X_______ 
-    _______X XX______ 
-    _______X XX______ 
-    _______X XX______ 
-    _______X XX______ 
-    ________ XX______ 
-    ________ XX______ 
-    ________ XX______ 
-    ________ XX______ 
-    ________ XX______ 
-    ________ XX______ 
-    ________ XX______ 
-    ________ XX______ 
-    ________ XX______ 
-    _____X__ XX______ 
-    _____X__ XX______ 
-    _____X_X XX______ 
-    _____X_X XX______ 
-    ____XX_X XX______ 
-    ____XXXX XX______ 
-    ____XXXX XX______ 
-    ____XXXX X_______ 
-    ___XXXXX X_______ 
-    ___XXXXX X_______ 
-    ___XXXXX X_______ 
-    ___XXXXX ________ 
-    __XXXXX_ ________ 
-    __XXXXX_ ________ 
-    __XXXXX_ ________ 
-    __XXXXXX ________ 
-    ___XXXXX ________ 
-    ____XXXX ________ 
-    _____XXX ________ 
-    _______X ________ 
-    ________ ________ 
-    ________ ________ 
-    ________ ________ 
-    ________ ________ 
-    ________ ________ 
-
-};
-
-
-
-const unsigned char cubeBoundary[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    21,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,21,               // center point (PIXELS) from 0,0 top left
-
-    ________ 
-    ________ 
-    ___X____ 
-    ________ 
-    ________ 
-    __X_____ 
-    ________ 
-    ________ 
-    _X_X____ 
-    ________ 
-    ________ 
-    X_X_____ 
-    ________ 
-    ________ 
-    ___X____ 
-    ________ 
-    ________ 
-    ____X___ 
-    ________ 
-    ________ 
-    ________ 
-
-};
-
-const unsigned char cube1Boundary[] = {
-
-    1,                  // width in BYTES (=8 pix/byte) (MAX =4)
-    21,                 // height in SCANLINES (pref multiples of 3 -- TRIPIXs)
-    8,21,               // center point (PIXELS) from 0,0 top left
-
-
-
-    ________ 
-    ________ 
-    ________ 
-    ________ 
-    ________ 
-    ________ 
-    ________ 
-    ________ 
-    ________ 
-    ________ 
-    ________ 
-    _X_X_X_X 
-    ________ 
-    ________ 
-    X_X_X_X_ 
-    ________ 
-    ________ 
-    ___X_X__ 
-    ________ 
-    ________ 
-    ____X___ 
-
-};
 
 
 
@@ -568,11 +126,16 @@ ROTATION
 void drawBitmap(const unsigned char *bmp, char colour, int x, int y) {
 
     unsigned char pix[40];
+    unsigned char maskPix[40];
+
     unsigned char pf[3][6];
+    unsigned char masker[6];
+
 
     memset(pix, 0, 40);
+    memset(maskPix, 0, 40);
 
-    static unsigned char colourMask[8][3] = {
+    static const unsigned char colourMask[8][3] = {
 
         { 0,     0,      0, },      // 0
         { 0,     0,   0xFF, },      // 1
@@ -588,33 +151,41 @@ void drawBitmap(const unsigned char *bmp, char colour, int x, int y) {
     //trivial off-screen checks
 
     int pixL = (x - scrollX - (bmp[BMP_CENTER_X] << 14)) & 0xFFFFC000;
-    int pixR = pixL + (bmp[BMP_WIDTH] << (14 + 3));
+    int pixR = pixL + (bmp[BMP_WIDTH] << (14));
     if (pixR < 0 || pixL >= (40 << 14))
         return;
 
-    int pixT = (y - ((scrollY & 0xFFFF0000) * 3)) - (bmp[BMP_CENTER_Y] << 16);
-    int pixB = pixT + (bmp[BMP_HEIGHT] << 16);
-    if (pixB < 0 || pixT >= (_ARENA_SCANLINES << 16))
+    int pixT = (y - ((scrollY & 0xFFFF0000) * 3)) - ((bmp[BMP_CENTER_Y]) << 16);
+    int pixB = pixT + ((bmp[BMP_HEIGHT] * 3) << 16);
+    if (pixB < 0 || pixT >= ((_ARENA_SCANLINES )<< 16))
         return;
 
 
-    for (int line = 0; line * 3 < bmp[BMP_HEIGHT]; line++) {
+    for (int line = 0; line < bmp[BMP_HEIGHT]; line ++) {
         int scanline = line * 3 - bmp[BMP_CENTER_Y] + ((y - ((scrollY & 0xFFFF0000) * 3)) >> 16);
-        if (scanline >= 0 && scanline < _ARENA_SCANLINES-2) {
+        if (scanline >= 0 && scanline < _ARENA_SCANLINES) {
 
             for (int ssl = 0; ssl < 3; ssl++) {
 
-                int adjustedIndex = line * bmp[BMP_WIDTH] + BMP_HEADER_BYTES;
+                unsigned char *adjustedIndex = bmp + line * bmp[BMP_WIDTH] + BMP_HEADER_BYTES;
+                unsigned char *maskAjdustedIndex = adjustedIndex + bmp[BMP_WIDTH] * bmp[BMP_HEIGHT];
+
                 unsigned int bits = 0;
-                for (int i = 0; i < bmp[BMP_WIDTH]; i++)
-                    bits = (bits << 8) | (bmp[adjustedIndex++] & colourMask[colour][ssl]);
-                
+                unsigned int maskBits = 0xFFFFFFFF;
+
+                for (int i = 0; i < bmp[BMP_WIDTH]; i++) {
+                    bits = (bits << 8) | (*adjustedIndex++ & colourMask[colour][ssl]);
+                    maskBits = (maskBits << 8) | *maskAjdustedIndex++;
+                }
+
                 int bitRange = (bmp[BMP_WIDTH] << 3) - 1;
                 int absBit = ((x - scrollX) >> 14) - bmp[BMP_CENTER_X];
-                for (int bit = 0; bit <= bitRange; bit++) {
-                    if (absBit >= 0 && absBit < 40)
-                        pix[absBit] = (bits >> (bitRange - bit)) & 1;
-                    absBit++;
+                for (int bit = bitRange; bit >= 0; bit--) {
+                    // if (absBit >= 0 && absBit < 40) {
+                        pix[absBit] = (bits >> bit) & 1;
+                        maskPix[absBit++] = (maskBits >> bit) & 1;
+                    // }
+                    // absBit++;
                 }
 
                 // convert to PF format
@@ -664,15 +235,59 @@ void drawBitmap(const unsigned char *bmp, char colour, int x, int y) {
                            | (pix[37] << 5)
                            | (pix[38] << 6)
                            | (pix[39] << 7);
+
+
+
+                masker[0] =  ((maskPix[ 0] << 4)          // mirrored
+                           | (maskPix[ 1] << 5)
+                           | (maskPix[ 2] << 6)
+                           | (maskPix[ 3] << 7)) ^ 0xFF;
+                    
+                masker[1] = ((maskPix[ 4] << 7)          // normal
+                           | (maskPix[ 5] << 6)
+                           | (maskPix[ 6] << 5)
+                           | (maskPix[ 7] << 4)
+                           | (maskPix[ 8] << 3)
+                           | (maskPix[ 9] << 2)
+                           | (maskPix[10] << 1)
+                           | (maskPix[11] /*<< 0*/)) ^ 0xFF;
+
+                masker[2] = ((maskPix[12] /*<< 0*/)          // mirrored
+                           | (maskPix[13] << 1)
+                           | (maskPix[14] << 2)
+                           | (maskPix[15] << 3)
+                           | (maskPix[16] << 4)
+                           | (maskPix[17] << 5)
+                           | (maskPix[18] << 6)
+                           | (maskPix[19] << 7)) ^ 0xFF;
+
+                masker[3] = ((maskPix[20] << 4)          // mirrored
+                           | (maskPix[21] << 5)
+                           | (maskPix[22] << 6)
+                           | (maskPix[23] << 7)) ^ 0xFF;
+                    
+                masker[4] = ((maskPix[24] << 7)          // normal
+                           | (maskPix[25] << 6)
+                           | (maskPix[26] << 5)
+                           | (maskPix[27] << 4)
+                           | (maskPix[28] << 3)
+                           | (maskPix[29] << 2)
+                           | (maskPix[30] << 1)
+                           | (maskPix[31] /*<< 0*/)) ^ 0xFF;
+
+                masker[5] = ((maskPix[32] /*<< 0*/)          // mirrored
+                           | (maskPix[33] << 1)
+                           | (maskPix[34] << 2)
+                           | (maskPix[35] << 3)
+                           | (maskPix[36] << 4)
+                           | (maskPix[37] << 5)
+                           | (maskPix[38] << 6)
+                           | (maskPix[39] << 7)) ^ 0xFF;
+
+
+
             }
 
-            unsigned char masker[6];
-            masker[0] = ~(pf[0][0] | pf[1][0] | pf[2][0]);
-            masker[1] = ~(pf[0][1] | pf[1][1] | pf[2][1]);
-            masker[2] = ~(pf[0][2] | pf[1][2] | pf[2][2]);
-            masker[3] = ~(pf[0][3] | pf[1][3] | pf[2][3]);
-            masker[4] = ~(pf[0][4] | pf[1][4] | pf[2][4]);
-            masker[5] = ~(pf[0][5] | pf[1][5] | pf[2][5]);
 
             extern const int bufPtr[][2];
             extern int pfBuffer;

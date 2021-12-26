@@ -611,7 +611,7 @@
      15  0000 ????				      ENDM		; stream, destination
      16  0000 ????
      17  0000 ????
-     18  0000 ????	       00 14	   CDC	      =	20
+     18  0000 ????	       00 0f	   CDC	      =	15
      19  0000 ????
      20  0000 ????						; Symbols prefixed with _ are exported to 'main/defines_from_dasm_for_c.h'
      21  0000 ????						; This is done via 'awk' in the makefile.
@@ -649,7 +649,7 @@
      53  0000 ????
      54  0000 ????						; NTSC...
      55  0000 ????	       00 38	   VB_TIM64T  =	56	;46; //7; //7
-     56  0000 ????	       00 1b	   OS_TIM64T  =	27	; 41; //33 ;-3
+     56  0000 ????	       00 1c	   OS_TIM64T  =	28	; 41; //33 ;-3
      57  0000 ????
      58  0000 ????						; PAL...
      59  0000 ????						; VB_TIM64T = 76;46; //7; //7
@@ -750,178 +750,178 @@
     153  0800							; include the custom ARM code.
     154  0800
     155  0800					      incbin	"main/bin/armcode.bin"
-    156  3da0
-    157  3da0
-    158  3da0
-    159  3da0
-    160  3da0							;===============================================================================
-    161  3da0							; ARM Indirect Data
-    162  3da0							;----------------------------------------
-    163  3da0							;   Data that the C code indirectly accesses can be stored immediately after the
-    164  3da0							;   custom ARM code.
-    165  3da0							;===============================================================================
-    166  3da0
- ---- $3260 bytes of ARM and Moveable Data space left
-    167  3da0					      echo	"----",($7000 - *) , "bytes of ARM and Moveable Data space left"
-    168  3da0
-    169  3da0
-    170  3da0
-    171  3da0							;===============================================================================
-    172  3da0							; ARM Direct Data
-    173  3da0							;----------------------------------------
-    174  3da0							;   I find it easier, and more space efficient, to store some of the data the
-    175  3da0							;   C code needs to access in the 6507 code instead of the C code.  Because the
-    176  3da0							;   build process is:
-    177  3da0							;
-    178  3da0							;	 1) assemble 6507 code to create defines_from_dasm_for_c.h
-    179  3da0							;	 2) compile C code to create ARM routines
-    180  3da0							;	 3) assemble 6507 to create final ROM
-    181  3da0							;
-    182  3da0							;   the ARM code could change size between steps 1 and 3, which would shift data
-    183  3da0							;   that immediately comes after it. So the data that C directly accesses needs
-    184  3da0							;   to be after an ORG to prevent it from moving.
-    185  3da0							;
-    186  3da0							;   The _IMAGE_GRAPHICS, _IMAGE_COLORS, etc data tables are directly access by
-    187  3da0							;   the C code so must be in the Direct Data area. The data they point to is
-    188  3da0							;   indirectly accessed by the C code, so they can go in the Indirect Data area.
-    189  3da0							;   Note the labels for the tables are prefixed by _ so they'll end up in the
-    190  3da0							;   defines_from_dasm_for_c.h file, while the labels for the data the tables
-    191  3da0							;   point to are not prefixed by _
-    192  3da0							;===============================================================================
-    193  3da0							;	  ORG $5F80
-    194  3da0							;	  ORG $5FFF
-    195  3da0							;_ARENA_INCREMENTS:
-    196  3da0							;	  .byte 255 ; * Arena1_Height / _ARENA_SCANLINES
-    197  3da0							;	  .byte 255 ;* Arena2_Height / _ARENA_SCANLINES
-    198  3da0							;	  .byte 255 ;* Arena3_Height / _ARENA_SCANLINES
-    199  3da0							;	  .byte 255 ;* Arena4_Height / _ARENA_SCANLINES
-    200  3da0
-    201  3da0
-    202  3da0
-    203  3da0							; value used in this echo depends upon how many banks are used for 6507 code
-    204  3da0							;   $5000 if using banks 4, 5 & 6
-    205  3da0							;   $6000 if using banks 5 & 6
-    206  3da0							;   $7000 if using just bank 6
-    207  3da0							;    echo "----",[$6000 - *] , "bytes of ARM Direct Data left"
-    208  3da0
-    209  3da0							;===============================================================================
-    210  3da0							; Bank 5 - 6507 code
-    211  3da0							;----------------------------------------
-    212  3da0							;   I normally allocate banks 0-5 for ARM code, and just use bank 6 for 6507
-    213  3da0							;   code, but in order to show an example of CDFJ bankswitching I am using bank
-    214  3da0							;   5 for the splash screen and menu routines.
-    215  3da0							;===============================================================================
-    216  3da0
-    217  3da0							;	  ORG $6000
-    218  3da0							;	  RORG $F000
-    219  3da0
-    220  3da0							; this and SplashMenuVB in bank 6 are used to switch between the banks
-    221  3da0							;SplashMenuOS:
-    222  3da0							;	  sta SELECTBANK6	  ; switch to bank 6, then jmp SplashMenuOS_Code
-    223  3da0							;	  jmp SplashMenuVB_Code
-    224  3da0
-    225  3da0							;	  POSITION_OBJECT	  ; this must occupy same address in both banks
-    226  3da0
-    227  3da0
-    228  3da0
-    229  3da0							;===============================================================================
-    230  3da0							; Two Color Graphic routine
-    231  3da0							;-------------------------------------------------------------------------------
-    232  3da0							; this works by using a "negative" image when drawing the sprites.
-    233  3da0							; The sprites are colored black while the background is the color
-    234  3da0							; that shows up as though it were the sprites.  The 2nd color is
-    235  3da0							; achieved by using the playfield and/or ball.
-    236  3da0							;
-    237  3da0							; The missiles (also black) and setting the screen & playfield to BLACK
-    238  3da0							; are used to hide the screen and playfield beyond the 48 pixel image.
-    239  3da0							;===============================================================================
-    240  3da0							;ShowTwoColorGraphic:
-    241  3da0
-    242  3da0
-    243  3da0							;SplashMenuVB_Code:	  ; entry point from Bank 6
-    244  3da0							;	  lda Mode	  ; check which screen to show
-    245  3da0							;	  bne MenuVB	  ; Mode 1 = Menu
-    246  3da0							;	  jmp SplashVB	  ; Mode 0 = Splash
-    247  3da0
-    248  3da0							;MenuVB:
-    249  3da0							; players are already in position, just need to set size/copies & color
-    250  3da0							;	  ldy #%11111111
-    251  3da0							;	  sty GRP0
-    252  3da0							;	  sty GRP1
-    253  3da0							;	  ldy #%00100000  ; Ball Size = 4
-    254  3da0							;	  sty CTRLPF	  ; repeat playfield, ball width = 4
-    255  3da0							;	  ldy #_BLACK
-    256  3da0							;	  sty COLUP0
-    257  3da0							;	  sty COLUP1
-    258  3da0							;	  ldy #%00010000;11
-    259  3da0							;	  sty ENAM0	      ; missile on
-    260  3da0							;	  sty ENAM1	      ; missile on
-    261  3da0							;	  sty ENABL	      ; ball on
-    262  3da0							;	  sty NUSIZ0	      ; three copies close, missile x8
-    263  3da0							;	  sty NUSIZ1	      ; three copies close, missile x8
-    264  3da0							;	  sty VDELP0	      ; vertical delay on
-    265  3da0							;	  sty VDELP1	      ; vertical delay on
-    266  3da0
-    267  3da0
-    268  3da0							;	  ldx #0
-    269  3da0							;	  stx COLUPF
-    270  3da0							;MenuVBwait:
-    271  3da0							;	  sta WSYNC
-    272  3da0							;	  bit TIMINT
-    273  3da0							;	  bpl MenuVBwait
-    274  3da0							;	  stx VBLANK		  ; video output on
-    275  3da0
-    276  3da0							;MenuKernel:
-    277  3da0
-    278  3da0							;MenuDone:
-    279  3da0							;	  sta WSYNC
-    280  3da0							;	  stx ENAM0    ; X=0 after ShowTwoColorGraphic
-    281  3da0							;	  stx ENAM1
-    282  3da0							;	  stx ENABL
-    283  3da0
-    284  3da0
-    285  3da0							;ShowSpiceWareLogo:
-    286  3da0							;SSWL1:
-    287  3da0							;SSWLskip1:			  ;   15 from branch just before SSWL1
-    288  3da0							;EndShowSpiceWareLogo:
-    289  3da0
-    290  3da0							;MenuOS:
-    291  3da0							;	  ldy #_FN_MENU_OS    ; going to run function MenuOverScan()
-    292  3da0							;	  jmp SplashMenuOS
-    293  3da0
-    294  3da0
-    295  3da0							;SplashVB:
-    296  3da0							;SplashVBwait:
-    297  3da0							;SplashKernel:
-    298  3da0							;SplashOS:
-    299  3da0							;	  ldy #_FN_SPLASH_OS	  ; going to run function SplashOverScan()
-    300  3da0							;	  jmp SplashMenuOS
-    301  3da0
-    302  3da0
-    303  3da0							;    echo ($FFE9-*), "(6507) bytes left in bank 6"
-    304  3da0
-    305  3da0							;include "48x128.asm"
-    306  3da0
-    307  3da0
-    308  3da0							;    echo ($FFE9-*), "AFTER 48x128 include, (6507) bytes left in bank 6"
-    309  3da0
-    310  3da0							;	  ORG $6FEA
-    311  3da0							;	  RORG $FFEA
-    312  3da0							;B5init:
-    313  3da0							;	  sta SELECTBANK6
-    314  3da0							;	  jmp B5init	  ; should never get here, but just in case
-    315  3da0							;	  ds 12, 0	  ; reserve space for CDFJ registers
-    316  3da0							;	  .WORD B5init	  ; while CDFJ will only power up in bank 5, an accidental
-    317  3da0							;	  .WORD B5init	  ; BRK instruction could occur, so gracefully handle it
-    318  3da0
-    319  3da0
-    320  3da0
-    321  3da0							;===============================================================================
-    322  3da0							; Bank 6 - 6507 code
-    323  3da0							;----------------------------------------
-    324  3da0							;   CDFJ will always start in bank 6 because banks 0-5 could contain ARM code
-    325  3da0							;===============================================================================
-    326  3da0
+    156  4ab4
+    157  4ab4
+    158  4ab4
+    159  4ab4
+    160  4ab4							;===============================================================================
+    161  4ab4							; ARM Indirect Data
+    162  4ab4							;----------------------------------------
+    163  4ab4							;   Data that the C code indirectly accesses can be stored immediately after the
+    164  4ab4							;   custom ARM code.
+    165  4ab4							;===============================================================================
+    166  4ab4
+ ---- $254c bytes of ARM and Moveable Data space left
+    167  4ab4					      echo	"----",($7000 - *) , "bytes of ARM and Moveable Data space left"
+    168  4ab4
+    169  4ab4
+    170  4ab4
+    171  4ab4							;===============================================================================
+    172  4ab4							; ARM Direct Data
+    173  4ab4							;----------------------------------------
+    174  4ab4							;   I find it easier, and more space efficient, to store some of the data the
+    175  4ab4							;   C code needs to access in the 6507 code instead of the C code.  Because the
+    176  4ab4							;   build process is:
+    177  4ab4							;
+    178  4ab4							;	 1) assemble 6507 code to create defines_from_dasm_for_c.h
+    179  4ab4							;	 2) compile C code to create ARM routines
+    180  4ab4							;	 3) assemble 6507 to create final ROM
+    181  4ab4							;
+    182  4ab4							;   the ARM code could change size between steps 1 and 3, which would shift data
+    183  4ab4							;   that immediately comes after it. So the data that C directly accesses needs
+    184  4ab4							;   to be after an ORG to prevent it from moving.
+    185  4ab4							;
+    186  4ab4							;   The _IMAGE_GRAPHICS, _IMAGE_COLORS, etc data tables are directly access by
+    187  4ab4							;   the C code so must be in the Direct Data area. The data they point to is
+    188  4ab4							;   indirectly accessed by the C code, so they can go in the Indirect Data area.
+    189  4ab4							;   Note the labels for the tables are prefixed by _ so they'll end up in the
+    190  4ab4							;   defines_from_dasm_for_c.h file, while the labels for the data the tables
+    191  4ab4							;   point to are not prefixed by _
+    192  4ab4							;===============================================================================
+    193  4ab4							;	  ORG $5F80
+    194  4ab4							;	  ORG $5FFF
+    195  4ab4							;_ARENA_INCREMENTS:
+    196  4ab4							;	  .byte 255 ; * Arena1_Height / _ARENA_SCANLINES
+    197  4ab4							;	  .byte 255 ;* Arena2_Height / _ARENA_SCANLINES
+    198  4ab4							;	  .byte 255 ;* Arena3_Height / _ARENA_SCANLINES
+    199  4ab4							;	  .byte 255 ;* Arena4_Height / _ARENA_SCANLINES
+    200  4ab4
+    201  4ab4
+    202  4ab4
+    203  4ab4							; value used in this echo depends upon how many banks are used for 6507 code
+    204  4ab4							;   $5000 if using banks 4, 5 & 6
+    205  4ab4							;   $6000 if using banks 5 & 6
+    206  4ab4							;   $7000 if using just bank 6
+    207  4ab4							;    echo "----",[$6000 - *] , "bytes of ARM Direct Data left"
+    208  4ab4
+    209  4ab4							;===============================================================================
+    210  4ab4							; Bank 5 - 6507 code
+    211  4ab4							;----------------------------------------
+    212  4ab4							;   I normally allocate banks 0-5 for ARM code, and just use bank 6 for 6507
+    213  4ab4							;   code, but in order to show an example of CDFJ bankswitching I am using bank
+    214  4ab4							;   5 for the splash screen and menu routines.
+    215  4ab4							;===============================================================================
+    216  4ab4
+    217  4ab4							;	  ORG $6000
+    218  4ab4							;	  RORG $F000
+    219  4ab4
+    220  4ab4							; this and SplashMenuVB in bank 6 are used to switch between the banks
+    221  4ab4							;SplashMenuOS:
+    222  4ab4							;	  sta SELECTBANK6	  ; switch to bank 6, then jmp SplashMenuOS_Code
+    223  4ab4							;	  jmp SplashMenuVB_Code
+    224  4ab4
+    225  4ab4							;	  POSITION_OBJECT	  ; this must occupy same address in both banks
+    226  4ab4
+    227  4ab4
+    228  4ab4
+    229  4ab4							;===============================================================================
+    230  4ab4							; Two Color Graphic routine
+    231  4ab4							;-------------------------------------------------------------------------------
+    232  4ab4							; this works by using a "negative" image when drawing the sprites.
+    233  4ab4							; The sprites are colored black while the background is the color
+    234  4ab4							; that shows up as though it were the sprites.  The 2nd color is
+    235  4ab4							; achieved by using the playfield and/or ball.
+    236  4ab4							;
+    237  4ab4							; The missiles (also black) and setting the screen & playfield to BLACK
+    238  4ab4							; are used to hide the screen and playfield beyond the 48 pixel image.
+    239  4ab4							;===============================================================================
+    240  4ab4							;ShowTwoColorGraphic:
+    241  4ab4
+    242  4ab4
+    243  4ab4							;SplashMenuVB_Code:	  ; entry point from Bank 6
+    244  4ab4							;	  lda Mode	  ; check which screen to show
+    245  4ab4							;	  bne MenuVB	  ; Mode 1 = Menu
+    246  4ab4							;	  jmp SplashVB	  ; Mode 0 = Splash
+    247  4ab4
+    248  4ab4							;MenuVB:
+    249  4ab4							; players are already in position, just need to set size/copies & color
+    250  4ab4							;	  ldy #%11111111
+    251  4ab4							;	  sty GRP0
+    252  4ab4							;	  sty GRP1
+    253  4ab4							;	  ldy #%00100000  ; Ball Size = 4
+    254  4ab4							;	  sty CTRLPF	  ; repeat playfield, ball width = 4
+    255  4ab4							;	  ldy #_BLACK
+    256  4ab4							;	  sty COLUP0
+    257  4ab4							;	  sty COLUP1
+    258  4ab4							;	  ldy #%00010000;11
+    259  4ab4							;	  sty ENAM0	      ; missile on
+    260  4ab4							;	  sty ENAM1	      ; missile on
+    261  4ab4							;	  sty ENABL	      ; ball on
+    262  4ab4							;	  sty NUSIZ0	      ; three copies close, missile x8
+    263  4ab4							;	  sty NUSIZ1	      ; three copies close, missile x8
+    264  4ab4							;	  sty VDELP0	      ; vertical delay on
+    265  4ab4							;	  sty VDELP1	      ; vertical delay on
+    266  4ab4
+    267  4ab4
+    268  4ab4							;	  ldx #0
+    269  4ab4							;	  stx COLUPF
+    270  4ab4							;MenuVBwait:
+    271  4ab4							;	  sta WSYNC
+    272  4ab4							;	  bit TIMINT
+    273  4ab4							;	  bpl MenuVBwait
+    274  4ab4							;	  stx VBLANK		  ; video output on
+    275  4ab4
+    276  4ab4							;MenuKernel:
+    277  4ab4
+    278  4ab4							;MenuDone:
+    279  4ab4							;	  sta WSYNC
+    280  4ab4							;	  stx ENAM0    ; X=0 after ShowTwoColorGraphic
+    281  4ab4							;	  stx ENAM1
+    282  4ab4							;	  stx ENABL
+    283  4ab4
+    284  4ab4
+    285  4ab4							;ShowSpiceWareLogo:
+    286  4ab4							;SSWL1:
+    287  4ab4							;SSWLskip1:			  ;   15 from branch just before SSWL1
+    288  4ab4							;EndShowSpiceWareLogo:
+    289  4ab4
+    290  4ab4							;MenuOS:
+    291  4ab4							;	  ldy #_FN_MENU_OS    ; going to run function MenuOverScan()
+    292  4ab4							;	  jmp SplashMenuOS
+    293  4ab4
+    294  4ab4
+    295  4ab4							;SplashVB:
+    296  4ab4							;SplashVBwait:
+    297  4ab4							;SplashKernel:
+    298  4ab4							;SplashOS:
+    299  4ab4							;	  ldy #_FN_SPLASH_OS	  ; going to run function SplashOverScan()
+    300  4ab4							;	  jmp SplashMenuOS
+    301  4ab4
+    302  4ab4
+    303  4ab4							;    echo ($FFE9-*), "(6507) bytes left in bank 6"
+    304  4ab4
+    305  4ab4							;include "48x128.asm"
+    306  4ab4
+    307  4ab4
+    308  4ab4							;    echo ($FFE9-*), "AFTER 48x128 include, (6507) bytes left in bank 6"
+    309  4ab4
+    310  4ab4							;	  ORG $6FEA
+    311  4ab4							;	  RORG $FFEA
+    312  4ab4							;B5init:
+    313  4ab4							;	  sta SELECTBANK6
+    314  4ab4							;	  jmp B5init	  ; should never get here, but just in case
+    315  4ab4							;	  ds 12, 0	  ; reserve space for CDFJ registers
+    316  4ab4							;	  .WORD B5init	  ; while CDFJ will only power up in bank 5, an accidental
+    317  4ab4							;	  .WORD B5init	  ; BRK instruction could occur, so gracefully handle it
+    318  4ab4
+    319  4ab4
+    320  4ab4
+    321  4ab4							;===============================================================================
+    322  4ab4							; Bank 6 - 6507 code
+    323  4ab4							;----------------------------------------
+    324  4ab4							;   CDFJ will always start in bank 6 because banks 0-5 could contain ARM code
+    325  4ab4							;===============================================================================
+    326  4ab4
     327  7000					      ORG	$7000
     328  7000					      RORG	$F000
     329  7000
@@ -1090,7 +1090,7 @@
     475  70b1		       85 02		      sta	WSYNC
     476  70b3		       a2 02		      ldx	#2
     477  70b5		       86 01		      stx	VBLANK	; video output off
-    478  70b7		       a2 1b		      ldx	#OS_TIM64T
+    478  70b7		       a2 1c		      ldx	#OS_TIM64T
     479  70b9		       8e 96 02 	      stx	TIM64T	; set timer for OS
     480  70bc
     481  70bc
@@ -1101,7 +1101,7 @@
     486  70c4		       30 0c		      bmi	.ag2
     487  70c6		       a0 04		      ldy	#_FN_GAME_IDLE
     488  70c8		       ae 84 02 	      ldx	INTIM
-    489  70cb		       e0 14		      cpx	#CDC
+    489  70cb		       e0 0f		      cpx	#CDC
     490  70cd		       b0 ef		      bcs	Again2
     491  70cf
     492  70cf
@@ -1222,7 +1222,7 @@
     607  712d		       ae 85 02    skipss2    ldx	TIMINT
     608  7130		       30 fb		      bmi	skipss2
     609  7132		       ae 84 02 	      ldx	INTIM
-    610  7135		       e0 14		      cpx	#CDC
+    610  7135		       e0 0f		      cpx	#CDC
     611  7137		       b0 ef		      bcs	Again1
     612  7139
     613  7139
@@ -1406,115 +1406,115 @@
     751 U0010
     752 U0010					      align	4
     753 U0010
-    754 U0010		       00 00 00 00*_BUF_JUMP1 ds	_ARENA_SCANLINES * 2	; long-word align!!
-    755 U01a2		       00 00	   _BUF_JUMP1_EXIT ds	2
-    756 U01a4
-    757 U01a4							; DO NOT CHANGE ORDER
-    758 U01a4							;{ clear in main.c assumes one block to clear
-    759 U01a4
-    760 U01a4							;------------------------------------------------------------------------------
-    761 U01a4
-    762 U01a4		       01 a4	   _BUFFERS   =	*
-    763 U01a4
-    764 U01a4				   BUFN       SET	0
-    765 U01a4					      MAC	defbuf
-    766 U01a4				   _BUF_{1}   ds	ARENA_BUFFER_SIZE
-    767 U01a4				   BUFN       SET	BUFN + 1
-    768 U01a4					      ENDM		;name
-    769 U01a4
-      0 U01a4					      DEFBUF	COLUP0
-      1 U01a4		       00 00 00 00*_BUF_COLUP0 ds	ARENA_BUFFER_SIZE
-      2 U01a4				   BUFN       SET	BUFN + 1
-      0 U026d					      DEFBUF	COLUP1
-      1 U026d		       00 00 00 00*_BUF_COLUP1 ds	ARENA_BUFFER_SIZE
-      2 U026d				   BUFN       SET	BUFN + 1
-      0 U0336					      DEFBUF	COLUPF
-      1 U0336		       00 00 00 00*_BUF_COLUPF ds	ARENA_BUFFER_SIZE
-      2 U0336				   BUFN       SET	BUFN + 1
-      0 U03ff					      DEFBUF	COLUBK
-      1 U03ff		       00 00 00 00*_BUF_COLUBK ds	ARENA_BUFFER_SIZE
-      2 U03ff				   BUFN       SET	BUFN + 1
-      0 U04c8					      DEFBUF	A_PF0_LEFT
-      1 U04c8		       00 00 00 00*_BUF_A_PF0_LEFT ds	ARENA_BUFFER_SIZE
-      2 U04c8				   BUFN       SET	BUFN + 1
-      0 U0591					      DEFBUF	A_PF1_LEFT
-      1 U0591		       00 00 00 00*_BUF_A_PF1_LEFT ds	ARENA_BUFFER_SIZE
-      2 U0591				   BUFN       SET	BUFN + 1
-      0 U065a					      DEFBUF	A_PF2_LEFT
-      1 U065a		       00 00 00 00*_BUF_A_PF2_LEFT ds	ARENA_BUFFER_SIZE
-      2 U065a				   BUFN       SET	BUFN + 1
-      0 U0723					      DEFBUF	A_PF0_RIGHT
-      1 U0723		       00 00 00 00*_BUF_A_PF0_RIGHT ds	ARENA_BUFFER_SIZE
-      2 U0723				   BUFN       SET	BUFN + 1
-      0 U07ec					      DEFBUF	A_PF1_RIGHT
-      1 U07ec		       00 00 00 00*_BUF_A_PF1_RIGHT ds	ARENA_BUFFER_SIZE
-      2 U07ec				   BUFN       SET	BUFN + 1
-      0 U08b5					      DEFBUF	A_PF2_RIGHT
-      1 U08b5		       00 00 00 00*_BUF_A_PF2_RIGHT ds	ARENA_BUFFER_SIZE
-      2 U08b5				   BUFN       SET	BUFN + 1
-      0 U097e					      DEFBUF	B_PF0_LEFT
-      1 U097e		       00 00 00 00*_BUF_B_PF0_LEFT ds	ARENA_BUFFER_SIZE
-      2 U097e				   BUFN       SET	BUFN + 1
-      0 U0a47					      DEFBUF	B_PF1_LEFT
-      1 U0a47		       00 00 00 00*_BUF_B_PF1_LEFT ds	ARENA_BUFFER_SIZE
-      2 U0a47				   BUFN       SET	BUFN + 1
-      0 U0b10					      DEFBUF	B_PF2_LEFT
-      1 U0b10		       00 00 00 00*_BUF_B_PF2_LEFT ds	ARENA_BUFFER_SIZE
-      2 U0b10				   BUFN       SET	BUFN + 1
-      0 U0bd9					      DEFBUF	B_PF0_RIGHT
-      1 U0bd9		       00 00 00 00*_BUF_B_PF0_RIGHT ds	ARENA_BUFFER_SIZE
-      2 U0bd9				   BUFN       SET	BUFN + 1
-      0 U0ca2					      DEFBUF	B_PF1_RIGHT
-      1 U0ca2		       00 00 00 00*_BUF_B_PF1_RIGHT ds	ARENA_BUFFER_SIZE
-      2 U0ca2				   BUFN       SET	BUFN + 1
-      0 U0d6b					      DEFBUF	B_PF2_RIGHT
-      1 U0d6b		       00 00 00 00*_BUF_B_PF2_RIGHT ds	ARENA_BUFFER_SIZE
-      2 U0d6b				   BUFN       SET	BUFN + 1
-      0 U0e34					      DEFBUF	GRP0A
-      1 U0e34		       00 00 00 00*_BUF_GRP0A ds	ARENA_BUFFER_SIZE
-      2 U0e34				   BUFN       SET	BUFN + 1
-      0 U0efd					      DEFBUF	GRP1A
-      1 U0efd		       00 00 00 00*_BUF_GRP1A ds	ARENA_BUFFER_SIZE
-      2 U0efd				   BUFN       SET	BUFN + 1
-    788 U0fc6
-    789 U0fc6		       0e 22	   _BUFFER_BLOCK_SIZE =	* - _BUFFERS
-    790 U0fc6
-    791 U0fc6							;------------------------------------------------------------------------------
-    792 U0fc6
-    793 U0fc6
-    794 U0fc6
-    795 U0fc6		       00 00	   _BUF_AUDV  ds	2
-    796 U0fc8		       00 00	   _BUF_AUDC  ds	2
-    797 U0fca		       00 00	   _BUF_AUDF  ds	2
-    798 U0fcc
-    799 U0fcc
-    800 U0fcc				   OverlapDisplayDataRam		; mark the beginning of overlapped RAM
-    801 U0fcc							; Splash screen datastream buffers
-    802 U0fcc							;_BUF_SPLASH0:   ds 192
-    803 U0fcc							;_BUF_SPLASH1:   ds 192
-    804 U0fcc							;_BUF_SPLASH2:   ds 192
-    805 U0fcc							;_BUF_SPLASH3:   ds 192
-    806 U0fcc
- ---- $34 Splash bytes of Display Data RAM left
-    807 U0fcc					      echo	"----",($1000 - *) , "Splash bytes of Display Data RAM left"
-    808 U0fcc							;----------------------------------------
-    809 U0fcc							; this ORG overlaps the Menu datastreams on top of the Splash datastreams
-    810 U0fcc							;----------------------------------------
-    811 U0fcc
-    812 U0fcc							; Generic overlap variable usage
-    813 U0fcc					      ORG	OverlapDisplayDataRam
- ---- $34 Menu bytes of Example Overlap RAM left
-    814 U0fcc					      echo	"----",($1000 - *) , "Menu bytes of Example Overlap RAM left"
-    815 U0fcc
-    816 U0fcc							;----------------------------------------
-    817 U0fcc							; this ORG overlaps the Game datastreams on top of the Splash and Menu datastreams
-    818 U0fcc							;----------------------------------------
-    819 U0fcc					      ORG	OverlapDisplayDataRam
-    820 U0fcc							; Game datastream buffers
-    821 U0fcc				   _EVERY_FRAME_ZERO_START
-    822 U0fcc
-    823 U0fcc					      align	4	; need to be 4 byte aligned to use myMemsetInt
-    824 U0fcc		       00 00	   _EVERY_FRAME_ZERO_COUNT =	*-_EVERY_FRAME_ZERO_START	; end of zeroed out data
+    754 U0010		       00 00 00 00*_BUF_JUMP1 ds	(_ARENA_SCANLINES - 1)* 2	; long-word align!!
+    755 U01a0		       00 00	   _BUF_JUMP1_EXIT ds	2
+    756 U01a2
+    757 U01a2							; DO NOT CHANGE ORDER
+    758 U01a2							;{ clear in main.c assumes one block to clear
+    759 U01a2
+    760 U01a2							;------------------------------------------------------------------------------
+    761 U01a2
+    762 U01a2		       01 a2	   _BUFFERS   =	*
+    763 U01a2
+    764 U01a2				   BUFN       SET	0
+    765 U01a2					      MAC	defbuf
+    766 U01a2				   _BUF_{1}   ds	ARENA_BUFFER_SIZE
+    767 U01a2				   BUFN       SET	BUFN + 1
+    768 U01a2					      ENDM		;name
+    769 U01a2
+      0 U01a2					      DEFBUF	COLUP0
+      1 U01a2		       00 00 00 00*_BUF_COLUP0 ds	ARENA_BUFFER_SIZE
+      2 U01a2				   BUFN       SET	BUFN + 1
+      0 U026b					      DEFBUF	COLUP1
+      1 U026b		       00 00 00 00*_BUF_COLUP1 ds	ARENA_BUFFER_SIZE
+      2 U026b				   BUFN       SET	BUFN + 1
+      0 U0334					      DEFBUF	COLUPF
+      1 U0334		       00 00 00 00*_BUF_COLUPF ds	ARENA_BUFFER_SIZE
+      2 U0334				   BUFN       SET	BUFN + 1
+      0 U03fd					      DEFBUF	COLUBK
+      1 U03fd		       00 00 00 00*_BUF_COLUBK ds	ARENA_BUFFER_SIZE
+      2 U03fd				   BUFN       SET	BUFN + 1
+      0 U04c6					      DEFBUF	A_PF0_LEFT
+      1 U04c6		       00 00 00 00*_BUF_A_PF0_LEFT ds	ARENA_BUFFER_SIZE
+      2 U04c6				   BUFN       SET	BUFN + 1
+      0 U058f					      DEFBUF	A_PF1_LEFT
+      1 U058f		       00 00 00 00*_BUF_A_PF1_LEFT ds	ARENA_BUFFER_SIZE
+      2 U058f				   BUFN       SET	BUFN + 1
+      0 U0658					      DEFBUF	A_PF2_LEFT
+      1 U0658		       00 00 00 00*_BUF_A_PF2_LEFT ds	ARENA_BUFFER_SIZE
+      2 U0658				   BUFN       SET	BUFN + 1
+      0 U0721					      DEFBUF	A_PF0_RIGHT
+      1 U0721		       00 00 00 00*_BUF_A_PF0_RIGHT ds	ARENA_BUFFER_SIZE
+      2 U0721				   BUFN       SET	BUFN + 1
+      0 U07ea					      DEFBUF	A_PF1_RIGHT
+      1 U07ea		       00 00 00 00*_BUF_A_PF1_RIGHT ds	ARENA_BUFFER_SIZE
+      2 U07ea				   BUFN       SET	BUFN + 1
+      0 U08b3					      DEFBUF	A_PF2_RIGHT
+      1 U08b3		       00 00 00 00*_BUF_A_PF2_RIGHT ds	ARENA_BUFFER_SIZE
+      2 U08b3				   BUFN       SET	BUFN + 1
+      0 U097c					      DEFBUF	B_PF0_LEFT
+      1 U097c		       00 00 00 00*_BUF_B_PF0_LEFT ds	ARENA_BUFFER_SIZE
+      2 U097c				   BUFN       SET	BUFN + 1
+      0 U0a45					      DEFBUF	B_PF1_LEFT
+      1 U0a45		       00 00 00 00*_BUF_B_PF1_LEFT ds	ARENA_BUFFER_SIZE
+      2 U0a45				   BUFN       SET	BUFN + 1
+      0 U0b0e					      DEFBUF	B_PF2_LEFT
+      1 U0b0e		       00 00 00 00*_BUF_B_PF2_LEFT ds	ARENA_BUFFER_SIZE
+      2 U0b0e				   BUFN       SET	BUFN + 1
+      0 U0bd7					      DEFBUF	B_PF0_RIGHT
+      1 U0bd7		       00 00 00 00*_BUF_B_PF0_RIGHT ds	ARENA_BUFFER_SIZE
+      2 U0bd7				   BUFN       SET	BUFN + 1
+      0 U0ca0					      DEFBUF	B_PF1_RIGHT
+      1 U0ca0		       00 00 00 00*_BUF_B_PF1_RIGHT ds	ARENA_BUFFER_SIZE
+      2 U0ca0				   BUFN       SET	BUFN + 1
+      0 U0d69					      DEFBUF	B_PF2_RIGHT
+      1 U0d69		       00 00 00 00*_BUF_B_PF2_RIGHT ds	ARENA_BUFFER_SIZE
+      2 U0d69				   BUFN       SET	BUFN + 1
+      0 U0e32					      DEFBUF	GRP0A
+      1 U0e32		       00 00 00 00*_BUF_GRP0A ds	ARENA_BUFFER_SIZE
+      2 U0e32				   BUFN       SET	BUFN + 1
+      0 U0efb					      DEFBUF	GRP1A
+      1 U0efb		       00 00 00 00*_BUF_GRP1A ds	ARENA_BUFFER_SIZE
+      2 U0efb				   BUFN       SET	BUFN + 1
+    788 U0fc4
+    789 U0fc4		       0e 22	   _BUFFER_BLOCK_SIZE =	* - _BUFFERS
+    790 U0fc4
+    791 U0fc4							;------------------------------------------------------------------------------
+    792 U0fc4
+    793 U0fc4
+    794 U0fc4
+    795 U0fc4		       00 00	   _BUF_AUDV  ds	2
+    796 U0fc6		       00 00	   _BUF_AUDC  ds	2
+    797 U0fc8		       00 00	   _BUF_AUDF  ds	2
+    798 U0fca
+    799 U0fca
+    800 U0fca				   OverlapDisplayDataRam		; mark the beginning of overlapped RAM
+    801 U0fca							; Splash screen datastream buffers
+    802 U0fca							;_BUF_SPLASH0:   ds 192
+    803 U0fca							;_BUF_SPLASH1:   ds 192
+    804 U0fca							;_BUF_SPLASH2:   ds 192
+    805 U0fca							;_BUF_SPLASH3:   ds 192
+    806 U0fca
+ ---- $36 Splash bytes of Display Data RAM left
+    807 U0fca					      echo	"----",($1000 - *) , "Splash bytes of Display Data RAM left"
+    808 U0fca							;----------------------------------------
+    809 U0fca							; this ORG overlaps the Menu datastreams on top of the Splash datastreams
+    810 U0fca							;----------------------------------------
+    811 U0fca
+    812 U0fca							; Generic overlap variable usage
+    813 U0fca					      ORG	OverlapDisplayDataRam
+ ---- $36 Menu bytes of Example Overlap RAM left
+    814 U0fca					      echo	"----",($1000 - *) , "Menu bytes of Example Overlap RAM left"
+    815 U0fca
+    816 U0fca							;----------------------------------------
+    817 U0fca							; this ORG overlaps the Game datastreams on top of the Splash and Menu datastreams
+    818 U0fca							;----------------------------------------
+    819 U0fca					      ORG	OverlapDisplayDataRam
+    820 U0fca							; Game datastream buffers
+    821 U0fca				   _EVERY_FRAME_ZERO_START
+    822 U0fca
+    823 U0fcc		       00 00		      align	4	; need to be 4 byte aligned to use myMemsetInt
+    824 U0fcc		       00 02	   _EVERY_FRAME_ZERO_COUNT =	*-_EVERY_FRAME_ZERO_START	; end of zeroed out data
     825 U0fcc
     826 U0fcc
     827 U0fcc

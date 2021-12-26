@@ -28,6 +28,8 @@
 #include "cavedata.h"
 #include "sound.h"
 #include "drawBitmap.h"
+#include "cubeDef.h"
+#include "shapes.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -500,8 +502,8 @@ void initFacets() {
 
             do
             {
-                mobileCol[facet] = (getRandom32() & 7); //face + 2; ///*//(square & 7); //*/getRandom32() & 7;
-            } while (mobileCol[facet] == 0);
+                mobileCol[facet] = /*face + 1; (square & 7); //*/getRandom32() & 7;
+            } while (mobileCol[facet] == 0 || mobileCol[facet] == 7);
             
     
     
@@ -661,6 +663,25 @@ void twirl(int face) {
     int fb = face * 9;
 
     char temp = mobileCol[fb + 0];
+    mobileCol[fb + 0] = mobileCol[fb + 2];
+    mobileCol[fb + 2] = mobileCol[fb + 8];
+    mobileCol[fb + 8] = mobileCol[fb + 6];
+    mobileCol[fb + 6] = temp;
+
+    temp = mobileCol[fb + 1];
+    mobileCol[fb + 1] = mobileCol[fb + 5];
+    mobileCol[fb + 5] = mobileCol[fb + 7];
+    mobileCol[fb + 7] = mobileCol[fb + 3];
+    mobileCol[fb + 3] = temp;
+
+}
+
+
+void twirl2(int face) {
+
+    int fb = face * 9;
+
+    char temp = mobileCol[fb + 0];
     mobileCol[fb + 0] = mobileCol[fb + 6];
     mobileCol[fb + 6] = mobileCol[fb + 8];
     mobileCol[fb + 8] = mobileCol[fb + 2];
@@ -673,6 +694,7 @@ void twirl(int face) {
     mobileCol[fb + 5] = temp;
 
 }
+
 
 void rotateLeft(int layer, int axis) {
 
@@ -758,11 +780,11 @@ void rotateLeft(int layer, int axis) {
 
         switch (layer) {
         case 0:
-            twirl(4);
+            twirl2(4);
             break;
 
         case 2:
-            twirl(2);
+            twirl2(2);
             break;
         }
 
@@ -968,7 +990,7 @@ void HandleJoystick() {
                 controlledLayer++;
                 if (controlledLayer > 2) {
                     controlledLayer = 0;
-                    axis ^= 1;
+//                    axis ^= 1;
                 }
 
             }
@@ -981,7 +1003,7 @@ void HandleJoystick() {
                 controlledLayer--;
                 if (controlledLayer < 0) {
                     controlledLayer = 2;
-                    axis ^= 1;
+//                    axis ^= 1;
                 }
             }
 
@@ -993,14 +1015,14 @@ void HandleJoystick() {
                         rotateSpeed[layer] = 1;  //50;
                      
                      
-                        switch (axis) {
-                            case 0:
+                        // switch (axis) {
+                        //     case 0:
                                 direct[layer] = 1;
-                                break;
-                            case 1:
-                                direct[layer] = -1;
-                                break;
-                        }
+                        //         break;
+                        //     case 1:
+                        //         direct[layer] = -1;
+                        //         break;
+                        // }
 
     //                    rotateTop[layer] &= !3;
                     }
@@ -1020,29 +1042,27 @@ void HandleJoystick() {
                     for (int layer = 0; layer < 3; layer++) {
                         rotateSpeed[layer] = 1;
 
-                        switch (axis) {
-                            case 0:
+                        // switch (axis) {
+                        //     case 0:
                                 direct[layer] = -1;
-                                break;
-                            case 1:
-                                direct[layer] = 1;
-                                break;
-                        }
-
-    //                    rotateTop[layer] &= !3;
+                        //         break;
+                        //     case 1:
+                        //         direct[layer] = 1;
+                        //         break;
+                        // }
                     }
 
 
                 rotateSpeed[controlledLayer] = 1;
+                direct[controlledLayer] = -1;
 
-                        switch (axis) {
-                            case 0:
-                                direct[controlledLayer] = -1;
-                                break;
-                            case 1:
-                                direct[controlledLayer] = 1;
-                                break;
-                        }
+                // switch (axis) {
+                //     case 0:
+                    //     break;
+                    // case 1:
+                    //     direct[controlledLayer] = 1;
+                    //     break;
+                // }
 
     //            AddAudio(SFX_PUSH);
             }
@@ -1145,15 +1165,48 @@ void setPalette(int start, int size, int step) {
 
 const unsigned char *shapeMarker[] = {
     &marker[0],
-    &marker[0],
-    &marker[0],
-    &marker[0],
-    &marker[0],
-    &marker[0],
-    &marker[0],
-    &marker[0],
 };
 
+const unsigned char *shapeLeftCornerTop[] = {
+    &leftCornerTop[0],
+};
+
+const unsigned char *shapeLeftCornerTopFrame3[] = {
+    &leftCornerTopFrame3[0],
+};
+
+const unsigned char *shapeRightCornerTopFrame3[] = {
+    &rightCornerTopFrame3[0],
+};
+
+const unsigned char *shapeLayer0LeftCornerTopFrame3[] = {
+    &layer0LeftCornerTopFrame3[0],
+};
+
+const unsigned char *shapeLayer0RightCornerTopFrame3[] = {
+    &layer0RightCornerTopFrame3[0],
+};
+
+
+const unsigned char *shapeRightCornerTop[] = {
+    &rightCornerTop[0],
+};
+
+const unsigned char *shapeFrontCornerTop[] = {
+    &frontCornerTop[0],
+};
+
+const unsigned char *shapeFrontCornerTopFrame1[] = {
+    &frontCornerTopFrame1[0],
+};
+
+const unsigned char *shapeRightCornerTopFrame1[] = {
+    &rightCornerTopFrame1[0],
+};
+
+const unsigned char *shapeLeftUpTop[] = {
+    &leftUpTop[0],
+};
 
 const unsigned char *shapeSetTop[] = {
     &topFacets000[0],
@@ -1171,34 +1224,68 @@ const unsigned char *shapeSetTop45[] = {
     &topFacet45_000[0],
 };
 
+
+const unsigned char *shapeLayer2Right2TopFrame2[] = {
+    &layer2Right2TopFrame2[0],
+};
+
+
+
 const unsigned char *shapeSetFront45[] = {
     &frontFacet45_000[0],
 };
 
+const unsigned char *shapeSetFront45RHS[] = {
+    &frontFacet45_000RHS[0],
+};
 
 const unsigned char *shapeSetRight[] = {
     &rightFacets000[0],
 };
 
+const unsigned char *shapeSetRightRHS[] = {
+    &rightFacets000RHS[0],
+};
+
+
 const unsigned char *shapeSetRight2[] = {
     &right2Facets000[0],
 };
 
-const unsigned char *shapeSetRight3[] = {
-    &right3Facets000[0],
+const unsigned char *shapeSetRight2RHS[] = {
+    &right2Facets000RHS[0],
 };
+
+const unsigned char *shapeSetRight3[] = {   // misnamed (left)
+    &layer0Left01Frame3[0],
+};
+
+const unsigned char *shapeSetRight3RHS[] = {   // misnamed (left)
+    &layer0Left2Frame3[0],
+};
+
 
 const unsigned char *shapeSetLeft[] = {
     &leftFacets000[0],
 };
 
+const unsigned char *shapeSetLeftLHS[] = {
+    &leftFacets000LHS[0],
+};
+
+
 const unsigned char *shapeSetLeft2[] = {
     &left2Facets000[0],
 };
 
-const unsigned char *shapeSetLeft3[] = {
-    &left3Facets000[0],
+const unsigned char *shapeLayer0Right01Frame3[] = {
+    &layer0Right01Frame3[0],
 };
+
+const unsigned char *shapeLayer3Right2Frame3[] = {    // misnamed
+    &layer0Right2Frame3[0],
+};
+
 
 const unsigned char *shapeBoundary[] = {
     &cubeBoundary[0],
@@ -1225,23 +1312,44 @@ const unsigned char *shapeSetAxis1Frame2R[] = {
 
 
 static const unsigned char **whichShapeSet[] = {
-    shapeSetTop,
-    shapeSetLeft,        
-    shapeSetRight,
-    shapeSetTop45,
-    shapeSetFront45,
-    shapeSetRight2,
-    shapeSetLeft2,
-    shapeSetTop2,
-    shapeBoundary,
-    shapeSetTop3,
-    shapeSetLeft3,
-    shapeSetRight3,
-    shapeMarker,
+    shapeSetTop,                        // 0
+    shapeSetLeft,                       // 1
+    shapeSetRight,                      // 2
+    shapeSetTop45,                      // 3
+    shapeSetFront45,                    // 4
+    shapeSetRight2,                     // 5
+    shapeSetLeft2,                      // 6
+    shapeSetTop2,                       // 7
+    shapeBoundary,                      // 8
+    shapeSetTop3,                       // 9
+    shapeLayer0Right01Frame3,           // 10
+    shapeSetRight3,                     // 11
+    shapeMarker,                        // 12
 
     shapeSetAxis1Frame1Side,            // 13
     shapeSetAxis1Frame1Top,             // 14
     shapeSetAxis1Frame2R,               // 15
+
+    shapeSetRightRHS,                   // 16
+    shapeSetLeftLHS,                    // 17
+
+    shapeLeftCornerTop,                 // 18
+    shapeRightCornerTop,                // 19
+    shapeFrontCornerTop,                // 20
+    shapeLeftUpTop,                     // 21
+    shapeFrontCornerTopFrame1,          // 22
+    shapeRightCornerTopFrame1,          // 23
+
+    shapeSetRight2RHS,                  // 24
+    shapeSetFront45RHS,                 // 25
+    shapeLayer3Right2Frame3,                   // 26 // misnamed
+    shapeSetRight3RHS,                  // 27 // misnamed (left)
+    shapeLeftCornerTopFrame3,           // 28
+    shapeRightCornerTopFrame3,          // 29
+
+    shapeLayer0LeftCornerTopFrame3,    // 30
+    shapeLayer0RightCornerTopFrame3,   // 31
+    shapeLayer2Right2TopFrame2,         //32
 };
 
 
@@ -1313,672 +1421,6 @@ void drawOverviewSoftwareSprites() {
     }
 }
 
-
-#define AXES 2
-#define ROTATE 4
-
-
-struct facet {
-    signed char shape;
-    char x;
-    int y;
-    char face;
-    char square;
-};
-
-
-#define MARKER 0
-
-               // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
-
-            // multiple facets, each...
-            // face, colour, x, y, side, face# (to get colour), topOnly
-
-    // FACE     INTERPRETATION
-    // 0        TOP
-    // 1        LEFT
-    // 2        RIGHT
-    // 3        BOTTOM
-    // 4        BACK LEFT
-    // 5        BACK RIGHT
-
-
-
-
-            // topOnly:
-            // true             a part of the 3x3 "top" of the layer
-            // false            always drawn
-
-
-
-// FACET NUMBERING on a face
-
-// 6 7 8
-// 3 4 5
-// 0 1 2
-
-// face orientation...
-
-
-//      6
-//    3   7
-//  0   4   8
-// \  1   5  / 
-// 6 \  2  / 8
-//   7 \ / 7 
-// 3   8|6   5
-//   4  |  4
-// 0   5|3   2
-//   1  |  1
-//     210  
-
-
-// may be old...
-// each of the 3 visible faces indexes to an array telling us which face is actually there
-// orientation of faces is hardwired -- we move/swap contents when rotating
-
-//             B/2
-//            +--+--+--+
-//            |15|16|17|
-//            +--+--+--+
-//            |12|13|14|
-//            +--+--+--+
-//            | 9|10|11|
-//            +--+--+--+
-//  A/0        C/3        E/5        F/6
-// +--+--+--+ +--+--+--+ +--+--+--+ +--+--+--+
-// | 6| 7| 8| |24|25|26| |42|43|44| |51|52|53|
-// +--+--+--+ +--+--+--+ +--+--+--+ +--+--+--+
-// | 3| 4| 5| |21|22|23| |39|40|41| |48|49|50|
-// +--+--+--+ +--+--+--+ +--+--+--+ +--+--+--+
-// | 0| 1| 2| |18|19|20| |36|37|38| |45|46|47|
-// +--+--+--+ +--+--+--+ +--+--+--+ +--+--+--+
-//             D/4
-//            +--+--+--+
-//            |33|34|35|
-//            +--+--+--+
-//            |30|31|32|
-//            +--+--+--+
-//            |27|28|29|
-//            +--+--+--+
-
-
-#define VERT_0 (121 << 16)
-#define VERT_1 (107 << 16)
-#define VERT_2 (93 << 16)
-
-
-const struct facet shapeDef[AXES][ROTATE][3][25] = {
-
-    {   // AXIS 0 (horizontal planes)
-        // AXIS 0, FRAME 0
-
-        // ROTATION 0  ISO
-
-        {
-
-#define AX0 0
-#define AY1 0
-
-            // LAYER 0
-            {
-                // left facets
-
-                {   1,    4, 0x140000+VERT_0,   1, 0,       },       // L0
-                {   1,    9, 0x190000+VERT_0,   1, 1,       },       // L1
-                {   1,   14, 0x1E0000+VERT_0,   1, 2,       },       // L2 (@CENTER)
-
-                // right facets
-
-                {   2,   14, 0x1E0000+VERT_0,   2, 0,       },
-                {   2,   19, 0x190000+VERT_0,   2, 1,       },
-                {   2,   24, 0x140000+VERT_0,   2, 2,       },
-
-                {   -1,   0,0,0,0,        },
-
-            },
-            
-            // LAYER 1
-            {
-                // left facets
-
-                {   1,    4, 0x140000+VERT_1,   1, 3,       },       // L0
-                {   1,    9, 0x190000+VERT_1,   1, 4,       },       // L1
-                {   1,   14, 0x1E0000+VERT_1,   1, 5,       },       // L2 (@CENTER)
-
-                // right facets
-
-                {   2,   14, 0x1E0000+VERT_1,   2, 3,       },
-                {   2,   19, 0x190000+VERT_1,   2, 4,       },
-                {   2,   24, 0x140000+VERT_1,   2, 5,       },
-
-                {   -1,   0,0,0,0,        },
-
-            },
-
-            // LAYER 2
-            {
-                // left facets
-
-                {   1,    4, 0x140000+VERT_2,   1, 6,       },       // L0
-                {   1,    9, 0x190000+VERT_2,   1, 7,       },       // L1
-                {   1,   14, 0x1E0000+VERT_2,   1, 8,       },       // L2 (@CENTER)
-
-                // right facets
-
-                {   2,   14, 0x1E0000+VERT_2,   2, 6,       },
-                {   2,   19, 0x190000+VERT_2,   2, 7,       },
-                {   2,   24, 0x140000+VERT_2,   2, 8,       },
-
-                // top facets
-
-                {   0,    4, 0x140000+VERT_2,   0, 0,        }, //?ordering here needs fixing
-                {   0,    9, 0x190000+VERT_2,   0, 1,        },
-                {   0,   14, 0x1E0000+VERT_2,   0, 2,        },
-    //
-                {   0,    9, 0x0F0000+VERT_2,   0, 3,        },
-                {   0,   14, 0x140000+VERT_2,   0, 4,        },
-                {   0,   19, 0x190000+VERT_2,   0, 5,        },
-    //
-                {   0,   14, 0x0A0000+VERT_2,   0, 6,        },
-                {   0,   19, 0x0F0000+VERT_2,   0, 7,        },
-                {   0,   24, 0x140000+VERT_2,   0, 8,        },
-
-                {   -1,0,0,0,0,        },
-            },
-        },
-    
-
-        // AXIS 0, FRAME 1
-        {
-
-#define AX1 2
-#define AY1 -0x20000
-
-            // LAYER 0
-            {
-                // left facets
-
-                {   6,    3+AX1, 0x110000+AY1 + VERT_0,   1, 0,       },       // L0
-                {   6,    6+AX1, 0x180000+AY1 + VERT_0,   1, 1,       },       // L1
-                {   6,   9+AX1, 0x1F0000+AY1 + VERT_0,   1, 2,       },       // L2 (@CENTER)
-
-                // right facets
-
-                {   5,   10+AX1, 0x200000+AY1 + VERT_0,   2, 0,       },
-                {   5,   16+AX1, 0x1D0000+AY1 + VERT_0,   2, 1,       },
-                {   5,   22+AX1, 0x1A0000+AY1 + VERT_0,   2, 2,       },
-
-                {   -1,0,0,0,0,        },
-            },
-            
-            // LAYER 1
-            {
-            // left facets
-
-                {   6,    3+AX1, 0x110000+AY1 + VERT_1,   1, 3,       },       // L0
-                {   6,    6+AX1, 0x180000+AY1 + VERT_1,   1, 4,       },       // L1
-                {   6,   9+AX1, 0x1F0000+AY1 + VERT_1,   1, 5,       },       // L2 (@CENTER)
-
-                // right facets
-
-                {   5,   10+AX1, 0x200000+AY1 + VERT_1,   2, 3,       },
-                {   5,   16+AX1, 0x1D0000+AY1 + VERT_1,   2, 4,       },
-                {   5,   22+AX1, 0x1A0000+AY1 + VERT_1,   2, 5,       },
-
-                {   -1,0,0,0,0,        },
-
-            },
-
-            // LAYER 2
-            {
-
-
-
-            // left facets
-
-                {   6,    3+AX1, 0x110000+AY1 + VERT_2,   1, 6,       },       // L0
-                {   6,    6+AX1, 0x180000+AY1 + VERT_2,   1, 7,       },       // L1
-                {   6,   9+AX1, 0x1F0000+AY1 + VERT_2,   1, 8,       },       // L2 (@CENTER)
-
-                // right facets
-
-                {   5,   10+AX1, 0x200000+AY1 + VERT_2,   2, 6,       },
-                {   5,   16+AX1, 0x1D0000+AY1 + VERT_2,   2, 7,       },
-                {   5,   22+AX1, 0x1A0000+AY1 + VERT_2,   2, 8,       },
-
-                // top facets
-
-                {   7,    3+AX1, 0x110000+AY1 + VERT_2,   0, 0,        },
-                {   7,    6+AX1, 0x180000+AY1 + VERT_2,   0, 1,        },
-                {   7,   9+AX1, 0x1F0000+AY1 + VERT_2,   0, 2,        },
-                {   7,   9+AX1, 0x0E0000+AY1 + VERT_2,   0, 3,        },
-                {   7,   12+AX1, 0x150000+AY1 + VERT_2,   0, 4,        },
-                {   7,   15+AX1, 0x1C0000+AY1 + VERT_2,   0, 5,        },
-                {   7,   15+AX1, 0x0B0000+AY1 + VERT_2,   0, 6,        },     // TODO: ordering
-                {   7,   18+AX1, 0x120000+AY1 + VERT_2,   0, 7,        },
-                {   7,   21+AX1, 0x190000+AY1 + VERT_2,   0, 8,        },
-
-                {   -1,0,0,0,0,        },
-            },
-        },
-
-        // AXIS 0, FRAME 2
-
-        {   // THIS GROUPING DEFINES DISPLAY OF A LAYER (e.g, one row or column of a cube)
-
-#define AX2 -1
-#define AY2 -0x20000
-
-            // LAYER 0
-            {
-                // right facets (now face-on)
-
-                {   4,    8+AX2, 0x1D0000+AY2 + VERT_0,   2, 0,       },       // L0
-                {   4,   15+AX2, 0x1D0000+AY2 + VERT_0,   2, 1,       },       // L1
-                {   4,   22+AX2, 0x1D0000+AY2 + VERT_0,   2, 2,       },       // L2 (@CENTER)
-                {   -1,0,0,0,0,        },
-
-            },
-            
-            // LAYER 1
-            {
-                // right facets (now face-on)
-
-                {   4,    8+AX2, 0x1D0000+AY2 + VERT_1,   2, 3,       },       // L0
-                {   4,   15+AX2, 0x1D0000+AY2 + VERT_1,   2, 4,       },       // L1
-                {   4,   22+AX2, 0x1D0000+AY2 + VERT_1,   2, 5,       },       // L2 (@CENTER)
-                {   -1,0,0,0,0,        },
-            },
-
-            // LAYER 2
-            {
-                // top facets
-
-                {   3,   8+AX2, 0x0F0000+AY2 + VERT_2,   0, 0,        }, // TODO fix ordering
-                {   3,  15+AX2, 0x0F0000+AY2 + VERT_2,   0, 3,        },
-                {   3,  22+AX2, 0x0F0000+AY2 + VERT_2,   0, 6,        },
-                {   3,   8+AX2, 0x160000+AY2 + VERT_2,   0, 1,        },
-                {   3,  15+AX2, 0x160000+AY2 + VERT_2,   0, 4,        },
-                {   3,  22+AX2, 0x160000+AY2 + VERT_2,   0, 7,        },
-                {   3,   8+AX2, 0x1D0000+AY2 + VERT_2,   0, 2,        },
-                {   3,  15+AX2, 0x1D0000+AY2 + VERT_2,   0, 5,        },
-                {   3,  22+AX2, 0x1D0000+AY2 + VERT_2,   0, 8,        },
-
-                // right facets (now face-on)
-
-                {   4,    8+AX2, 0x1D0000+AY2 + VERT_2,   2, 6,       },       // L0
-                {   4,   15+AX2, 0x1D0000+AY2 + VERT_2,   2, 7,       },       // L1
-                {   4,   22+AX2, 0x1D0000+AY2 + VERT_2,   2, 8,       },       // L2 (@CENTER)
-
-                {   -1,0,0,0,0,        },
-            },
-
-        },
- 
-        // AXIS 0, FRAME 3
-        {
-#define AX3 -1
-#define AY3 -0x40000
-
-            // LAYER 0
-            {
-                // right facets
-
-                {   10,   19+AX3, 0x210000+AY3 + VERT_0,   4, 0,       },
-                {   10,   22+AX3, 0x1A0000+AY3 + VERT_0,   4, 1,       },
-                {   10,   25+AX3, 0x130000+AY3 + VERT_0,   4, 2,       },
-
-                // left facets
-
-                {   11,    6+AX3, 0x1B0000+AY3 + VERT_0,   2, 0,       },
-                {   11,   12+AX3, 0x1E0000+AY3 + VERT_0,   2, 1,       },
-                {   11,   18+AX3, 0x210000+AY3 + VERT_0,   2, 2,       },
-
-                {   -1,0,0,0,0,        },
-
-            },
-            
-            // LAYER 1
-            {
-                // right facets
-
-                {   10,   19+AX3, 0x210000+AY3 + VERT_1,   4, 3,       },
-                {   10,   22+AX3, 0x1A0000+AY3 + VERT_1,   4, 4,       },
-                {   10,   25+AX3, 0x130000+AY3 + VERT_1,   4, 5,       },
-
-                // left facets
-
-                {   11,    6+AX3, 0x1B0000+AY3 + VERT_1,   2, 3,       },
-                {   11,   12+AX3, 0x1E0000+AY3 + VERT_1,   2, 4,       },
-                {   11,   18+AX3, 0x210000+AY3 + VERT_1,   2, 5,       },
-
-                {   -1,0,0,0,0,        },
-
-            },
-
-            // LAYER 2
-            {
-                // right facets
-
-                {   10,   19+AX3, 0x210000+AY3 + VERT_2,   4, 6,       },
-                {   10,   22+AX3, 0x1A0000+AY3 + VERT_2,   4, 7,       },
-                {   10,   25+AX3, 0x130000+AY3 + VERT_2,   4, 8,       },
-
-                // left facets
-
-                {   11,    6+AX3, 0x1B0000+AY3 + VERT_2,   2, 6,       },
-                {   11,   12+AX3, 0x1E0000+AY3 + VERT_2,   2, 7,       },
-                {   11,   18+AX3, 0x210000+AY3 + VERT_2,   2, 8,       },
-                // top facets
-
-                {   9,    6+AX3, 0x1B0000+AY3 + VERT_2,   0, 2,        },
-                {   9,    9+AX3, 0x140000+AY3 + VERT_2,   0, 1,        },
-                {   9,   12+AX3, 0x0D0000+AY3 + VERT_2,   0, 0,        },
-                {   9,   12+AX3, 0x1E0000+AY3 + VERT_2,   0, 5,        },
-                {   9,   15+AX3, 0x170000+AY3 + VERT_2,   0, 4,        },
-                {   9,   18+AX3, 0x100000+AY3 + VERT_2,   0, 3,        },
-                {   9,   18+AX3, 0x210000+AY3 + VERT_2,   0, 8,        },
-                {   9,   21+AX3, 0x1A0000+AY3 + VERT_2,   0, 7,        },
-                {   9,   24+AX3, 0x130000+AY3 + VERT_2,   0, 6,        },
-
-
-                {   -1,0,0,0,0,        },
-            },
-        },
-
-    },
-
-
-    /////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // AXIS 1
-    //
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
-    {   // AXIS 1 (left vertical planes)
-        // AXIS 1, FRAME 0
-        {
-#define AXIS1AX0 0
-#define AXIS1AY0 0
-
-            // SLICE 0 (back left vertical)
-            {
-
-                {   1,    4, 0x140000 + VERT_0,   1, 0, },
-                {   1,    4, 0x140000 + VERT_1,   1, 3, },
-                {   1,    4, 0x140000 + VERT_2,   1, 6, },
-
-                {   0,    4, 0x140000 + VERT_2,   0, 0, },
-                {   0,    9, 0x0F0000 + VERT_2,   0, 3, },
-                {   0,   14, 0x0A0000 + VERT_2,   0, 6, },
-
-                {  -1,0,0,0,0, },
-            },
-            
-            // SLICE 1
-            {
-                {   1,    9, 0x190000 + VERT_0,   1, 1, },
-                {   1,    9, 0x190000 + VERT_1,   1, 4, },
-                {   1,    9, 0x190000 + VERT_2,   1, 7, },
-
-                {   0,    9, 0x190000 + VERT_2,   0, 1, },
-                {   0,   14, 0x140000 + VERT_2,   0, 4, },
-                {   0,   19, 0x0F0000 + VERT_2,   0, 7, },
-
-                {   -1,0,0,0,0,        },
-
-            },
-
-            // SLICE 2
-            {
-                {   1,   14, 0x1E0000 + VERT_0,   1, 2, },
-                {   1,   14, 0x1E0000 + VERT_1,   1, 5, },
-                {   1,   14, 0x1E0000 + VERT_2,   1, 8, },
-
-                {   0,   14, 0x1E0000 + VERT_2,   0, 2, },
-                {   0,   19, 0x190000 + VERT_2,   0, 5, },
-                {   0,   24, 0x140000 + VERT_2,   0, 8, },
-
-                // right face
-
-
-                {   2,   14, 0x1E0000 + VERT_0,   2, 0, },
-                {   2,   19, 0x190000 + VERT_0,   2, 1, },
-                {   2,   24, 0x140000 + VERT_0,   2, 2, },
-
-                {   2,   14, 0x1E0000 + VERT_1,   2, 3, },
-                {   2,   19, 0x190000 + VERT_1,   2, 4, },
-                {   2,   24, 0x140000 + VERT_1,   2, 5, },
-
-                {   2,   14, 0x1E0000 + VERT_2,   2, 6, },
-                {   2,   19, 0x190000 + VERT_2,   2, 7, },
-                {   2,   24, 0x140000 + VERT_2,   2, 8, },
-
-                {   -1,0,0,0,0,        },
-            },
-        },
-    
-        {
-
-#define ADF3 -0x80000
-#define ADFX3 -4
-
-#define VERT_0B (134 << 16)
-#define VERT_1B (125 << 16)
-#define VERT_2B (116 << 16)
-
-        // AXIS 1, FRAME 1
-#define AXIS1AX2 -1
-#define AXIS1AY2 -0x20000
-
-#define ADFX3B -0x80000
-#define ADF3B -0x40000
-
-            // SLICE 0
-            {
-                {   14,   6+AXIS1AX2 + ADFX3, 0x080000+AXIS1AY2 + VERT_0B + ADF3,   0, 0,       },
-                {   14,   10+AXIS1AX2 + ADFX3, 0x040000+AXIS1AY2 + VERT_1B + ADF3,  0, 3,       },
-                {   14,   14+AXIS1AX2 + ADFX3, 0x000000+AXIS1AY2 + VERT_2B + ADF3,  0, 6,       },
-
-                {   13,   7+AXIS1AX2 + ADFX3, 0x100000+AXIS1AY2 + VERT_0B + ADF3,   1, 6,       },
-                {   13,   11+AXIS1AX2 + ADFX3, 0x1F0000+AXIS1AY2 + VERT_1B + ADF3,   1, 3,      },
-
-                // PRIORTY CULL
-                // {   13,   15+AXIS1AX2 + ADFX3, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3,   1, 0,       },
-
-                {   -1,0,0,0,0,        },
-            },
-            
-            // SLICE 1
-            {
-                // top
-
-                {   14,   6+AXIS1AX2+ADFX3B, 0x080000+AXIS1AY2 + VERT_0B + ADF3B,   0, 1,      },
-                {   14,   10+AXIS1AX2+ADFX3B, 0x040000+AXIS1AY2 + VERT_1B + ADF3B,  0, 4,      },
-                {   14,   14+AXIS1AX2+ADFX3B, 0x000000+AXIS1AY2 + VERT_2B + ADF3B,  0, 7,      },
-
-                // lower side
-
-                {   13,   7+AXIS1AX2+ADFX3B, 0x100000+AXIS1AY2 + VERT_0B + ADF3B,   1, 7,       },
-                {   13,   11+AXIS1AX2+ADFX3B, 0x1F0000+AXIS1AY2 + VERT_1B + ADF3B,   1, 4,       },
-                // {   13,   15+AXIS1AX2+ADFX3B, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3B,   1, 2,       },  CULLED BY PRIORITY
-
-                {   -1,0,0,0,0,        },
-            },
-
-            // SLICE 2
-            {
-    //    A
-    //   B C
-    //  D E F
-    //   G H
-    //    I
-
-                // full face
-
-                {   15,   17+AXIS1AX2+4, 0x200000+AXIS1AY2 + VERT_0B,   2, 0,       },  // I
-                {   15,   21+AXIS1AX2+4, 0x1C0000+AXIS1AY2 + VERT_1B,   2, 1,       },  // H
-                {   15,   25+AXIS1AX2+4, 0x060000+AXIS1AY2 + VERT_0B,   2, 2,       },  // F
-                {   15,   13+AXIS1AX2+4, 0x230000+AXIS1AY2 + VERT_1B,   2, 3,       },  // G
-                {   15,   17+AXIS1AX2+4, 0x160000+AXIS1AY2 + VERT_1B,   2, 4,       },  // E
-                {   15,   21+AXIS1AX2+4, 0x090000+AXIS1AY2 + VERT_1B,   2, 5,       },  // C
-                {   15,    9+AXIS1AX2+4, 0x260000+AXIS1AY2 + VERT_2B,   2, 6,       },  // D
-                {   15,   13+AXIS1AX2+4, 0x190000+AXIS1AY2 + VERT_2B,   2, 7,       },  // B
-                {   15,   17+AXIS1AX2+4, 0x0C0000+AXIS1AY2 + VERT_2B,   2, 8,       },  // A
-
-                // top
-
-                {   14,   6+AXIS1AX2+4, 0x080000+AXIS1AY2 + VERT_0B,    0, 2,       },  // A
-                {   14,   10+AXIS1AX2+4, 0x040000+AXIS1AY2 + VERT_1B,   0, 5,       },  // A
-                {   14,   14+AXIS1AX2+4, 0x000000+AXIS1AY2 + VERT_2B,   0, 8,       },  // A
-
-                // lower side
-
-                {   13,   7+AXIS1AX2+4, 0x100000+AXIS1AY2 + VERT_0B,   1, 8,       },  // A
-                {   13,   11+AXIS1AX2+4, 0x1F0000+AXIS1AY2 + VERT_1B,   1, 5,       },  // A
-                {   13,   15+AXIS1AX2+4, 0x2E0000+AXIS1AY2 + VERT_2B,   1, 2,       },  // A
-
-                {   -1,0,0,0,0,        },
-            },
-        },
-
-        // AXIS 1, FRAME 2
-        {
-#define AXIS1AX2 -1
-#define AXIS1AY2 -0x20000
-
-            // SLICE 0
-            {
-                {   14,   6+AXIS1AX2 + ADFX3, 0x080000+AXIS1AY2 + VERT_0B + ADF3,   0, 0,       },
-                {   14,   10+AXIS1AX2 + ADFX3, 0x040000+AXIS1AY2 + VERT_1B + ADF3,   0, 3,       },
-                {   14,   14+AXIS1AX2 + ADFX3, 0x000000+AXIS1AY2 + VERT_2B + ADF3,   0, 6,       },
-
-                {   13,   7+AXIS1AX2 + ADFX3, 0x100000+AXIS1AY2 + VERT_0B + ADF3,   1, 6,       },
-                {   13,   11+AXIS1AX2 + ADFX3, 0x1F0000+AXIS1AY2 + VERT_1B + ADF3,   1, 3,       },
-//                {   13,   15+AXIS1AX2 + ADFX3, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3,   1, 2,       },
-
-                {   -1,0,0,0,0,        },
-            },
-            
-            // SLICE 1
-            {
-                {   14,   6+AXIS1AX2+ADFX3B, 0x080000+AXIS1AY2 + VERT_0B + ADF3B,   0, 1,       },
-                {   14,   10+AXIS1AX2+ADFX3B, 0x040000+AXIS1AY2 + VERT_1B + ADF3B,   0, 4,       },
-                {   14,   14+AXIS1AX2+ADFX3B, 0x000000+AXIS1AY2 + VERT_2B + ADF3B,   0, 7,       },
-
-                {   13,   7+AXIS1AX2+ADFX3B, 0x100000+AXIS1AY2 + VERT_0B + ADF3B,   1, 7,       },
-                {   13,   11+AXIS1AX2+ADFX3B, 0x1F0000+AXIS1AY2 + VERT_1B + ADF3B,   1, 4,       },
- //               {   13,   15+AXIS1AX2+ADFX3B, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3B,   1, 2,       },  // A
-
-                {   -1,0,0,0,0,        },
-            },
-
-            // SLICE 2
-            {
-#define VERT_0B (134 << 16)
-#define VERT_1B (125 << 16)
-#define VERT_2B (116 << 16)
-
-
-
-    //    A
-    //   B C
-    //  D E F
-    //   G H
-    //    I
-
-                {   15,   17+AXIS1AX2+4, 0x200000+AXIS1AY2 + VERT_0B,   2, 0,       },  // I
-                {   15,   21+AXIS1AX2+4, 0x1C0000+AXIS1AY2 + VERT_1B,   2, 1,       },  // H
-                {   15,   25+AXIS1AX2+4, 0x060000+AXIS1AY2 + VERT_0B,   2, 2,       },  // F
-                {   15,   13+AXIS1AX2+4, 0x230000+AXIS1AY2 + VERT_1B,   2, 3,       },  // G
-                {   15,   17+AXIS1AX2+4, 0x160000+AXIS1AY2 + VERT_1B,   2, 4,       },  // E
-                {   15,   21+AXIS1AX2+4, 0x090000+AXIS1AY2 + VERT_1B,   2, 5,       },  // C
-                {   15,    9+AXIS1AX2+4, 0x260000+AXIS1AY2 + VERT_2B,   2, 6,       },  // D
-                {   15,   13+AXIS1AX2+4, 0x190000+AXIS1AY2 + VERT_2B,   2, 7,       },  // B
-                {   15,   17+AXIS1AX2+4, 0x0C0000+AXIS1AY2 + VERT_2B,   2, 8,       },  // A
-
-
-                {   14,   6+AXIS1AX2+4, 0x080000+AXIS1AY2 + VERT_0B,   0, 8,       },  // A
-                {   14,   10+AXIS1AX2+4, 0x040000+AXIS1AY2 + VERT_1B,   0, 5,       },  // A
-                {   14,   14+AXIS1AX2+4, 0x000000+AXIS1AY2 + VERT_2B,   0, 2,       },  // A
-
-                {   13,   7+AXIS1AX2+4, 0x100000+AXIS1AY2 + VERT_0B,   1, 8,       },  // A
-                {   13,   11+AXIS1AX2+4, 0x1F0000+AXIS1AY2 + VERT_1B,   1, 5,       },  // A
-                {   13,   15+AXIS1AX2+4, 0x2E0000+AXIS1AY2 + VERT_2B,   1, 2,       },  // A
-
-                {   -1,0,0,0,0,        },
-            },
-
-        },
- 
-          // AXIS 1, FRAME 3
-        {
-#define AXIS1AX2 -1
-#define AXIS1AY2 -0x20000
-
-            // SLICE 0
-            {
-                {   14,   6+AXIS1AX2 + ADFX3, 0x080000+AXIS1AY2 + VERT_0B + ADF3,   0, 0,       },
-                {   14,   10+AXIS1AX2 + ADFX3, 0x040000+AXIS1AY2 + VERT_1B + ADF3,   0, 3,       },
-                {   14,   14+AXIS1AX2 + ADFX3, 0x000000+AXIS1AY2 + VERT_2B + ADF3,   0, 6,       },
-
-                {   13,   7+AXIS1AX2 + ADFX3, 0x100000+AXIS1AY2 + VERT_0B + ADF3,   1, 6,       },
-                {   13,   11+AXIS1AX2 + ADFX3, 0x1F0000+AXIS1AY2 + VERT_1B + ADF3,   1, 3,       },
-
-                // PRIORITY CULLED
-                // {   13,   15+AXIS1AX2 + ADFX3, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3,   1, 2,       },
-
-                {   -1,0,0,0,0,        },
-            },
-            
-            // SLICE 1
-            {
-                {   14,   6+AXIS1AX2+ADFX3B, 0x080000+AXIS1AY2 + VERT_0B + ADF3B,   0, 1,       },  // A
-                {   14,   10+AXIS1AX2+ADFX3B, 0x040000+AXIS1AY2 + VERT_1B + ADF3B,   0, 4,       },  // A
-                {   14,   14+AXIS1AX2+ADFX3B, 0x000000+AXIS1AY2 + VERT_2B + ADF3B,   0, 7,       },  // A
-
-                {   13,   7+AXIS1AX2+ADFX3B, 0x100000+AXIS1AY2 + VERT_0B + ADF3B,   1, 7,       },  // A
-                {   13,   11+AXIS1AX2+ADFX3B, 0x1F0000+AXIS1AY2 + VERT_1B + ADF3B,   1, 4,       },  // A
- //               {   13,   15+AXIS1AX2+ADFX3B, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3B,   1, 2,       },  // A
-
-                {   -1,0,0,0,0,        },
-            },
-
-            // SLICE 2
-            {
-    //    A
-    //   B C
-    //  D E F
-    //   G H
-    //    I
-
-
-                {   15,   21+AXIS1AX2, 0x200000+AXIS1AY2 + VERT_0B,   2, 0,       },  // I
-                {   15,   25+AXIS1AX2, 0x1C0000+AXIS1AY2 + VERT_1B,   2, 1,       },  // H
-                {   15,   29+AXIS1AX2, 0x060000+AXIS1AY2 + VERT_0B,   2, 2,       },  // F
-                {   15,   17+AXIS1AX2, 0x230000+AXIS1AY2 + VERT_1B,   2, 3,       },  // G
-                {   15,   21+AXIS1AX2, 0x160000+AXIS1AY2 + VERT_1B,   2, 4,       },  // E
-                {   15,   25+AXIS1AX2, 0x090000+AXIS1AY2 + VERT_1B,   2, 5,       },  // C
-                {   15,   13+AXIS1AX2, 0x260000+AXIS1AY2 + VERT_2B,   2, 6,       },  // D
-                {   15,   17+AXIS1AX2, 0x190000+AXIS1AY2 + VERT_2B,   2, 7,       },  // B
-                {   15,   21+AXIS1AX2, 0x0C0000+AXIS1AY2 + VERT_2B,   2, 8,       },  // A
-
-
-                {   14,   10+AXIS1AX2, 0x080000+AXIS1AY2 + VERT_0B,   0, 2,       },
-                {   14,   14+AXIS1AX2, 0x040000+AXIS1AY2 + VERT_1B,   0, 5,       },
-                {   14,   18+AXIS1AX2, 0x000000+AXIS1AY2 + VERT_2B,   0, 8,       },
-
-                {   13,   11+AXIS1AX2, 0x100000+AXIS1AY2 + VERT_0B,   1, 8,       },
-                {   13,   15+AXIS1AX2, 0x1F0000+AXIS1AY2 + VERT_1B,   1, 5,       },
-                {   13,   19+AXIS1AX2, 0x2E0000+AXIS1AY2 + VERT_2B,   1, 2,       },
-
-                {   -1,0,0,0,0,        },
-            },
-        },
-    },
-
-};
 
 
 int visibleFace[] = {
@@ -2139,8 +1581,16 @@ const int facetEndY[] = {
 
 const unsigned char facetColour0[] = {
 
-    1,21,
+    1,7,
     0,0,
+
+    XXX_____
+    XXX_____
+    XXX_____
+    XXX_____
+    XXX_____
+    XXX_____
+    XXX_____
 
     XXX_____
     XXX_____
@@ -2175,19 +1625,9 @@ void drawSoftwareSprites() {
 
     rr = rotateTop[fLayer] & 3;
 
-//    if (axis == 1 && fLayer ==2)
-//      rr = 2;
 
-    // if (axis ==1)
-    //     rr = 3;
-
-//    rr = (rr2 >> 3) & 3;
-
-    // rr = 1;
-//    if (JOY0_FIRE || fLayer == 2)
-//        rr = rotateTop[0];
-
-    // rr = 14;
+    //   if (fLayer == 1)
+    //        rr = 1;
 
     struct facet *f = &shapeDef[axis][rr][fLayer][fno++];
 
@@ -2224,27 +1664,26 @@ void drawSoftwareSprites() {
     
                 if (direct[l] && !rotateSpeed[l]) {
 
-                    rotateSpeed[l] = 1; //50;
+
+                    rotateSpeed[l] = 1;
                     rotateTop[l]+= direct[l];
-                    rotateTop[l] &= 15;
+                    rotateTop[l] &= 3;
+
+
+                    if (direct[l] < 0 && (rotateTop[l] & 3) == 3) {
+                        rotateLeft(l, axis);
+                        rotateLeft(l, axis);
+                        rotateLeft(l, axis);
+                        //direct[l] = 0;
+                    }
+
 
                     if (direct[l] > 0 && !(rotateTop[l] & 3)) {
-
-                        //if (l == controlledLayer)
-                            rotateLeft(l, axis);
+                        rotateLeft(l, axis);
                         direct[l] = 0;
                     }
 
 
-                    if (direct[l] < 0 && (rotateTop[l] & 3) == 3) {
-
-                        //if (l == controlledLayer) {
-                            rotateLeft(l, axis);
-                            rotateLeft(l, axis);
-                            rotateLeft(l, axis);
-                        //}
-                        //direct[l] = 0;
-                    }
 
                     if (direct[l] < 0 && !(rotateTop[l] & 3))
                         direct[l] = 0;
@@ -2266,9 +1705,22 @@ void drawSoftwareSprites() {
     if ((showHighlight && fLayer == controlledLayer ) && !(highlightLayer & 1))
         theColour = 0;
 
-    drawBitmap(whichShapeSet[f->shape][0],theColour,
-        ((f->x << 14) & 0xFFFFC000) + 0x00014000,
-        f->y * 3);
+    char shape = f->shape;
+    // if (shape & 0x80) {
+    //     if (controlledLayer > 0 && rotateTop[controlledLayer-1]) {
+    //         shape = shape & 0x7f;
+    //     }
+    // }
+
+    // if (!(shape & 0x80))
+
+
+    // if (fLayer == 2)
+    //     return;
+
+        drawBitmap(whichShapeSet[shape][0],theColour,
+            ((f->x << 14) & 0xFFFFC000) + 0x00014000,
+            f->y * 3);
   
 }
 
