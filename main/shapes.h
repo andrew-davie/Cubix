@@ -45,6 +45,10 @@ extern const unsigned char layer2Right2TopFrame2[];
 extern const unsigned char axis1FixupRightCornerTop[];
 extern const unsigned char axis1Frame1Top0[];
 extern const unsigned char axis1blackface[];
+extern const unsigned char axis1FixupFrame1[];
+
+extern const unsigned char vertBlack[];
+
 
 // OLD FORMAT...
 

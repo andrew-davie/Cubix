@@ -92,6 +92,10 @@ struct facet {
 #define VERT_1 ((35 * 3 + 1) << 16)
 #define VERT_2 ((31 * 3 + 0) << 16)
 
+#define END \
+    {   -1,0,0,0,0,        },
+
+
 
 const struct facet shapeDef[AXES][ROTATE][3][25] = {
 
@@ -121,10 +125,7 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
 
                 // { 14, 24, 0x140000 + VERT_0, 2, 2, },
 
-
-
-                {   -1,   0,0,0,0,        },
-
+                END
             },
             
             // LAYER 1
@@ -140,9 +141,7 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
                 {   2,   14, 0x1E0000+VERT_1,   2, 3,       },
                 {   2,   19, 0x190000+VERT_1,   2, 4,       },
                 {  16,   24, 0x140000+VERT_1,   2, 5,       },
-
-                {   -1,   0,0,0,0,        },
-
+                END
             },
 
             // LAYER 2
@@ -172,9 +171,7 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
                 {   2,   14, 0x1E0000+VERT_2,   2, 6,       },
                 {   2,   19, 0x190000+VERT_2,   2, 7,       },
                 {  16,   24, 0x140000+VERT_2,   2, 8,       },
-
-
-                {   -1,0,0,0,0,        },
+                END
             },
         },
     
@@ -208,10 +205,7 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
                 {   5,   10+AX1, 0x200000+AY1 + VERT_0,   2, 0,       },
                 {   5,   16+AX1, 0x1D0000+AY1 + VERT_0,   2, 1,       },
                 {  24,   22+AX1, 0x1A0000+AY1 + VERT_0,   2, 2,       },
-
-
-
-                {   -1,0,0,0,0,        },
+                END
             },
             
             // LAYER 1
@@ -244,10 +238,7 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
                 {   5,   10+AX1, 0x200000+AY1 + VERT_1,   2, 3,       },
                 {   5,   16+AX1, 0x1D0000+AY1 + VERT_1,   2, 4,       },
                 {  24,   22+AX1, 0x1A0000+AY1 + VERT_1,   2, 5,       },
-
-
-                {   -1,0,0,0,0,        },
-
+                END
             },
 
             // LAYER 2
@@ -281,9 +272,7 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
                 {   5,   10+AX1, 0x210000+AY1 + VERT_2,   2, 6,       },
                 {   5,   16+AX1, 0x1E0000+AY1 + VERT_2,   2, 7,       },
                 {  24,   22+AX1, 0x1B0000+AY1 + VERT_2,   2, 8,       },
-
-
-                {   -1,0,0,0,0,        },
+                END
             },
         },
 
@@ -306,8 +295,7 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
                 { 21, 3 + AX1, 0x1D0000+AY1 + VERT_0, 1,0, },     // left up top
                 { 21, 10 + AX1, 0x1D00000+AY1 + VERT_0, 1,0, },     // left up top
                 { 21, 16 + AX1, 0x1D0000+AY1 + VERT_0, 1,0, },     // left up top
-                {   -1,0,0,0,0,        },
-
+                END
             },
             
             // LAYER 1
@@ -326,9 +314,7 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
                 {   4,    8+AX2, 0x1D0000+AY2 + VERT_1,   2, 3,       },       // L0
                 {   4,   15+AX2, 0x1D0000+AY2 + VERT_1,   2, 4,       },       // L1
                 {  25,   23+AX2, 0x1D0000+AY2 + VERT_1,   2, 5,       },       // L2 (@CENTER)
-
-
-                {   -1,0,0,0,0,        },
+                END
             },
 
             // LAYER 2
@@ -354,8 +340,7 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
                 {   4,    8+AX2, 0x1E0000+AY2 + VERT_2,   2, 6,       },       // L0
                 {   4,   15+AX2, 0x1E0000+AY2 + VERT_2,   2, 7,       },       // L1
                 {  25,   23+AX2, 0x1E0000+AY2 + VERT_2,   2, 8,       },       // L2 (@CENTER)
-
-                {   -1,0,0,0,0,        },
+                END
             },
 
         },
@@ -381,9 +366,7 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
 
                 {   30, 0 + AX1, 0x190000+AY3 + VERT_0, 1,0, },     // top, left corner
                 {   29, 13 + AX1, 0x1D0000+AY3 + VERT_0, 1,0, },     // top, left corner
-
-                {   -1,0,0,0,0,        },
-
+                END
             },
             
             // LAYER 1
@@ -409,9 +392,7 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
 
                 { 28, 0 + AX1, 0x0B0000+AY1 + VERT_0, 1,0, },     // left corner
                 { 29, 13 + AX1, 0x0E0000+AY1 + VERT_0, 1,0, },     // right corner
-
-                {   -1,0,0,0,0,        },
-
+                END
             },
 
             // LAYER 2
@@ -448,9 +429,7 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
                 {   11,    6+AX3, 0x1C0000+AY3 + VERT_2,   2, 6,       },
                 {   11,   12+AX3, 0x1F0000+AY3 + VERT_2,   2, 7,       },
                 {   27,   18+AX3, 0x220000+AY3 + VERT_2,   2, 8,       },
-
-
-                {   -1,0,0,0,0,        },
+                END
             },
         },
 
@@ -462,6 +441,16 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
     // AXIS 1
     //
     /////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    //    A
+    //   B C
+    //  D E F
+    //   G H
+    //    I
+
+
 
     {   // AXIS 1 (left vertical planes)
         // AXIS 1, FRAME 0
@@ -479,9 +468,7 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
                 {   17,    4, 0x140000 + VERT_0,   1, 0, },
                 {   17,    4, 0x140000 + VERT_1,   1, 3, },
                 {   17,    4, 0x140000 + VERT_2,   1, 6, },
-
-
-                {  -1,0,0,0,0, },
+                END
             },
             
             // SLICE 1
@@ -494,9 +481,7 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
                 {   1,    9, 0x190000 + VERT_0,   1, 1, },
                 {   1,    9, 0x190000 + VERT_1,   1, 4, },
                 {   1,    9, 0x190000 + VERT_2,   1, 7, },
-
-                {   -1,0,0,0,0,        },
-
+                END
             },
 
             // SLICE 2
@@ -524,10 +509,7 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
                 {   2,   19, 0x190000 + VERT_2,   2, 7, },
                 {  16,   24, 0x140000 + VERT_2,   2, 8, },
 
-
-
-
-                {   -1,0,0,0,0,        },
+                END
             },
         },
     
@@ -559,12 +541,10 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
     {   15,   13+AXIS1AX2+4 + xOffset, 0x190000+AXIS1AY2 + VERT_2B + (yOffset << 16),   2, 7,       }, \
     {   15,   16+AXIS1AX2+4 + xOffset, 0x0C0000+AXIS1AY2 + VERT_2B + (yOffset << 16),   2, 8,       }, \
 
-
-
 #define PART_TOP_FRAME_1(xOffset, yOffset, col) \
-    {   14,   14+AXIS1AX2+4 + xOffset, -0x000000+AXIS1AY2 + VERT_2B + (yOffset << 16),   0, 6 + col,       }, \
-    {   14,   10+AXIS1AX2+4 + xOffset, 0x030000+AXIS1AY2 + VERT_1B + (yOffset << 16),   0, 3 + col,       }, \
-    {   14,   7+AXIS1AX2+4+ xOffset, 0x070000+AXIS1AY2 + VERT_0B + (yOffset << 16),   0, 0 + col,       }, \
+    {   14,   13+AXIS1AX2+4 + xOffset, 0x00000+AXIS1AY2 + VERT_2B + ((yOffset+2) << 16),   0, 6 + col,       }, \
+    {   14,   10+AXIS1AX2+4 + xOffset, 0x030000+AXIS1AY2 + VERT_1B + ((yOffset+2) << 16),   0, 3 + col,       }, \
+    {   14,   7+AXIS1AX2+4+ xOffset, 0x060000+AXIS1AY2 + VERT_0B + ((yOffset+2) << 16),   0, 0 + col,       }, \
 
 #define PART_BLANK_SIDEFACE(xOffset, yOffset) \
     {   33,   13+AXIS1AX2+4 + xOffset, -0x20000+AXIS1AY2 + VERT_2B + (yOffset << 16),  0, 0, }, \
@@ -574,63 +554,77 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
     {   33,   7+AXIS1AX2+4 + xOffset,  0x1F0000+AXIS1AY2 + VERT_2B + (yOffset << 16),  0, 0, },
 
 #define PART_LOWER_SIDE_FRAME_1(xOffset, yOffset, col) \
-    {   13,   8+AXIS1AX2+4 + xOffset, 0x0F0000+AXIS1AY2 + VERT_0B + (yOffset << 16),   1, 6 + col, }, \
-    {   13,   12+AXIS1AX2+4 + xOffset, 0x1E0000+AXIS1AY2 + VERT_1B+ (yOffset << 16),   1, 3 + col, }, \
-    {   13,   15+AXIS1AX2+4 + xOffset, 0x2B0000+AXIS1AY2 + VERT_2B+ (yOffset << 16),   1, 0 + col, },\
+    {   13,   8+AXIS1AX2+4 + xOffset, 0x0E0000+AXIS1AY2 + VERT_0B + ((yOffset+2) << 16),   1, 6 + col, }, \
+    {   13,   12+AXIS1AX2+4 + xOffset, 0x1D0000+AXIS1AY2 + VERT_1B+ ((yOffset+2) << 16),   1, 3 + col, }, \
+    {   13,   15+AXIS1AX2+4 + xOffset, 0x2A0000+AXIS1AY2 + VERT_2B+ ((yOffset+2) << 16),   1, 0 + col, },\
+
+#define PART_BLACKFACE_RIGHT_FRAME1(x, y) \
+//    {   13,   6+AXIS1AX2+ADFX3B, 0x0D0000+AXIS1AY2 + VERT_0B + ADF3B,   1, 7, }, \
+//    {   13,   10+AXIS1AX2+ADFX3B, 0x1C0000+AXIS1AY2 + VERT_1B + ADF3B,   1, 4, }, \
+
+#define PART_BLACK_FRAME2(x,y) \
+    {   36,   10+9+AXIS1AX2 + -3+4 + x,  0x0C0000+AXIS1AY2 + VERT_2B + (-11 << 16) + (y << 16),   0, 0, }, \
+    {   36,   10+4+AXIS1AX2 + -3+4 + x,  0x110000+AXIS1AY2 + VERT_2B + (-11 << 16) + (y << 16),   0, 0, }, \
+    {   36,   10+1+AXIS1AX2 + -3+4 + x,  0x200000+AXIS1AY2 + VERT_2B + (-11 << 16) + (y << 16),   0, 0, }, \
+    {   36,   10+0+AXIS1AX2 + -3+4 + x,  0x240000+AXIS1AY2 + VERT_2B + (-11 << 16) + (y << 16),   0, 0, }, \
+
 
 
             // SLICE 0
 
 
             {
-
-    {   33,   8+AXIS1AX2+4 + -10,  0x0C0000+AXIS1AY2 + VERT_2B + (-10 << 16),   0, 0, },
-    {   33,   8+AXIS1AX2+4 + -10,  0x140000+AXIS1AY2 + VERT_2B + (-10 << 16),   0, 0, },
-    {   33,   8+AXIS1AX2+4 + -7,  0x0D0000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
-    {   22,   8+AXIS1AX2+4 + -7,  0x0330000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
-
-    {   35,   8+AXIS1AX2+4 + -3+4,  0x140000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
-
+                PART_BLACK_FRAME2(-10, -10)
+                // {   36,   9+AXIS1AX2 + -3+4,  0x0C0000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   4+AXIS1AX2 + -3+4,  0x110000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   1+AXIS1AX2 + -3+4,  0x200000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   0+AXIS1AX2 + -3+4,  0x240000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
 
                 PART_TOP_FRAME_1(-10, -10, 0)
                 PART_LOWER_SIDE_FRAME_1(-10, -10, 0)
-
-
-                {   -1,0,0,0,0,        },
+                END
             },
             
             // SLICE 1
             {
 
+                // {   36,   9+AXIS1AX2 + -3+4,  0x0C0000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   4+AXIS1AX2 + -3+4,  0x110000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   1+AXIS1AX2 + -3+4,  0x200000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   0+AXIS1AX2 + -3+4,  0x240000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+
                 PART_BLANK_SIDEFACE(-5, -5)
+                PART_BLACK_FRAME2(-5, -5)
                 PART_TOP_FRAME_1(-5, -5, 1)
                 PART_LOWER_SIDE_FRAME_1(-5, -5, 1)
+                END
 
-                // lower side
 
-                {   13,   6+AXIS1AX2+ADFX3B, 0x0D0000+AXIS1AY2 + VERT_0B + ADF3B,   1, 7,       },
-                {   13,   10+AXIS1AX2+ADFX3B, 0x1C0000+AXIS1AY2 + VERT_1B + ADF3B,   1, 4,       },
-                // {   13,   15+AXIS1AX2+ADFX3B, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3B,   1, 2,       },  CULLED BY PRIORITY
 
-                {   -1,0,0,0,0,        },
+                // // PART_BLANK_SIDEFACE(-5, -5)
+                // // PART_TOP_FRAME_1(-5, -5, 1)
+                // // PART_LOWER_SIDE_FRAME_1(-5, -5, 1)
+                // // PART_BLACKFACE_RIGHT_FRAME1(0, 0)
+                // // END
+
+
+                // {   36,   9+AXIS1AX2 + -3+4,  0x0C0000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   4+AXIS1AX2 + -3+4,  0x110000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   1+AXIS1AX2 + -3+4,  0x200000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   0+AXIS1AX2 + -3+4,  0x240000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+
+                // PART_TOP_FRAME_1(-10, -10, 0)
+                // PART_LOWER_SIDE_FRAME_1(-10, -10, 0)
+                // END
             },
 
             // AXIS 1, FRAME 1, SLICE 2
             {
-
-    //    A
-    //   B C
-    //  D E F
-    //   G H
-    //    I
-
-
                 PART_BLANK_SIDEFACE(0, 0)
                 PART_SIDEFACE(0,0)
                 PART_TOP_FRAME_1(0, 0, 2)
                 PART_LOWER_SIDE_FRAME_1(0, 0, 2)
-
-                {   -1,0,0,0,0,        },
+                END
             },
         },
 
@@ -642,36 +636,56 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
             // SLICE 0
             {
 
-    {   33,   8+AXIS1AX2+4 + -10,  0x0C0000+AXIS1AY2 + VERT_2B + (-10 << 16),   0, 0, },
-    {   33,   8+AXIS1AX2+4 + -10,  0x140000+AXIS1AY2 + VERT_2B + (-10 << 16),   0, 0, },
-    {   33,   8+AXIS1AX2+4 + -7,  0x0D0000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
-    {   22,   8+AXIS1AX2+4 + -7,  0x0330000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   9+AXIS1AX2 + -3+4,  0x0C0000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   4+AXIS1AX2 + -3+4,  0x110000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   1+AXIS1AX2 + -3+4,  0x200000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   0+AXIS1AX2 + -3+4,  0x240000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
 
-    {   35,   8+AXIS1AX2+4 + -3+4,  0x140000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // PART_TOP_FRAME_1(-10, -10, 0)
+                // PART_LOWER_SIDE_FRAME_1(-10, -10, 0)
+                // END
 
-
+                PART_BLACK_FRAME2(-10, -10)
                 PART_TOP_FRAME_1(-10, -10, 0)
                 PART_LOWER_SIDE_FRAME_1(-10, -10, 0)
-
-
-                {   -1,0,0,0,0,        },
+                END
             },
             
             // SLICE 1
             {
 
 
+                // {   36,   9+AXIS1AX2 + -3+4,  0x0C0000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   4+AXIS1AX2 + -3+4,  0x110000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   1+AXIS1AX2 + -3+4,  0x200000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   0+AXIS1AX2 + -3+4,  0x240000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+
                 PART_BLANK_SIDEFACE(-5, -5)
+                PART_BLACK_FRAME2(-5, -5)
                 PART_TOP_FRAME_1(-5, -5, 1)
                 PART_LOWER_SIDE_FRAME_1(-5, -5, 1)
+                END
 
-                // lower side
 
-                {   13,   6+AXIS1AX2+ADFX3B, 0x0D0000+AXIS1AY2 + VERT_0B + ADF3B,   1, 7,       },
-                {   13,   10+AXIS1AX2+ADFX3B, 0x1C0000+AXIS1AY2 + VERT_1B + ADF3B,   1, 4,       },
-                // {   13,   15+AXIS1AX2+ADFX3B, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3B,   1, 2,       },  CULLED BY PRIORITY
+                // {   36,   9+AXIS1AX2 + -3+4,  0x0C0000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   4+AXIS1AX2 + -3+4,  0x110000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   1+AXIS1AX2 + -3+4,  0x200000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   0+AXIS1AX2 + -3+4,  0x240000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
 
-                {   -1,0,0,0,0,        },
+                // PART_TOP_FRAME_1(-10, -10, 0)
+                // PART_LOWER_SIDE_FRAME_1(-10, -10, 0)
+                // END
+
+                // PART_BLANK_SIDEFACE(-5, -5)
+                // PART_TOP_FRAME_1(-5, -5, 1)
+                // PART_LOWER_SIDE_FRAME_1(-5, -5, 1)
+
+                // // lower side
+
+                // {   13,   6+AXIS1AX2+ADFX3B, 0x0D0000+AXIS1AY2 + VERT_0B + ADF3B,   1, 7,       },
+                // {   13,   10+AXIS1AX2+ADFX3B, 0x1C0000+AXIS1AY2 + VERT_1B + ADF3B,   1, 4,       },
+                // // {   13,   15+AXIS1AX2+ADFX3B, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3B,   1, 2,       },  CULLED BY PRIORITY
+                // END
             },
 
             // SLICE 2
@@ -688,37 +702,12 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
     //   G H
     //    I
 
-                // {   33,   13+AXIS1AX2+4, -0x20000+AXIS1AY2 + VERT_2B,   2, 0,       },  // I
-                // {   33,   7+AXIS1AX2+4,  0x30000+AXIS1AY2 + VERT_2B,   2, 0,       },  // I
-                // {   33,   7+AXIS1AX2+4,  0x1F0000+AXIS1AY2 + VERT_2B,   2, 0,       },  // I
-
-                // {   15,   18+AXIS1AX2+4, 0x200000+AXIS1AY2 + VERT_0B,   2, 0,       },  // I
-                // {   15,   21+AXIS1AX2+4, 0x1C0000+AXIS1AY2 + VERT_1B,   2, 1,       },  // H
-                // {   15,   24+AXIS1AX2+4, 0x060000+AXIS1AY2 + VERT_0B,   2, 2,       },  // F
-                // {   15,   14+AXIS1AX2+4, 0x230000+AXIS1AY2 + VERT_1B,   2, 3,       },  // G
-                // {   15,   17+AXIS1AX2+4, 0x160000+AXIS1AY2 + VERT_1B,   2, 4,       },  // E
-                // {   15,   20+AXIS1AX2+4, 0x090000+AXIS1AY2 + VERT_1B,   2, 5,       },  // C
-                // {   15,   10+AXIS1AX2+4, 0x260000+AXIS1AY2 + VERT_2B,   2, 6,       },  // D
-                // {   15,   13+AXIS1AX2+4, 0x190000+AXIS1AY2 + VERT_2B,   2, 7,       },  // B
-                // {   15,   16+AXIS1AX2+4, 0x0C0000+AXIS1AY2 + VERT_2B,   2, 8,       },  // A
-
-
-                // {   14,   7+AXIS1AX2+4, 0x070000+AXIS1AY2 + VERT_0B,   0, 2,       },  // A
-                // {   14,   10+AXIS1AX2+4, 0x030000+AXIS1AY2 + VERT_1B,   0, 5,       },  // A
-                // {   14,   13+AXIS1AX2+4, -0x010000+AXIS1AY2 + VERT_2B,   0, 8,       },  // A
-
-                // {   13,   8+AXIS1AX2+4, 0x0F0000+AXIS1AY2 + VERT_0B,   1, 8,       },  // A
-                // {   13,   12+AXIS1AX2+4, 0x1E0000+AXIS1AY2 + VERT_1B,   1, 5,       },  // A
-                // {   13,   16+AXIS1AX2+4, 0x2D0000+AXIS1AY2 + VERT_2B,   1, 2,       },  // A
 
                 PART_BLANK_SIDEFACE(0, 0)
                 PART_SIDEFACE(0,0)
                 PART_TOP_FRAME_1(0, 0, 2)
                 PART_LOWER_SIDE_FRAME_1(0, 0, 2)
-
-
-
-                {   -1,0,0,0,0,        },
+                END
             },
 
         },
@@ -731,35 +720,72 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
             // SLICE 0
             {
 
-    {   33,   8+AXIS1AX2+4 + -10,  0x0C0000+AXIS1AY2 + VERT_2B + (-10 << 16),   0, 0, },
-    {   33,   8+AXIS1AX2+4 + -10,  0x140000+AXIS1AY2 + VERT_2B + (-10 << 16),   0, 0, },
-    {   33,   8+AXIS1AX2+4 + -7,  0x0D0000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
-    {   22,   8+AXIS1AX2+4 + -7,  0x0330000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+    // {   33,   8+AXIS1AX2+4 + -10,  0x0C0000+AXIS1AY2 + VERT_2B + (-10 << 16),   0, 0, },
+    // {   33,   8+AXIS1AX2+4 + -10,  0x140000+AXIS1AY2 + VERT_2B + (-10 << 16),   0, 0, },
+    // {   33,   8+AXIS1AX2+4 + -7,  0x0D0000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+    // {   22,   8+AXIS1AX2+4 + -7,  0x0330000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
 
-    {   35,   8+AXIS1AX2+4 + -3+4,  0x140000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+    // {   35,   8+AXIS1AX2+4 + -3+4,  0x140000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
 
 
+    //             PART_TOP_FRAME_1(-10, -10, 0)
+    //             PART_LOWER_SIDE_FRAME_1(-10, -10, 0)
+    //             END
+
+                // {   36,   9+AXIS1AX2 + -3+4,  0x0C0000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   4+AXIS1AX2 + -3+4,  0x110000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   1+AXIS1AX2 + -3+4,  0x200000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   0+AXIS1AX2 + -3+4,  0x240000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+
+                PART_BLACK_FRAME2(-10, -10)
                 PART_TOP_FRAME_1(-10, -10, 0)
                 PART_LOWER_SIDE_FRAME_1(-10, -10, 0)
+                END
 
+                // {   36,   9+AXIS1AX2 + -3+4,  0x0C0000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   4+AXIS1AX2 + -3+4,  0x110000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   1+AXIS1AX2 + -3+4,  0x200000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   0+AXIS1AX2 + -3+4,  0x240000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
 
-                {   -1,0,0,0,0,        },
+                // PART_TOP_FRAME_1(-10, -10, 0)
+                // PART_LOWER_SIDE_FRAME_1(-10, -10, 0)
+                // END
             },
             
             // SLICE 1
             {
 
+                // PART_BLANK_SIDEFACE(-5, -5)
+                // PART_TOP_FRAME_1(-5, -5, 1)
+                // PART_LOWER_SIDE_FRAME_1(-5, -5, 1)
+
+                // // lower side
+
+                // {   13,   6+AXIS1AX2+ADFX3B, 0x0D0000+AXIS1AY2 + VERT_0B + ADF3B,   1, 7,       },
+                // {   13,   10+AXIS1AX2+ADFX3B, 0x1C0000+AXIS1AY2 + VERT_1B + ADF3B,   1, 4,       },
+                // // {   13,   15+AXIS1AX2+ADFX3B, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3B,   1, 2,       },  CULLED BY PRIORITY
+
+                // END
+
+                // {   36,   9+AXIS1AX2 + -3+4,  0x0C0000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   4+AXIS1AX2 + -3+4,  0x110000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   1+AXIS1AX2 + -3+4,  0x200000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   0+AXIS1AX2 + -3+4,  0x240000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+
                 PART_BLANK_SIDEFACE(-5, -5)
+                PART_BLACK_FRAME2(-5, -5)
                 PART_TOP_FRAME_1(-5, -5, 1)
                 PART_LOWER_SIDE_FRAME_1(-5, -5, 1)
+                END
 
-                // lower side
+                // {   36,   9+AXIS1AX2 + -3+4,  0x0C0000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   4+AXIS1AX2 + -3+4,  0x110000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   1+AXIS1AX2 + -3+4,  0x200000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+                // {   36,   0+AXIS1AX2 + -3+4,  0x240000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
 
-                {   13,   6+AXIS1AX2+ADFX3B, 0x0D0000+AXIS1AY2 + VERT_0B + ADF3B,   1, 7,       },
-                {   13,   10+AXIS1AX2+ADFX3B, 0x1C0000+AXIS1AY2 + VERT_1B + ADF3B,   1, 4,       },
-                // {   13,   15+AXIS1AX2+ADFX3B, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3B,   1, 2,       },  CULLED BY PRIORITY
-
-                {   -1,0,0,0,0,        },
+                // PART_TOP_FRAME_1(-10, -10, 0)
+                // PART_LOWER_SIDE_FRAME_1(-10, -10, 0)
+                // END
             },
 
             // SLICE 2
@@ -772,32 +798,11 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
     //   G H
     //    I
 
-                // {   15,   18+AXIS1AX2+4, 0x200000+AXIS1AY2 + VERT_0B,   2, 0,       },  // I
-                // {   15,   21+AXIS1AX2+4, 0x1C0000+AXIS1AY2 + VERT_1B,   2, 1,       },  // H
-                // {   15,   24+AXIS1AX2+4, 0x060000+AXIS1AY2 + VERT_0B,   2, 2,       },  // F
-                // {   15,   14+AXIS1AX2+4, 0x230000+AXIS1AY2 + VERT_1B,   2, 3,       },  // G
-                // {   15,   17+AXIS1AX2+4, 0x160000+AXIS1AY2 + VERT_1B,   2, 4,       },  // E
-                // {   15,   20+AXIS1AX2+4, 0x090000+AXIS1AY2 + VERT_1B,   2, 5,       },  // C
-                // {   15,   10+AXIS1AX2+4, 0x260000+AXIS1AY2 + VERT_2B,   2, 6,       },  // D
-                // {   15,   13+AXIS1AX2+4, 0x190000+AXIS1AY2 + VERT_2B,   2, 7,       },  // B
-                // {   15,   16+AXIS1AX2+4, 0x0C0000+AXIS1AY2 + VERT_2B,   2, 8,       },  // A
-
-
-                // {   14,   7+AXIS1AX2+4, 0x070000+AXIS1AY2 + VERT_0B,   0, 2,       },  // A
-                // {   14,   10+AXIS1AX2+4, 0x030000+AXIS1AY2 + VERT_1B,   0, 5,       },  // A
-                // {   14,   13+AXIS1AX2+4, -0x010000+AXIS1AY2 + VERT_2B,   0, 8,       },  // A
-
-                // {   13,   8+AXIS1AX2+4, 0x0F0000+AXIS1AY2 + VERT_0B,   1, 8,       },  // A
-                // {   13,   12+AXIS1AX2+4, 0x1E0000+AXIS1AY2 + VERT_1B,   1, 5,       },  // A
-                // {   13,   16+AXIS1AX2+4, 0x2D0000+AXIS1AY2 + VERT_2B,   1, 2,       },  // A
-
-
                 PART_BLANK_SIDEFACE(0, 0)
                 PART_SIDEFACE(0,0)
                 PART_TOP_FRAME_1(0, 0, 2)
                 PART_LOWER_SIDE_FRAME_1(0, 0, 2)
-
-                {   -1,0,0,0,0,        },
+                END
             },
         },
     },

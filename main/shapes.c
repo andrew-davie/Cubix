@@ -36,6 +36,31 @@ const unsigned char layer0LeftCornerTopFrame3[] = {
 
 };
 
+const unsigned char vertBlack[] = {
+
+    1,8,
+    0,12,
+
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+
+    X_______
+    X_______
+    X_______
+    X_______
+    X_______
+    X_______
+    X_______
+    X_______
+
+};
+
 const unsigned char layer0RightCornerTopFrame3[] = {
 
     1,6,
@@ -128,6 +153,48 @@ const unsigned char axis1FixupRightCornerTop[] = {
 
 };
 
+const unsigned char axis1FixupFrame1[] = {
+
+    1,17,
+    0,12,
+
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+
+    X_______
+    XX______
+    XXX_____
+    XXXX____
+    XXXXX___
+    XXXXX___
+    XXXXXXX_
+    XXXXXXXX
+    XXXXXXXX
+    XXXXXXXX
+    XXXXXXXX
+    _XXXXXXX
+    __XXXXXX
+    ___XXXXX
+    ____XXXX
+    _____XXX
+    ______XX
+
+};
 
 const unsigned char leftCornerTopFrame3[] = {
     2,9,
@@ -1047,25 +1114,25 @@ const unsigned char axis1Frame1Side000[] = {
     9,
     3,15,
 
-    ________
-    XX______
+    X_______
+    _X______
     _XX_____
     __XX____
     ___XX___
     ___XXX__
-    ____XX__
-    _____XX_
-    ______X_
+    ____XXX_
+    ______XX
+    _______X
 
-    ________
-    XX______
+    X_______
+    _X______
     _XX_____
     __XX____
     ___XX___
     ___XXX__
-    ____XX__
-    _____XX_
-    ______X_
+    ____XXX_
+    ______XX
+    _______X
 };
 
 
@@ -1075,7 +1142,7 @@ const unsigned char axis1Frame1Top000[] = {
     16,
     3,24,
 
-    ____X___
+    ________
     ___XX___
     ___XXX__
     ___XXXX_
@@ -1088,11 +1155,11 @@ const unsigned char axis1Frame1Top000[] = {
     _XXXXX__
     __XXXX__
     ___XXX__
-    ___XX___
     ____X___
     ________
+    ________
 
-    ____X___
+    ________
     ___XX___
     ___XXX__
     ___XXXX_
@@ -1105,8 +1172,8 @@ const unsigned char axis1Frame1Top000[] = {
     _XXXXX__
     __XXXX__
     ___XXX__
-    ___XX___
     ____X___
+    ________
     ________
 
 };

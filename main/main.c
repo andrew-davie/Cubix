@@ -970,8 +970,8 @@ void HandleJoystick() {
 
 //         else 
 
-        if (!swap && (!JOY0_FIRE && lastJOY0_FIRE))
-            swap = true;
+        // if (!swap && (!JOY0_FIRE && lastJOY0_FIRE))
+        //     swap = true;
 
 
 
@@ -1067,7 +1067,7 @@ void HandleJoystick() {
     //            AddAudio(SFX_PUSH);
             }
 
-            else if (!swap && (!JOY0_FIRE && lastJOY0_FIRE)) {
+            else if (false && !swap && (!JOY0_FIRE && lastJOY0_FIRE)) {
                 swap = true;
 
                 resetMobileEndpoints();
@@ -1317,6 +1317,14 @@ const unsigned char *shapeAxis1blackface[] = {
     &axis1blackface[0],
 };
 
+const unsigned char *shapeAxis1FixupFrame1[] = {
+    &axis1FixupFrame1[0],
+};
+
+const unsigned char *shapeVertBlack[] = {
+    &vertBlack[0],
+};
+
 
 const unsigned char *shapeSetAxis1Frame2R[] = {
     &axis1Frame2R000[0],
@@ -1365,6 +1373,9 @@ static const unsigned char **whichShapeSet[] = {
     shapeAxis1FixupRightCornerTop,      // 33
     shapeAxis1Frame1Top0,               // 34
     shapeAxis1blackface,                // 35
+    shapeAxis1FixupFrame1,              // 36
+    shapeVertBlack,                     // 37
+
 };
 
 
@@ -1644,7 +1655,7 @@ void drawSoftwareSprites() {
 
 
     //    if (axis ==1 && fLayer == 0)
-    //         rr = 1;
+    //         rr = 3;
 
     struct facet *f = &shapeDef[axis][rr][fLayer][fno++];
 
