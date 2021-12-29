@@ -85,6 +85,50 @@ const unsigned char leftCornerTop[] = {
 };
 
 
+const unsigned char axis1FixupRightCornerTop[] = {
+
+    1,17,
+    0,12,
+
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+
+    _______X
+    ______XX
+    _____XXX
+    ____XXXX
+    ___XXXXX
+    __XXXXXX
+    _XXXXXXX
+    XXXXXXXX
+    XXXXXXXX
+    XXXXXXXX
+    XXXXXXX_
+    XXXXXX__
+    XXXXX___
+    XXXX____
+    XXX_____
+    XX______
+    X_______
+
+};
+
+
 const unsigned char leftCornerTopFrame3[] = {
     2,9,
     0,12,
@@ -182,6 +226,35 @@ const unsigned char frontCornerTopFrame1[] = {
     ___XXX__
 
 };
+
+
+
+
+const unsigned char axis1blackface[] = {
+
+    1,8,
+    4,24,
+
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+    ________
+
+    XXXXX___
+    XXXXX___
+    XXXXXX__
+    XXXXXX__
+    XXXXXXX_
+    XXXXXXX_
+    XXXXXXXX
+    XXXXXXXX
+
+};
+
 
 const unsigned char rightCornerTopFrame1[] = {
 
@@ -975,20 +1048,20 @@ const unsigned char axis1Frame1Side000[] = {
     3,15,
 
     ________
-    _X______
-    __X_____
-    ___X____
-    ___XX___
-    ____XX__
-    _____X__
-    ______X_
-    ________
-
-    X_______
     XX______
     _XX_____
     __XX____
-    __XXX___
+    ___XX___
+    ___XXX__
+    ____XX__
+    _____XX_
+    ______X_
+
+    ________
+    XX______
+    _XX_____
+    __XX____
+    ___XX___
     ___XXX__
     ____XX__
     _____XX_
@@ -999,7 +1072,7 @@ const unsigned char axis1Frame1Side000[] = {
 const unsigned char axis1Frame1Top000[] = {
 
     1,
-    14,
+    16,
     3,24,
 
     ____X___
@@ -1016,11 +1089,13 @@ const unsigned char axis1Frame1Top000[] = {
     __XXXX__
     ___XXX__
     ___XX___
+    ____X___
+    ________
 
+    ____X___
+    ___XX___
     ___XXX__
-    __XXXX__
-    __XXXXX_
-    __XXXXXX
+    ___XXXX_
     __XXXXXX
     __XXXXXX
     __XXXXX_
@@ -1031,18 +1106,64 @@ const unsigned char axis1Frame1Top000[] = {
     __XXXX__
     ___XXX__
     ___XX___
+    ____X___
+    ________
 
 };
 
+
+
+const unsigned char axis1Frame1Top0[] = {
+
+    1,
+    16,
+    3,24,
+
+    ____X___
+    ___XX___
+    ___XXX__
+    ___XXXX_
+    __XXXXXX
+    __XXXXXX
+    __XXXXX_
+    __XXXXX_
+    _XXXXXX_
+    _XXXXX__
+    _XXXXX__
+    __XXXX__
+    ___XXX__
+    ___XX___
+    ____X___
+    ________
+
+    ____X___
+    ___XX___
+    ___XXX__
+    ___XXXX_
+    __XXXXXX
+    __XXXXXX
+    __XXXXX_
+    __XXXXX_
+    _XXXXXX_
+    _XXXXXX_
+    _XXXXXX_
+    __XXXXX_
+    ___XXXX_
+    ___XXXX_
+    ____XXX_
+    ______X_
+
+};
 
 
 
 const unsigned char axis1Frame2R000[] = {
 
     1,
-    15,
-    2,48,
+    18,
+    2,51,
 
+    ________
     ____X___
     ___XX___
     ___XXX__
@@ -1050,28 +1171,33 @@ const unsigned char axis1Frame2R000[] = {
     __XXXXX_
     __XXXXX_
     __XXXXX_
+    __XXXXX_
+    _XXXXX__
+    _XXXXX__
+    _XXXXX__
     __XXXX__
-    _XXXXX__
-    _XXXXX__
-    _XXXXX__
-    __XXX___
     ___XX___
     ___XX___
     ____X___
+    ________
+    ________
 
-    ____X___
+    ___X____
     ___XX___
-    ___XXX__
-    ___XXXX_
-    __XXXXX_
-    __XXXXX_
-    __XXXXX_
-    __XXXX__
-    _XXXXX__
-    _XXXXX__
-    _XXXXX__
     __XXX___
-    ___XX___
+    __XXXX__
+    __XXXXX_
+    _XXXXXX_
+    _XXXXXX_
+    _XXXXXX_
+    _XXXXX__
+    XXXXXX__
+    XXXXXX__
+    XXXXXX__
+    XXXXXX__
+    _XXXX___
+    __XXX___
+    __XXX___
     ___XX___
     ____X___
 };

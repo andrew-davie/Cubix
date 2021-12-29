@@ -501,26 +501,28 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
 
             // SLICE 2
             {
-                {   16,   14, 0x1E0000 + VERT_0,   1, 2, },
-                {   16,   14, 0x1E0000 + VERT_1,   1, 5, },
-                {   16,   14, 0x1E0000 + VERT_2,   1, 8, },
 
                 {   0,   14, 0x1E0000 + VERT_2,   0, 2, },
                 {   0,   19, 0x190000 + VERT_2,   0, 5, },
                 {   0,   24, 0x140000 + VERT_2,   0, 8, },
 
 
+                {   1,   14, 0x1E0000 + VERT_0,   1, 2, },
+                {   1,   14, 0x1E0000 + VERT_1,   1, 5, },
+                {   1,   14, 0x1E0000 + VERT_2,   1, 8, },
+
+
                 {   2,   14, 0x1E0000 + VERT_0,   2, 0, },
                 {   2,   19, 0x190000 + VERT_0,   2, 1, },
-                {   2,   24, 0x140000 + VERT_0,   2, 2, },
+                {  16,   24, 0x140000 + VERT_0,   2, 2, },
 
                 {   2,   14, 0x1E0000 + VERT_1,   2, 3, },
                 {   2,   19, 0x190000 + VERT_1,   2, 4, },
-                {   2,   24, 0x140000 + VERT_1,   2, 5, },
+                {  16,   24, 0x140000 + VERT_1,   2, 5, },
 
                 {   2,   14, 0x1E0000 + VERT_2,   2, 6, },
                 {   2,   19, 0x190000 + VERT_2,   2, 7, },
-                {   2,   24, 0x140000 + VERT_2,   2, 8, },
+                {  16,   24, 0x140000 + VERT_2,   2, 8, },
 
 
 
@@ -545,39 +547,75 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
 #define ADFX3B -0x80000
 #define ADF3B -0x40000
 
+
+#define PART_SIDEFACE(xOffset, yOffset) \
+    {   15,   18+AXIS1AX2+4 + xOffset, 0x200000+AXIS1AY2 + VERT_0B + (yOffset << 16),   2, 0,       }, \
+    {   15,   21+AXIS1AX2+4 + xOffset, 0x1C0000+AXIS1AY2 + VERT_1B + (yOffset << 16),   2, 1,       }, \
+    {   15,   24+AXIS1AX2+4 + xOffset, 0x060000+AXIS1AY2 + VERT_0B + (yOffset << 16),   2, 2,       }, \
+    {   15,   14+AXIS1AX2+4 + xOffset, 0x230000+AXIS1AY2 + VERT_1B + (yOffset << 16),   2, 3,       }, \
+    {   15,   17+AXIS1AX2+4 + xOffset, 0x160000+AXIS1AY2 + VERT_1B + (yOffset << 16),   2, 4,       }, \
+    {   15,   20+AXIS1AX2+4 + xOffset, 0x090000+AXIS1AY2 + VERT_1B + (yOffset << 16),   2, 5,       }, \
+    {   15,   10+AXIS1AX2+4 + xOffset, 0x260000+AXIS1AY2 + VERT_2B + (yOffset << 16),   2, 6,       }, \
+    {   15,   13+AXIS1AX2+4 + xOffset, 0x190000+AXIS1AY2 + VERT_2B + (yOffset << 16),   2, 7,       }, \
+    {   15,   16+AXIS1AX2+4 + xOffset, 0x0C0000+AXIS1AY2 + VERT_2B + (yOffset << 16),   2, 8,       }, \
+
+
+
+#define PART_TOP_FRAME_1(xOffset, yOffset, col) \
+    {   14,   14+AXIS1AX2+4 + xOffset, -0x000000+AXIS1AY2 + VERT_2B + (yOffset << 16),   0, 6 + col,       }, \
+    {   14,   10+AXIS1AX2+4 + xOffset, 0x030000+AXIS1AY2 + VERT_1B + (yOffset << 16),   0, 3 + col,       }, \
+    {   14,   7+AXIS1AX2+4+ xOffset, 0x070000+AXIS1AY2 + VERT_0B + (yOffset << 16),   0, 0 + col,       }, \
+
+#define PART_BLANK_SIDEFACE(xOffset, yOffset) \
+    {   33,   13+AXIS1AX2+4 + xOffset, -0x20000+AXIS1AY2 + VERT_2B + (yOffset << 16),  0, 0, }, \
+    {   33,   7+AXIS1AX2+4 + xOffset,  0x30000+AXIS1AY2 + VERT_2B + (yOffset << 16),   0, 0, }, \
+    {   33,   7+AXIS1AX2+4 + xOffset,  0x0C0000+AXIS1AY2 + VERT_2B + (yOffset << 16),   0, 0, }, \
+    {   33,   7+AXIS1AX2+4 + xOffset,  0x150000+AXIS1AY2 + VERT_2B + (yOffset << 16),   0, 0, }, \
+    {   33,   7+AXIS1AX2+4 + xOffset,  0x1F0000+AXIS1AY2 + VERT_2B + (yOffset << 16),  0, 0, },
+
+#define PART_LOWER_SIDE_FRAME_1(xOffset, yOffset, col) \
+    {   13,   8+AXIS1AX2+4 + xOffset, 0x0F0000+AXIS1AY2 + VERT_0B + (yOffset << 16),   1, 6 + col, }, \
+    {   13,   12+AXIS1AX2+4 + xOffset, 0x1E0000+AXIS1AY2 + VERT_1B+ (yOffset << 16),   1, 3 + col, }, \
+    {   13,   15+AXIS1AX2+4 + xOffset, 0x2B0000+AXIS1AY2 + VERT_2B+ (yOffset << 16),   1, 0 + col, },\
+
+
             // SLICE 0
+
+
             {
-                {   14,   6+AXIS1AX2 + ADFX3, 0x080000+AXIS1AY2 + VERT_0B + ADF3,   0, 0,       },
-                {   14,   10+AXIS1AX2 + ADFX3, 0x040000+AXIS1AY2 + VERT_1B + ADF3,  0, 3,       },
-                {   14,   14+AXIS1AX2 + ADFX3, 0x000000+AXIS1AY2 + VERT_2B + ADF3,  0, 6,       },
 
-                {   13,   7+AXIS1AX2 + ADFX3, 0x100000+AXIS1AY2 + VERT_0B + ADF3,   1, 6,       },
-                {   13,   11+AXIS1AX2 + ADFX3, 0x1F0000+AXIS1AY2 + VERT_1B + ADF3,   1, 3,      },
+    {   33,   8+AXIS1AX2+4 + -10,  0x0C0000+AXIS1AY2 + VERT_2B + (-10 << 16),   0, 0, },
+    {   33,   8+AXIS1AX2+4 + -10,  0x140000+AXIS1AY2 + VERT_2B + (-10 << 16),   0, 0, },
+    {   33,   8+AXIS1AX2+4 + -7,  0x0D0000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+    {   22,   8+AXIS1AX2+4 + -7,  0x0330000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
 
-                // PRIORTY CULL
-                // {   13,   15+AXIS1AX2 + ADFX3, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3,   1, 0,       },
+    {   35,   8+AXIS1AX2+4 + -3+4,  0x140000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+
+
+                PART_TOP_FRAME_1(-10, -10, 0)
+                PART_LOWER_SIDE_FRAME_1(-10, -10, 0)
+
 
                 {   -1,0,0,0,0,        },
             },
             
             // SLICE 1
             {
-                // top
 
-                {   14,   6+AXIS1AX2+ADFX3B, 0x080000+AXIS1AY2 + VERT_0B + ADF3B,   0, 1,      },
-                {   14,   10+AXIS1AX2+ADFX3B, 0x040000+AXIS1AY2 + VERT_1B + ADF3B,  0, 4,      },
-                {   14,   14+AXIS1AX2+ADFX3B, 0x000000+AXIS1AY2 + VERT_2B + ADF3B,  0, 7,      },
+                PART_BLANK_SIDEFACE(-5, -5)
+                PART_TOP_FRAME_1(-5, -5, 1)
+                PART_LOWER_SIDE_FRAME_1(-5, -5, 1)
 
                 // lower side
 
-                {   13,   7+AXIS1AX2+ADFX3B, 0x100000+AXIS1AY2 + VERT_0B + ADF3B,   1, 7,       },
-                {   13,   11+AXIS1AX2+ADFX3B, 0x1F0000+AXIS1AY2 + VERT_1B + ADF3B,   1, 4,       },
+                {   13,   6+AXIS1AX2+ADFX3B, 0x0D0000+AXIS1AY2 + VERT_0B + ADF3B,   1, 7,       },
+                {   13,   10+AXIS1AX2+ADFX3B, 0x1C0000+AXIS1AY2 + VERT_1B + ADF3B,   1, 4,       },
                 // {   13,   15+AXIS1AX2+ADFX3B, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3B,   1, 2,       },  CULLED BY PRIORITY
 
                 {   -1,0,0,0,0,        },
             },
 
-            // SLICE 2
+            // AXIS 1, FRAME 1, SLICE 2
             {
 
     //    A
@@ -586,24 +624,11 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
     //   G H
     //    I
 
-                {   15,   18+AXIS1AX2+4, 0x200000+AXIS1AY2 + VERT_0B,   2, 0,       },  // I
-                {   15,   21+AXIS1AX2+4, 0x1C0000+AXIS1AY2 + VERT_1B,   2, 1,       },  // H
-                {   15,   24+AXIS1AX2+4, 0x060000+AXIS1AY2 + VERT_0B,   2, 2,       },  // F
-                {   15,   14+AXIS1AX2+4, 0x230000+AXIS1AY2 + VERT_1B,   2, 3,       },  // G
-                {   15,   17+AXIS1AX2+4, 0x160000+AXIS1AY2 + VERT_1B,   2, 4,       },  // E
-                {   15,   20+AXIS1AX2+4, 0x090000+AXIS1AY2 + VERT_1B,   2, 5,       },  // C
-                {   15,   10+AXIS1AX2+4, 0x260000+AXIS1AY2 + VERT_2B,   2, 6,       },  // D
-                {   15,   13+AXIS1AX2+4, 0x190000+AXIS1AY2 + VERT_2B,   2, 7,       },  // B
-                {   15,   16+AXIS1AX2+4, 0x0C0000+AXIS1AY2 + VERT_2B,   2, 8,       },  // A
 
-
-                {   14,   7+AXIS1AX2+4, 0x070000+AXIS1AY2 + VERT_0B,   0, 2,       },  // A
-                {   14,   10+AXIS1AX2+4, 0x030000+AXIS1AY2 + VERT_1B,   0, 5,       },  // A
-                {   14,   13+AXIS1AX2+4, -0x010000+AXIS1AY2 + VERT_2B,   0, 8,       },  // A
-
-                {   13,   8+AXIS1AX2+4, 0x0F0000+AXIS1AY2 + VERT_0B,   1, 8,       },  // A
-                {   13,   12+AXIS1AX2+4, 0x1E0000+AXIS1AY2 + VERT_1B,   1, 5,       },  // A
-                {   13,   16+AXIS1AX2+4, 0x2D0000+AXIS1AY2 + VERT_2B,   1, 2,       },  // A
+                PART_BLANK_SIDEFACE(0, 0)
+                PART_SIDEFACE(0,0)
+                PART_TOP_FRAME_1(0, 0, 2)
+                PART_LOWER_SIDE_FRAME_1(0, 0, 2)
 
                 {   -1,0,0,0,0,        },
             },
@@ -616,26 +641,35 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
 
             // SLICE 0
             {
-                {   14,   6+AXIS1AX2 + ADFX3, 0x080000+AXIS1AY2 + VERT_0B + ADF3,   0, 0,       },
-                {   14,   10+AXIS1AX2 + ADFX3, 0x040000+AXIS1AY2 + VERT_1B + ADF3,   0, 3,       },
-                {   14,   14+AXIS1AX2 + ADFX3, 0x000000+AXIS1AY2 + VERT_2B + ADF3,   0, 6,       },
 
-                {   13,   7+AXIS1AX2 + ADFX3, 0x100000+AXIS1AY2 + VERT_0B + ADF3,   1, 6,       },
-                {   13,   11+AXIS1AX2 + ADFX3, 0x1F0000+AXIS1AY2 + VERT_1B + ADF3,   1, 3,       },
-//                {   13,   15+AXIS1AX2 + ADFX3, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3,   1, 2,       },
+    {   33,   8+AXIS1AX2+4 + -10,  0x0C0000+AXIS1AY2 + VERT_2B + (-10 << 16),   0, 0, },
+    {   33,   8+AXIS1AX2+4 + -10,  0x140000+AXIS1AY2 + VERT_2B + (-10 << 16),   0, 0, },
+    {   33,   8+AXIS1AX2+4 + -7,  0x0D0000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+    {   22,   8+AXIS1AX2+4 + -7,  0x0330000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+
+    {   35,   8+AXIS1AX2+4 + -3+4,  0x140000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+
+
+                PART_TOP_FRAME_1(-10, -10, 0)
+                PART_LOWER_SIDE_FRAME_1(-10, -10, 0)
+
 
                 {   -1,0,0,0,0,        },
             },
             
             // SLICE 1
             {
-                {   14,   6+AXIS1AX2+ADFX3B, 0x080000+AXIS1AY2 + VERT_0B + ADF3B,   0, 1,       },
-                {   14,   10+AXIS1AX2+ADFX3B, 0x040000+AXIS1AY2 + VERT_1B + ADF3B,   0, 4,       },
-                {   14,   14+AXIS1AX2+ADFX3B, 0x000000+AXIS1AY2 + VERT_2B + ADF3B,   0, 7,       },
 
-                {   13,   7+AXIS1AX2+ADFX3B, 0x100000+AXIS1AY2 + VERT_0B + ADF3B,   1, 7,       },
-                {   13,   11+AXIS1AX2+ADFX3B, 0x1F0000+AXIS1AY2 + VERT_1B + ADF3B,   1, 4,       },
- //               {   13,   15+AXIS1AX2+ADFX3B, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3B,   1, 2,       },  // A
+
+                PART_BLANK_SIDEFACE(-5, -5)
+                PART_TOP_FRAME_1(-5, -5, 1)
+                PART_LOWER_SIDE_FRAME_1(-5, -5, 1)
+
+                // lower side
+
+                {   13,   6+AXIS1AX2+ADFX3B, 0x0D0000+AXIS1AY2 + VERT_0B + ADF3B,   1, 7,       },
+                {   13,   10+AXIS1AX2+ADFX3B, 0x1C0000+AXIS1AY2 + VERT_1B + ADF3B,   1, 4,       },
+                // {   13,   15+AXIS1AX2+ADFX3B, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3B,   1, 2,       },  CULLED BY PRIORITY
 
                 {   -1,0,0,0,0,        },
             },
@@ -654,24 +688,35 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
     //   G H
     //    I
 
-                {   15,   18+AXIS1AX2+4, 0x200000+AXIS1AY2 + VERT_0B,   2, 0,       },  // I
-                {   15,   21+AXIS1AX2+4, 0x1C0000+AXIS1AY2 + VERT_1B,   2, 1,       },  // H
-                {   15,   24+AXIS1AX2+4, 0x060000+AXIS1AY2 + VERT_0B,   2, 2,       },  // F
-                {   15,   14+AXIS1AX2+4, 0x230000+AXIS1AY2 + VERT_1B,   2, 3,       },  // G
-                {   15,   17+AXIS1AX2+4, 0x160000+AXIS1AY2 + VERT_1B,   2, 4,       },  // E
-                {   15,   20+AXIS1AX2+4, 0x090000+AXIS1AY2 + VERT_1B,   2, 5,       },  // C
-                {   15,   10+AXIS1AX2+4, 0x260000+AXIS1AY2 + VERT_2B,   2, 6,       },  // D
-                {   15,   13+AXIS1AX2+4, 0x190000+AXIS1AY2 + VERT_2B,   2, 7,       },  // B
-                {   15,   16+AXIS1AX2+4, 0x0C0000+AXIS1AY2 + VERT_2B,   2, 8,       },  // A
+                // {   33,   13+AXIS1AX2+4, -0x20000+AXIS1AY2 + VERT_2B,   2, 0,       },  // I
+                // {   33,   7+AXIS1AX2+4,  0x30000+AXIS1AY2 + VERT_2B,   2, 0,       },  // I
+                // {   33,   7+AXIS1AX2+4,  0x1F0000+AXIS1AY2 + VERT_2B,   2, 0,       },  // I
+
+                // {   15,   18+AXIS1AX2+4, 0x200000+AXIS1AY2 + VERT_0B,   2, 0,       },  // I
+                // {   15,   21+AXIS1AX2+4, 0x1C0000+AXIS1AY2 + VERT_1B,   2, 1,       },  // H
+                // {   15,   24+AXIS1AX2+4, 0x060000+AXIS1AY2 + VERT_0B,   2, 2,       },  // F
+                // {   15,   14+AXIS1AX2+4, 0x230000+AXIS1AY2 + VERT_1B,   2, 3,       },  // G
+                // {   15,   17+AXIS1AX2+4, 0x160000+AXIS1AY2 + VERT_1B,   2, 4,       },  // E
+                // {   15,   20+AXIS1AX2+4, 0x090000+AXIS1AY2 + VERT_1B,   2, 5,       },  // C
+                // {   15,   10+AXIS1AX2+4, 0x260000+AXIS1AY2 + VERT_2B,   2, 6,       },  // D
+                // {   15,   13+AXIS1AX2+4, 0x190000+AXIS1AY2 + VERT_2B,   2, 7,       },  // B
+                // {   15,   16+AXIS1AX2+4, 0x0C0000+AXIS1AY2 + VERT_2B,   2, 8,       },  // A
 
 
-                {   14,   7+AXIS1AX2+4, 0x070000+AXIS1AY2 + VERT_0B,   0, 2,       },  // A
-                {   14,   10+AXIS1AX2+4, 0x030000+AXIS1AY2 + VERT_1B,   0, 5,       },  // A
-                {   14,   13+AXIS1AX2+4, -0x010000+AXIS1AY2 + VERT_2B,   0, 8,       },  // A
+                // {   14,   7+AXIS1AX2+4, 0x070000+AXIS1AY2 + VERT_0B,   0, 2,       },  // A
+                // {   14,   10+AXIS1AX2+4, 0x030000+AXIS1AY2 + VERT_1B,   0, 5,       },  // A
+                // {   14,   13+AXIS1AX2+4, -0x010000+AXIS1AY2 + VERT_2B,   0, 8,       },  // A
 
-                {   13,   8+AXIS1AX2+4, 0x0F0000+AXIS1AY2 + VERT_0B,   1, 8,       },  // A
-                {   13,   12+AXIS1AX2+4, 0x1E0000+AXIS1AY2 + VERT_1B,   1, 5,       },  // A
-                {   13,   16+AXIS1AX2+4, 0x2D0000+AXIS1AY2 + VERT_2B,   1, 2,       },  // A
+                // {   13,   8+AXIS1AX2+4, 0x0F0000+AXIS1AY2 + VERT_0B,   1, 8,       },  // A
+                // {   13,   12+AXIS1AX2+4, 0x1E0000+AXIS1AY2 + VERT_1B,   1, 5,       },  // A
+                // {   13,   16+AXIS1AX2+4, 0x2D0000+AXIS1AY2 + VERT_2B,   1, 2,       },  // A
+
+                PART_BLANK_SIDEFACE(0, 0)
+                PART_SIDEFACE(0,0)
+                PART_TOP_FRAME_1(0, 0, 2)
+                PART_LOWER_SIDE_FRAME_1(0, 0, 2)
+
+
 
                 {   -1,0,0,0,0,        },
             },
@@ -685,28 +730,34 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
 
             // SLICE 0
             {
-                {   14,   6+AXIS1AX2 + ADFX3, 0x080000+AXIS1AY2 + VERT_0B + ADF3,   0, 0,       },
-                {   14,   10+AXIS1AX2 + ADFX3, 0x040000+AXIS1AY2 + VERT_1B + ADF3,   0, 3,       },
-                {   14,   14+AXIS1AX2 + ADFX3, 0x000000+AXIS1AY2 + VERT_2B + ADF3,   0, 6,       },
 
-                {   13,   7+AXIS1AX2 + ADFX3, 0x100000+AXIS1AY2 + VERT_0B + ADF3,   1, 6,       },
-                {   13,   11+AXIS1AX2 + ADFX3, 0x1F0000+AXIS1AY2 + VERT_1B + ADF3,   1, 3,       },
+    {   33,   8+AXIS1AX2+4 + -10,  0x0C0000+AXIS1AY2 + VERT_2B + (-10 << 16),   0, 0, },
+    {   33,   8+AXIS1AX2+4 + -10,  0x140000+AXIS1AY2 + VERT_2B + (-10 << 16),   0, 0, },
+    {   33,   8+AXIS1AX2+4 + -7,  0x0D0000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+    {   22,   8+AXIS1AX2+4 + -7,  0x0330000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
 
-                // PRIORITY CULLED
-                // {   13,   15+AXIS1AX2 + ADFX3, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3,   1, 2,       },
+    {   35,   8+AXIS1AX2+4 + -3+4,  0x140000+AXIS1AY2 + VERT_2B + (-23 << 16),   0, 0, },
+
+
+                PART_TOP_FRAME_1(-10, -10, 0)
+                PART_LOWER_SIDE_FRAME_1(-10, -10, 0)
+
 
                 {   -1,0,0,0,0,        },
             },
             
             // SLICE 1
             {
-                {   14,   6+AXIS1AX2+ADFX3B, 0x080000+AXIS1AY2 + VERT_0B + ADF3B,   0, 1,       },  // A
-                {   14,   10+AXIS1AX2+ADFX3B, 0x040000+AXIS1AY2 + VERT_1B + ADF3B,   0, 4,       },  // A
-                {   14,   14+AXIS1AX2+ADFX3B, 0x000000+AXIS1AY2 + VERT_2B + ADF3B,   0, 7,       },  // A
 
-                {   13,   7+AXIS1AX2+ADFX3B, 0x100000+AXIS1AY2 + VERT_0B + ADF3B,   1, 7,       },  // A
-                {   13,   11+AXIS1AX2+ADFX3B, 0x1F0000+AXIS1AY2 + VERT_1B + ADF3B,   1, 4,       },  // A
- //               {   13,   15+AXIS1AX2+ADFX3B, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3B,   1, 2,       },  // A
+                PART_BLANK_SIDEFACE(-5, -5)
+                PART_TOP_FRAME_1(-5, -5, 1)
+                PART_LOWER_SIDE_FRAME_1(-5, -5, 1)
+
+                // lower side
+
+                {   13,   6+AXIS1AX2+ADFX3B, 0x0D0000+AXIS1AY2 + VERT_0B + ADF3B,   1, 7,       },
+                {   13,   10+AXIS1AX2+ADFX3B, 0x1C0000+AXIS1AY2 + VERT_1B + ADF3B,   1, 4,       },
+                // {   13,   15+AXIS1AX2+ADFX3B, 0x2E0000+AXIS1AY2 + VERT_2B + ADF3B,   1, 2,       },  CULLED BY PRIORITY
 
                 {   -1,0,0,0,0,        },
             },
@@ -721,24 +772,30 @@ const struct facet shapeDef[AXES][ROTATE][3][25] = {
     //   G H
     //    I
 
-                {   15,   18+AXIS1AX2+4, 0x200000+AXIS1AY2 + VERT_0B,   2, 0,       },  // I
-                {   15,   21+AXIS1AX2+4, 0x1C0000+AXIS1AY2 + VERT_1B,   2, 1,       },  // H
-                {   15,   24+AXIS1AX2+4, 0x060000+AXIS1AY2 + VERT_0B,   2, 2,       },  // F
-                {   15,   14+AXIS1AX2+4, 0x230000+AXIS1AY2 + VERT_1B,   2, 3,       },  // G
-                {   15,   17+AXIS1AX2+4, 0x160000+AXIS1AY2 + VERT_1B,   2, 4,       },  // E
-                {   15,   20+AXIS1AX2+4, 0x090000+AXIS1AY2 + VERT_1B,   2, 5,       },  // C
-                {   15,   10+AXIS1AX2+4, 0x260000+AXIS1AY2 + VERT_2B,   2, 6,       },  // D
-                {   15,   13+AXIS1AX2+4, 0x190000+AXIS1AY2 + VERT_2B,   2, 7,       },  // B
-                {   15,   16+AXIS1AX2+4, 0x0C0000+AXIS1AY2 + VERT_2B,   2, 8,       },  // A
+                // {   15,   18+AXIS1AX2+4, 0x200000+AXIS1AY2 + VERT_0B,   2, 0,       },  // I
+                // {   15,   21+AXIS1AX2+4, 0x1C0000+AXIS1AY2 + VERT_1B,   2, 1,       },  // H
+                // {   15,   24+AXIS1AX2+4, 0x060000+AXIS1AY2 + VERT_0B,   2, 2,       },  // F
+                // {   15,   14+AXIS1AX2+4, 0x230000+AXIS1AY2 + VERT_1B,   2, 3,       },  // G
+                // {   15,   17+AXIS1AX2+4, 0x160000+AXIS1AY2 + VERT_1B,   2, 4,       },  // E
+                // {   15,   20+AXIS1AX2+4, 0x090000+AXIS1AY2 + VERT_1B,   2, 5,       },  // C
+                // {   15,   10+AXIS1AX2+4, 0x260000+AXIS1AY2 + VERT_2B,   2, 6,       },  // D
+                // {   15,   13+AXIS1AX2+4, 0x190000+AXIS1AY2 + VERT_2B,   2, 7,       },  // B
+                // {   15,   16+AXIS1AX2+4, 0x0C0000+AXIS1AY2 + VERT_2B,   2, 8,       },  // A
 
 
-                {   14,   7+AXIS1AX2+4, 0x070000+AXIS1AY2 + VERT_0B,   0, 2,       },  // A
-                {   14,   10+AXIS1AX2+4, 0x030000+AXIS1AY2 + VERT_1B,   0, 5,       },  // A
-                {   14,   13+AXIS1AX2+4, -0x010000+AXIS1AY2 + VERT_2B,   0, 8,       },  // A
+                // {   14,   7+AXIS1AX2+4, 0x070000+AXIS1AY2 + VERT_0B,   0, 2,       },  // A
+                // {   14,   10+AXIS1AX2+4, 0x030000+AXIS1AY2 + VERT_1B,   0, 5,       },  // A
+                // {   14,   13+AXIS1AX2+4, -0x010000+AXIS1AY2 + VERT_2B,   0, 8,       },  // A
 
-                {   13,   8+AXIS1AX2+4, 0x0F0000+AXIS1AY2 + VERT_0B,   1, 8,       },  // A
-                {   13,   12+AXIS1AX2+4, 0x1E0000+AXIS1AY2 + VERT_1B,   1, 5,       },  // A
-                {   13,   16+AXIS1AX2+4, 0x2D0000+AXIS1AY2 + VERT_2B,   1, 2,       },  // A
+                // {   13,   8+AXIS1AX2+4, 0x0F0000+AXIS1AY2 + VERT_0B,   1, 8,       },  // A
+                // {   13,   12+AXIS1AX2+4, 0x1E0000+AXIS1AY2 + VERT_1B,   1, 5,       },  // A
+                // {   13,   16+AXIS1AX2+4, 0x2D0000+AXIS1AY2 + VERT_2B,   1, 2,       },  // A
+
+
+                PART_BLANK_SIDEFACE(0, 0)
+                PART_SIDEFACE(0,0)
+                PART_TOP_FRAME_1(0, 0, 2)
+                PART_LOWER_SIDE_FRAME_1(0, 0, 2)
 
                 {   -1,0,0,0,0,        },
             },

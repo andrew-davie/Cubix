@@ -750,178 +750,178 @@
     153  0800							; include the custom ARM code.
     154  0800
     155  0800					      incbin	"main/bin/armcode.bin"
-    156  4ab4
-    157  4ab4
-    158  4ab4
-    159  4ab4
-    160  4ab4							;===============================================================================
-    161  4ab4							; ARM Indirect Data
-    162  4ab4							;----------------------------------------
-    163  4ab4							;   Data that the C code indirectly accesses can be stored immediately after the
-    164  4ab4							;   custom ARM code.
-    165  4ab4							;===============================================================================
-    166  4ab4
- ---- $254c bytes of ARM and Moveable Data space left
-    167  4ab4					      echo	"----",($7000 - *) , "bytes of ARM and Moveable Data space left"
-    168  4ab4
-    169  4ab4
-    170  4ab4
-    171  4ab4							;===============================================================================
-    172  4ab4							; ARM Direct Data
-    173  4ab4							;----------------------------------------
-    174  4ab4							;   I find it easier, and more space efficient, to store some of the data the
-    175  4ab4							;   C code needs to access in the 6507 code instead of the C code.  Because the
-    176  4ab4							;   build process is:
-    177  4ab4							;
-    178  4ab4							;	 1) assemble 6507 code to create defines_from_dasm_for_c.h
-    179  4ab4							;	 2) compile C code to create ARM routines
-    180  4ab4							;	 3) assemble 6507 to create final ROM
-    181  4ab4							;
-    182  4ab4							;   the ARM code could change size between steps 1 and 3, which would shift data
-    183  4ab4							;   that immediately comes after it. So the data that C directly accesses needs
-    184  4ab4							;   to be after an ORG to prevent it from moving.
-    185  4ab4							;
-    186  4ab4							;   The _IMAGE_GRAPHICS, _IMAGE_COLORS, etc data tables are directly access by
-    187  4ab4							;   the C code so must be in the Direct Data area. The data they point to is
-    188  4ab4							;   indirectly accessed by the C code, so they can go in the Indirect Data area.
-    189  4ab4							;   Note the labels for the tables are prefixed by _ so they'll end up in the
-    190  4ab4							;   defines_from_dasm_for_c.h file, while the labels for the data the tables
-    191  4ab4							;   point to are not prefixed by _
-    192  4ab4							;===============================================================================
-    193  4ab4							;	  ORG $5F80
-    194  4ab4							;	  ORG $5FFF
-    195  4ab4							;_ARENA_INCREMENTS:
-    196  4ab4							;	  .byte 255 ; * Arena1_Height / _ARENA_SCANLINES
-    197  4ab4							;	  .byte 255 ;* Arena2_Height / _ARENA_SCANLINES
-    198  4ab4							;	  .byte 255 ;* Arena3_Height / _ARENA_SCANLINES
-    199  4ab4							;	  .byte 255 ;* Arena4_Height / _ARENA_SCANLINES
-    200  4ab4
-    201  4ab4
-    202  4ab4
-    203  4ab4							; value used in this echo depends upon how many banks are used for 6507 code
-    204  4ab4							;   $5000 if using banks 4, 5 & 6
-    205  4ab4							;   $6000 if using banks 5 & 6
-    206  4ab4							;   $7000 if using just bank 6
-    207  4ab4							;    echo "----",[$6000 - *] , "bytes of ARM Direct Data left"
-    208  4ab4
-    209  4ab4							;===============================================================================
-    210  4ab4							; Bank 5 - 6507 code
-    211  4ab4							;----------------------------------------
-    212  4ab4							;   I normally allocate banks 0-5 for ARM code, and just use bank 6 for 6507
-    213  4ab4							;   code, but in order to show an example of CDFJ bankswitching I am using bank
-    214  4ab4							;   5 for the splash screen and menu routines.
-    215  4ab4							;===============================================================================
-    216  4ab4
-    217  4ab4							;	  ORG $6000
-    218  4ab4							;	  RORG $F000
-    219  4ab4
-    220  4ab4							; this and SplashMenuVB in bank 6 are used to switch between the banks
-    221  4ab4							;SplashMenuOS:
-    222  4ab4							;	  sta SELECTBANK6	  ; switch to bank 6, then jmp SplashMenuOS_Code
-    223  4ab4							;	  jmp SplashMenuVB_Code
-    224  4ab4
-    225  4ab4							;	  POSITION_OBJECT	  ; this must occupy same address in both banks
-    226  4ab4
-    227  4ab4
-    228  4ab4
-    229  4ab4							;===============================================================================
-    230  4ab4							; Two Color Graphic routine
-    231  4ab4							;-------------------------------------------------------------------------------
-    232  4ab4							; this works by using a "negative" image when drawing the sprites.
-    233  4ab4							; The sprites are colored black while the background is the color
-    234  4ab4							; that shows up as though it were the sprites.  The 2nd color is
-    235  4ab4							; achieved by using the playfield and/or ball.
-    236  4ab4							;
-    237  4ab4							; The missiles (also black) and setting the screen & playfield to BLACK
-    238  4ab4							; are used to hide the screen and playfield beyond the 48 pixel image.
-    239  4ab4							;===============================================================================
-    240  4ab4							;ShowTwoColorGraphic:
-    241  4ab4
-    242  4ab4
-    243  4ab4							;SplashMenuVB_Code:	  ; entry point from Bank 6
-    244  4ab4							;	  lda Mode	  ; check which screen to show
-    245  4ab4							;	  bne MenuVB	  ; Mode 1 = Menu
-    246  4ab4							;	  jmp SplashVB	  ; Mode 0 = Splash
-    247  4ab4
-    248  4ab4							;MenuVB:
-    249  4ab4							; players are already in position, just need to set size/copies & color
-    250  4ab4							;	  ldy #%11111111
-    251  4ab4							;	  sty GRP0
-    252  4ab4							;	  sty GRP1
-    253  4ab4							;	  ldy #%00100000  ; Ball Size = 4
-    254  4ab4							;	  sty CTRLPF	  ; repeat playfield, ball width = 4
-    255  4ab4							;	  ldy #_BLACK
-    256  4ab4							;	  sty COLUP0
-    257  4ab4							;	  sty COLUP1
-    258  4ab4							;	  ldy #%00010000;11
-    259  4ab4							;	  sty ENAM0	      ; missile on
-    260  4ab4							;	  sty ENAM1	      ; missile on
-    261  4ab4							;	  sty ENABL	      ; ball on
-    262  4ab4							;	  sty NUSIZ0	      ; three copies close, missile x8
-    263  4ab4							;	  sty NUSIZ1	      ; three copies close, missile x8
-    264  4ab4							;	  sty VDELP0	      ; vertical delay on
-    265  4ab4							;	  sty VDELP1	      ; vertical delay on
-    266  4ab4
-    267  4ab4
-    268  4ab4							;	  ldx #0
-    269  4ab4							;	  stx COLUPF
-    270  4ab4							;MenuVBwait:
-    271  4ab4							;	  sta WSYNC
-    272  4ab4							;	  bit TIMINT
-    273  4ab4							;	  bpl MenuVBwait
-    274  4ab4							;	  stx VBLANK		  ; video output on
-    275  4ab4
-    276  4ab4							;MenuKernel:
-    277  4ab4
-    278  4ab4							;MenuDone:
-    279  4ab4							;	  sta WSYNC
-    280  4ab4							;	  stx ENAM0    ; X=0 after ShowTwoColorGraphic
-    281  4ab4							;	  stx ENAM1
-    282  4ab4							;	  stx ENABL
-    283  4ab4
-    284  4ab4
-    285  4ab4							;ShowSpiceWareLogo:
-    286  4ab4							;SSWL1:
-    287  4ab4							;SSWLskip1:			  ;   15 from branch just before SSWL1
-    288  4ab4							;EndShowSpiceWareLogo:
-    289  4ab4
-    290  4ab4							;MenuOS:
-    291  4ab4							;	  ldy #_FN_MENU_OS    ; going to run function MenuOverScan()
-    292  4ab4							;	  jmp SplashMenuOS
-    293  4ab4
-    294  4ab4
-    295  4ab4							;SplashVB:
-    296  4ab4							;SplashVBwait:
-    297  4ab4							;SplashKernel:
-    298  4ab4							;SplashOS:
-    299  4ab4							;	  ldy #_FN_SPLASH_OS	  ; going to run function SplashOverScan()
-    300  4ab4							;	  jmp SplashMenuOS
-    301  4ab4
-    302  4ab4
-    303  4ab4							;    echo ($FFE9-*), "(6507) bytes left in bank 6"
-    304  4ab4
-    305  4ab4							;include "48x128.asm"
-    306  4ab4
-    307  4ab4
-    308  4ab4							;    echo ($FFE9-*), "AFTER 48x128 include, (6507) bytes left in bank 6"
-    309  4ab4
-    310  4ab4							;	  ORG $6FEA
-    311  4ab4							;	  RORG $FFEA
-    312  4ab4							;B5init:
-    313  4ab4							;	  sta SELECTBANK6
-    314  4ab4							;	  jmp B5init	  ; should never get here, but just in case
-    315  4ab4							;	  ds 12, 0	  ; reserve space for CDFJ registers
-    316  4ab4							;	  .WORD B5init	  ; while CDFJ will only power up in bank 5, an accidental
-    317  4ab4							;	  .WORD B5init	  ; BRK instruction could occur, so gracefully handle it
-    318  4ab4
-    319  4ab4
-    320  4ab4
-    321  4ab4							;===============================================================================
-    322  4ab4							; Bank 6 - 6507 code
-    323  4ab4							;----------------------------------------
-    324  4ab4							;   CDFJ will always start in bank 6 because banks 0-5 could contain ARM code
-    325  4ab4							;===============================================================================
-    326  4ab4
+    156  4b58
+    157  4b58
+    158  4b58
+    159  4b58
+    160  4b58							;===============================================================================
+    161  4b58							; ARM Indirect Data
+    162  4b58							;----------------------------------------
+    163  4b58							;   Data that the C code indirectly accesses can be stored immediately after the
+    164  4b58							;   custom ARM code.
+    165  4b58							;===============================================================================
+    166  4b58
+ ---- $24a8 bytes of ARM and Moveable Data space left
+    167  4b58					      echo	"----",($7000 - *) , "bytes of ARM and Moveable Data space left"
+    168  4b58
+    169  4b58
+    170  4b58
+    171  4b58							;===============================================================================
+    172  4b58							; ARM Direct Data
+    173  4b58							;----------------------------------------
+    174  4b58							;   I find it easier, and more space efficient, to store some of the data the
+    175  4b58							;   C code needs to access in the 6507 code instead of the C code.  Because the
+    176  4b58							;   build process is:
+    177  4b58							;
+    178  4b58							;	 1) assemble 6507 code to create defines_from_dasm_for_c.h
+    179  4b58							;	 2) compile C code to create ARM routines
+    180  4b58							;	 3) assemble 6507 to create final ROM
+    181  4b58							;
+    182  4b58							;   the ARM code could change size between steps 1 and 3, which would shift data
+    183  4b58							;   that immediately comes after it. So the data that C directly accesses needs
+    184  4b58							;   to be after an ORG to prevent it from moving.
+    185  4b58							;
+    186  4b58							;   The _IMAGE_GRAPHICS, _IMAGE_COLORS, etc data tables are directly access by
+    187  4b58							;   the C code so must be in the Direct Data area. The data they point to is
+    188  4b58							;   indirectly accessed by the C code, so they can go in the Indirect Data area.
+    189  4b58							;   Note the labels for the tables are prefixed by _ so they'll end up in the
+    190  4b58							;   defines_from_dasm_for_c.h file, while the labels for the data the tables
+    191  4b58							;   point to are not prefixed by _
+    192  4b58							;===============================================================================
+    193  4b58							;	  ORG $5F80
+    194  4b58							;	  ORG $5FFF
+    195  4b58							;_ARENA_INCREMENTS:
+    196  4b58							;	  .byte 255 ; * Arena1_Height / _ARENA_SCANLINES
+    197  4b58							;	  .byte 255 ;* Arena2_Height / _ARENA_SCANLINES
+    198  4b58							;	  .byte 255 ;* Arena3_Height / _ARENA_SCANLINES
+    199  4b58							;	  .byte 255 ;* Arena4_Height / _ARENA_SCANLINES
+    200  4b58
+    201  4b58
+    202  4b58
+    203  4b58							; value used in this echo depends upon how many banks are used for 6507 code
+    204  4b58							;   $5000 if using banks 4, 5 & 6
+    205  4b58							;   $6000 if using banks 5 & 6
+    206  4b58							;   $7000 if using just bank 6
+    207  4b58							;    echo "----",[$6000 - *] , "bytes of ARM Direct Data left"
+    208  4b58
+    209  4b58							;===============================================================================
+    210  4b58							; Bank 5 - 6507 code
+    211  4b58							;----------------------------------------
+    212  4b58							;   I normally allocate banks 0-5 for ARM code, and just use bank 6 for 6507
+    213  4b58							;   code, but in order to show an example of CDFJ bankswitching I am using bank
+    214  4b58							;   5 for the splash screen and menu routines.
+    215  4b58							;===============================================================================
+    216  4b58
+    217  4b58							;	  ORG $6000
+    218  4b58							;	  RORG $F000
+    219  4b58
+    220  4b58							; this and SplashMenuVB in bank 6 are used to switch between the banks
+    221  4b58							;SplashMenuOS:
+    222  4b58							;	  sta SELECTBANK6	  ; switch to bank 6, then jmp SplashMenuOS_Code
+    223  4b58							;	  jmp SplashMenuVB_Code
+    224  4b58
+    225  4b58							;	  POSITION_OBJECT	  ; this must occupy same address in both banks
+    226  4b58
+    227  4b58
+    228  4b58
+    229  4b58							;===============================================================================
+    230  4b58							; Two Color Graphic routine
+    231  4b58							;-------------------------------------------------------------------------------
+    232  4b58							; this works by using a "negative" image when drawing the sprites.
+    233  4b58							; The sprites are colored black while the background is the color
+    234  4b58							; that shows up as though it were the sprites.  The 2nd color is
+    235  4b58							; achieved by using the playfield and/or ball.
+    236  4b58							;
+    237  4b58							; The missiles (also black) and setting the screen & playfield to BLACK
+    238  4b58							; are used to hide the screen and playfield beyond the 48 pixel image.
+    239  4b58							;===============================================================================
+    240  4b58							;ShowTwoColorGraphic:
+    241  4b58
+    242  4b58
+    243  4b58							;SplashMenuVB_Code:	  ; entry point from Bank 6
+    244  4b58							;	  lda Mode	  ; check which screen to show
+    245  4b58							;	  bne MenuVB	  ; Mode 1 = Menu
+    246  4b58							;	  jmp SplashVB	  ; Mode 0 = Splash
+    247  4b58
+    248  4b58							;MenuVB:
+    249  4b58							; players are already in position, just need to set size/copies & color
+    250  4b58							;	  ldy #%11111111
+    251  4b58							;	  sty GRP0
+    252  4b58							;	  sty GRP1
+    253  4b58							;	  ldy #%00100000  ; Ball Size = 4
+    254  4b58							;	  sty CTRLPF	  ; repeat playfield, ball width = 4
+    255  4b58							;	  ldy #_BLACK
+    256  4b58							;	  sty COLUP0
+    257  4b58							;	  sty COLUP1
+    258  4b58							;	  ldy #%00010000;11
+    259  4b58							;	  sty ENAM0	      ; missile on
+    260  4b58							;	  sty ENAM1	      ; missile on
+    261  4b58							;	  sty ENABL	      ; ball on
+    262  4b58							;	  sty NUSIZ0	      ; three copies close, missile x8
+    263  4b58							;	  sty NUSIZ1	      ; three copies close, missile x8
+    264  4b58							;	  sty VDELP0	      ; vertical delay on
+    265  4b58							;	  sty VDELP1	      ; vertical delay on
+    266  4b58
+    267  4b58
+    268  4b58							;	  ldx #0
+    269  4b58							;	  stx COLUPF
+    270  4b58							;MenuVBwait:
+    271  4b58							;	  sta WSYNC
+    272  4b58							;	  bit TIMINT
+    273  4b58							;	  bpl MenuVBwait
+    274  4b58							;	  stx VBLANK		  ; video output on
+    275  4b58
+    276  4b58							;MenuKernel:
+    277  4b58
+    278  4b58							;MenuDone:
+    279  4b58							;	  sta WSYNC
+    280  4b58							;	  stx ENAM0    ; X=0 after ShowTwoColorGraphic
+    281  4b58							;	  stx ENAM1
+    282  4b58							;	  stx ENABL
+    283  4b58
+    284  4b58
+    285  4b58							;ShowSpiceWareLogo:
+    286  4b58							;SSWL1:
+    287  4b58							;SSWLskip1:			  ;   15 from branch just before SSWL1
+    288  4b58							;EndShowSpiceWareLogo:
+    289  4b58
+    290  4b58							;MenuOS:
+    291  4b58							;	  ldy #_FN_MENU_OS    ; going to run function MenuOverScan()
+    292  4b58							;	  jmp SplashMenuOS
+    293  4b58
+    294  4b58
+    295  4b58							;SplashVB:
+    296  4b58							;SplashVBwait:
+    297  4b58							;SplashKernel:
+    298  4b58							;SplashOS:
+    299  4b58							;	  ldy #_FN_SPLASH_OS	  ; going to run function SplashOverScan()
+    300  4b58							;	  jmp SplashMenuOS
+    301  4b58
+    302  4b58
+    303  4b58							;    echo ($FFE9-*), "(6507) bytes left in bank 6"
+    304  4b58
+    305  4b58							;include "48x128.asm"
+    306  4b58
+    307  4b58
+    308  4b58							;    echo ($FFE9-*), "AFTER 48x128 include, (6507) bytes left in bank 6"
+    309  4b58
+    310  4b58							;	  ORG $6FEA
+    311  4b58							;	  RORG $FFEA
+    312  4b58							;B5init:
+    313  4b58							;	  sta SELECTBANK6
+    314  4b58							;	  jmp B5init	  ; should never get here, but just in case
+    315  4b58							;	  ds 12, 0	  ; reserve space for CDFJ registers
+    316  4b58							;	  .WORD B5init	  ; while CDFJ will only power up in bank 5, an accidental
+    317  4b58							;	  .WORD B5init	  ; BRK instruction could occur, so gracefully handle it
+    318  4b58
+    319  4b58
+    320  4b58
+    321  4b58							;===============================================================================
+    322  4b58							; Bank 6 - 6507 code
+    323  4b58							;----------------------------------------
+    324  4b58							;   CDFJ will always start in bank 6 because banks 0-5 could contain ARM code
+    325  4b58							;===============================================================================
+    326  4b58
     327  7000					      ORG	$7000
     328  7000					      RORG	$F000
     329  7000

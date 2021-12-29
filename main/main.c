@@ -502,7 +502,7 @@ void initFacets() {
 
             do
             {
-                mobileCol[facet] = /*face + 1; (square & 7); //*/getRandom32() & 7;
+                mobileCol[facet] = face + 1; //(square & 7); //*/getRandom32() & 7;
             } while (mobileCol[facet] == 0 || mobileCol[facet] == 7);
             
     
@@ -990,7 +990,7 @@ void HandleJoystick() {
                 controlledLayer++;
                 if (controlledLayer > 2) {
                     controlledLayer = 0;
-//                    axis ^= 1;
+                    axis ^= 1;
                 }
 
             }
@@ -1003,7 +1003,7 @@ void HandleJoystick() {
                 controlledLayer--;
                 if (controlledLayer < 0) {
                     controlledLayer = 2;
-//                    axis ^= 1;
+                    axis ^= 1;
                 }
             }
 
@@ -1229,6 +1229,9 @@ const unsigned char *shapeLayer2Right2TopFrame2[] = {
     &layer2Right2TopFrame2[0],
 };
 
+const unsigned char *shapeAxis1FixupRightCornerTop[] = {
+    &axis1FixupRightCornerTop[0],
+};
 
 
 const unsigned char *shapeSetFront45[] = {
@@ -1306,6 +1309,15 @@ const unsigned char *shapeSetAxis1Frame1Top[] = {
     &axis1Frame1Top000[0],
 };
 
+const unsigned char *shapeAxis1Frame1Top0[] = {
+    &axis1Frame1Top0[0],
+};
+
+const unsigned char *shapeAxis1blackface[] = {
+    &axis1blackface[0],
+};
+
+
 const unsigned char *shapeSetAxis1Frame2R[] = {
     &axis1Frame2R000[0],
 };
@@ -1347,10 +1359,15 @@ static const unsigned char **whichShapeSet[] = {
     shapeLeftCornerTopFrame3,           // 28
     shapeRightCornerTopFrame3,          // 29
 
-    shapeLayer0LeftCornerTopFrame3,    // 30
-    shapeLayer0RightCornerTopFrame3,   // 31
-    shapeLayer2Right2TopFrame2,         //32
+    shapeLayer0LeftCornerTopFrame3,     // 30
+    shapeLayer0RightCornerTopFrame3,    // 31
+    shapeLayer2Right2TopFrame2,         // 32
+    shapeAxis1FixupRightCornerTop,      // 33
+    shapeAxis1Frame1Top0,               // 34
+    shapeAxis1blackface,                // 35
 };
+
+
 
 
 const unsigned char *shapeSetFacet[];
@@ -1626,8 +1643,8 @@ void drawSoftwareSprites() {
     rr = rotateTop[fLayer] & 3;
 
 
-    //   if (fLayer == 1)
-    //        rr = 1;
+    //    if (axis ==1 && fLayer == 0)
+    //         rr = 1;
 
     struct facet *f = &shapeDef[axis][rr][fLayer][fno++];
 
@@ -1703,7 +1720,7 @@ void drawSoftwareSprites() {
     int theColour = mobileCol[whichFace[f->face] * 9 + f->square];
 
     if ((showHighlight && fLayer == controlledLayer ) && !(highlightLayer & 1))
-        theColour = 0;
+        theColour = 0; //getRandom32() & 7; //range++ & 7);
 
     char shape = f->shape;
     // if (shape & 0x80) {
@@ -1729,7 +1746,7 @@ void drawSoftwareSprites() {
 void GameVerticalBlank() {
  
 
-    if (finished) {
+    if (finished && fLayer == 0) {
 
         if (swap) {
             drawMode ^= 1;
